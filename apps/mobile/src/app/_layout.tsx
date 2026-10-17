@@ -14,6 +14,7 @@ export default function RootLayout() {
     <Stack screenOptions={{ headerStyle: { backgroundColor: palette.cream }, headerTintColor: palette.crust, headerTitleStyle:{fontFamily:'PressStart2P_400Regular',fontSize:9}, contentStyle: { backgroundColor: palette.cream } }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ title: "Your Breadcrumb account", presentation: "modal" }} />
+      <Stack.Screen name="account-setup" options={{title:"YOUR ACCOUNT"}}/>
       <Stack.Screen name="profile" options={{title:"YOUR PROFILE"}}/>
       <Stack.Screen name="avatar" options={{title:'PLAYER CREATOR'}}/>
       <Stack.Screen name="friends" options={{title:'YOUR CAMPUS CREW'}}/>

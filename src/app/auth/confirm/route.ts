@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
       ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type: type as "email" | "magiclink" | "signup" })
       : code ? await supabase.auth.exchangeCodeForSession(code) : null;
     if (result && !result.error && normalizeUfEmail(result.data.user?.email)) {
-      const {data:profile}=await supabase.from("profiles").select("avatar_completed").eq("id",result.data.user!.id).single();
-      const response = NextResponse.redirect(new URL(profile?.avatar_completed?"/":"/avatar", request.url));
+      const {data:profile}=await supabase.from("profiles").select("account_completed,avatar_completed").eq("id",result.data.user!.id).single();
+      const response = NextResponse.redirect(new URL(!profile?.account_completed||!profile.avatar_completed?"/profile?setup=1":"/", request.url));
       response.headers.set("Cache-Control", "private, no-store");
       return response;
     }

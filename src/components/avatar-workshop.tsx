@@ -1,17 +1,12 @@
 "use client";
-import {useState} from 'react';
+import {useRef,useState} from 'react';
 import {avatarOptions,defaultAvatar,type AvatarConfig} from '@breadcrumb/shared';
 import {AvatarArt} from './pixel-art';
-export function AvatarWorkshop({initial=defaultAvatar,onSave}:{initial?:AvatarConfig;onSave?:(avatar:AvatarConfig)=>Promise<void>}) {
+export function AvatarWorkshop({initial=defaultAvatar,onSave,onChange,hideSave=false}:{initial?:AvatarConfig;onSave?:(avatar:AvatarConfig)=>Promise<void>;onChange?:(avatar:AvatarConfig)=>void;hideSave?:boolean}){
  const [avatar,setAvatar]=useState<AvatarConfig>(initial),[pending,setPending]=useState(false),[error,setError]=useState('');
- async function save(){if(!onSave)return;setPending(true);try{await onSave(avatar);}catch(e){setError(e instanceof Error?e.message:'Could not save your avatar.');}finally{setPending(false);}}
+ const gesture=useRef<{key:keyof AvatarConfig;x:number;y:number}|null>(null);
  const names:Record<keyof AvatarConfig,string>={skin:'Skin tone',hair:'Hair color',hairstyle:'Hair style',shirt:'Top color',top:'Top style',pants:'Bottoms',accessory:'Accessory'};
- return <div className="workshop">
-  <div className="avatar-stage"><span className="pixel-kicker">PLAYER PREVIEW</span><AvatarArt avatar={avatar} size={104}/><span className="pixel-kicker">LOOKING CRUMB-TASTIC</span></div>
-  <div className="outfit-options">{(Object.keys(avatarOptions) as (keyof AvatarConfig)[]).map(key=><fieldset key={key}><legend>{names[key]}</legend><div className="option-row">{avatarOptions[key].map((option,i)=><button key={option} type="button" aria-label={`${names[key]}: ${option}`} aria-pressed={avatar[key]===i} className={`outfit-option ${avatar[key]===i?'selected':''}`} onClick={()=>setAvatar({...avatar,[key]:i})}>
-   {option.startsWith('#')?<span style={{background:option}} className="color-swatch"/>:option}
-  </button>)}</div></fieldset>)}</div>
-  <button className="pixel-button" type="button" disabled={pending||!onSave} onClick={save}>{!onSave?'SIGN IN TO SAVE':pending?'SAVING…':'SAVE MY AVATAR →'}</button>
-  {error&&<p role="alert">{error}</p>}
- </div>;
+ function cycle(key:keyof AvatarConfig,delta:number){const next={...avatar,[key]:(avatar[key]+delta+avatarOptions[key].length)%avatarOptions[key].length};setAvatar(next);onChange?.(next);}
+ async function save(){if(!onSave)return;setPending(true);try{await onSave(avatar);}catch(e){setError(e instanceof Error?e.message:'Could not save your avatar.');}finally{setPending(false);}}
+ return <div className="workshop arrow-workshop"><div className="avatar-stage"><span className="pixel-kicker">YOUR CAMPUS SELF</span><AvatarArt avatar={avatar} size={112}/><span className="avatar-swipe-hint">USE THE ARROWS OR SWIPE EACH ROW</span></div><div className="avatar-carousel-options">{(Object.keys(names) as (keyof AvatarConfig)[]).map(key=>{const option=avatarOptions[key][avatar[key]],color=option.startsWith('#');return <div className="avatar-carousel-row" key={key} onPointerDown={e=>{gesture.current={key,x:e.clientX,y:e.clientY};}} onPointerUp={e=>{const start=gesture.current;gesture.current=null;if(start?.key===key&&Math.abs(e.clientX-start.x)>35&&Math.abs(e.clientY-start.y)<35)cycle(key,e.clientX<start.x?1:-1);}} onPointerCancel={()=>{gesture.current=null;}}><span className="avatar-option-label">{names[key]}</span><div className="avatar-option-controls"><button type="button" className="avatar-arrow" aria-label={`Previous ${names[key].toLowerCase()}`} onClick={()=>cycle(key,-1)}>‹</button><div className="avatar-option-current" aria-live="polite">{color?<><span className="avatar-color-preview" style={{background:option}}/><span>SHADE {avatar[key]+1}</span></>:<span>{option.toUpperCase()}</span>}<small>{avatar[key]+1} / {avatarOptions[key].length}</small></div><button type="button" className="avatar-arrow" aria-label={`Next ${names[key].toLowerCase()}`} onClick={()=>cycle(key,1)}>›</button></div></div>;})}</div>{!hideSave&&<button className="pixel-button" type="button" disabled={pending||!onSave} onClick={()=>{void save();}}>{!onSave?'SIGN IN TO SAVE':pending?'SAVING…':'SAVE MY AVATAR →'}</button>}{error&&<p role="alert">{error}</p>}</div>;
 }
