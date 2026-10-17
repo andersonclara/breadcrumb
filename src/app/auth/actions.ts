@@ -1,5 +1,4 @@
 "use server";
-import { redirect } from "next/navigation";
 import { getSupabaseConfig } from "@/lib/env";
 import { normalizeUfEmail } from "@/lib/auth/rules";
 import { createClient } from "@/lib/supabase/server";
@@ -15,8 +14,4 @@ export async function sendMagicLink(_previous: LoginState, formData: FormData): 
   const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: new URL("/auth/confirm", site).toString() } });
   if (error) return { message: "We couldn't send a link. Please wait a minute and try again.", sent: false };
   return { message: "Check your UF inbox for your sign-in link.", sent: true };
-}
-export async function signOut() {
-  if (getSupabaseConfig()) { const supabase = await createClient(); await supabase.auth.signOut(); }
-  redirect("/");
 }

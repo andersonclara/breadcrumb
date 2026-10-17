@@ -24,6 +24,7 @@
     "react-native-gesture-handler": "2.32.0"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^4.32.1",
     "@breadcrumb/client": "*",
     "@breadcrumb/shared": "*",
     "@google/genai": "^2.30.0",
