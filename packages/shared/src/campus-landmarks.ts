@@ -5,11 +5,11 @@ export function identifyLandmark(name:string):LandmarkId|null{
  if(/Ben Hill Griffin Stadium/.test(name))return 'stadium';
  if(name==='Century Tower')return 'century';
  if(/Exactech Arena|O.Connell Center/.test(name))return 'odome';
- if(/^(J. Wayne )?Reitz Union$/.test(name))return 'reitz';
+ if(/^(J. Wayne )?Reitz (Student )?Union$/.test(name))return 'reitz';
  if(name==='Marston Science Library')return 'marston';
  if(name==='Library West')return 'west';
  if(name==='Plaza of the Americas')return 'plaza';
- if(/Malachowsky Hall/.test(name))return 'malachowsky';
+ if(/Malachowsky/.test(name))return 'malachowsky';
  return null;
 }
 // Original architectural pixel illustrations. Every shape is snapped to a pixel grid.
@@ -35,13 +35,41 @@ export function campusLandmarkArt(id:LandmarkId):{width:number;height:number;pix
   for(let y=59;y<99;y+=5){r(12,y,3,1,brickLight);r(17,y+2,3,1,brickLight);}return {width,height,pixels};
  }
  if(id==='stadium'){
-  poly([[4,42],[31,19],[98,19],[124,41],[124,76],[99,93],[29,93],[4,75]],'#758493');
-  poly([[6,38],[31,14],[98,14],[122,38],[122,70],[98,87],[29,87],[6,69]],stone);
-  for(let i=0;i<5;i++)poly([[12+i*3,38+i*2],[33+i*2,20+i*3],[95-i*2,20+i*3],[116-i*3,38+i*2],[116-i*3,65-i*2],[95-i*2,81-i*3],[33+i*2,81-i*3],[12+i*3,65-i*2]],i%2?'#4683B6':'#EE9D4A');
-  poly([[39,39],[88,39],[99,54],[87,68],[39,68],[29,54]],'#56A864');
-  for(let x=43;x<87;x+=8)r(x,43,1,20,'#DEEDD0');r(40,51,47,1,'#DEEDD0');r(40,62,47,1,'#DEEDD0');r(31,49,9,11,'#3B75AB');r(88,49,9,11,'#EF9B42');
-  r(43,7,43,13,dark);r(46,9,37,8,'#3D74A4');r(49,11,6,4,cream);r(60,11,17,2,'#F8B655');
-  for(const x of [14,110]){r(x,1,2,27,'#A3ACA4');r(x-6,0,14,5,cream);}flag(22,60);flag(104,60);
+  // Raised horseshoe bowl: brick arcade below terraced orange-and-blue stands.
+  poly([[4,43],[28,23],[99,23],[124,43],[124,77],[101,94],[27,94],[4,77]],'#674A3D');
+  poly([[5,46],[28,62],[100,62],[123,46],[123,76],[100,91],[28,91],[5,76]],brick);
+  poly([[100,62],[123,46],[123,76],[100,91]],brickDark);
+  r(29,64,70,26,brickLight);r(28,65,72,3,stone);r(28,86,72,3,stone);
+  for(let x=32;x<98;x+=9){r(x,70,5,13,brickDark);r(x+1,71,3,11,dark);r(x-1,69,7,2,stone);r(x,82,5,2,stone);}
+  for(let i=0;i<4;i++){const y=57+i*6;poly([[8,y],[24,y+10],[24,y+14],[8,y+4]],stone);poly([[105,y+10],[120,y],[120,y+4],[105,y+14]],'#B99E7A');}
+  // Concentric seating terraces leave a recessed, readable field.
+  poly([[5,38],[29,17],[98,17],[123,38],[123,59],[99,76],[28,76],[5,59]],stone);
+  for(let i=0;i<8;i++){
+   const inset=i*2;
+   poly([[9+inset,38+i],[31+i,20+inset],[96-i,20+inset],[119-inset,38+i],[119-inset,57-i],[97-i,72-inset],[30+i,72-inset],[9+inset,57-i]],i%2?'#3872B1':'#F3A34C');
+  }
+  // Long axis runs north/south in the bowl, with blue/orange end zones.
+  poly([[43,34],[85,34],[99,46],[85,59],[43,59],[29,46]],'#448C54');
+  poly([[45,36],[83,36],[93,46],[83,56],[45,56],[35,46]],'#62B16B');
+  poly([[43,34],[49,34],[41,46],[49,59],[43,59],[29,46]],'#2D66A7');
+  poly([[79,34],[85,34],[99,46],[85,59],[79,59],[90,46]],'#E68932');
+  for(let x=49;x<=79;x+=6){r(x,36,1,21,'#E8F0CB');r(x-1,41,3,1,cream);r(x-1,51,3,1,cream);}
+  r(47,36,33,1,cream);r(47,56,33,1,cream);
+  // Center-field orange F and goal posts.
+  r(62,42,3,9,'#F6A13C');r(65,42,6,2,'#F6A13C');r(65,46,4,2,'#F6A13C');
+  for(const x of [34,94]){r(x,40,1,11,'#FFE88C');r(x-3,39,7,1,'#FFE88C');r(x-3,35,1,5,'#FFE88C');r(x+3,35,1,5,'#FFE88C');}
+  // West-side press box, glazing, roof and upper deck supports.
+  r(30,6,67,13,brickDark);r(28,5,71,3,stone);r(32,10,63,6,dark);
+  for(let x=34;x<94;x+=7){r(x,11,5,3,'#8BC6D3');r(x,14,5,1,'#4F899E');}
+  r(35,2,57,3,'#F6D9A0');r(45,3,37,1,'#E58938');
+  for(const x of [33,91]){r(x,18,2,10,stone);}
+  // Video board, orange ribbon and entrance lettering in chunky pixels.
+  r(51,22,26,11,dark);r(53,24,22,7,'#2C5984');r(57,26,3,3,'#F9B451');r(63,26,9,1,cream);
+  r(39,63,49,5,'#2F6DA6');
+  const letters=['111101111','101001010','111101110'];
+  letters.forEach((row,y)=>[...row].forEach((v,x)=>{if(v==='1')r(55+x*2,64+y,1,1,'#FFE1A1');}));
+  for(const x of [12,113]){r(x,7,2,27,'#9EA9A4');r(x-6,5,14,4,dark);for(let n=0;n<4;n++)r(x-5+n*3,6,2,2,cream);}
+  flag(22,2);flag(104,2);
  }else if(id==='odome'){
   poly([[9,48],[24,33],[104,33],[121,48],[121,77],[102,87],[25,87],[9,76]],'#BBB7A7');r(15,49,98,28,cream);
   for(let y=0;y<32;y++){const half=Math.round(Math.sqrt(Math.max(0,1-((31-y)/32)**2))*55);r(64-half,18+y,half*2,1,y<8?'#FFF9E9':y<20?'#E7E6D7':'#C9D0C4');}
@@ -57,8 +85,6 @@ export function campusLandmarkArt(id:LandmarkId):{width:number;height:number;pix
   poly([[16,22],[35,12],[112,18],[112,79],[93,89],[16,81]],brickDark);r(16,24,78,56,brick);poly([[15,23],[34,12],[113,18],[94,29]],'#E0B38C');
   for(let y=32;y<72;y+=11){r(17,y,77,3,stone);r(23,y+3,65,5,dark);for(let x=27;x<90;x+=12)r(x,y+3,2,5,glass);}
   r(45,68,22,14,dark);r(48,70,16,12,glass);
-  // Alachua, the yellow beam sculpture outside Marston.
-  poly([[8,78],[42,49],[46,53],[12,82]],'#FFCC38');poly([[18,49],[23,47],[41,84],[36,86]],'#F5B622');poly([[7,61],[9,56],[47,70],[45,75]],'#FFE46A');poly([[31,47],[36,48],[28,85],[23,84]],'#ECA71C');
  }else if(id==='west'){
   poly([[10,27],[32,15],[119,22],[119,77],[98,89],[10,81]],'#A68769');r(10,28,88,53,'#E0C9A4');poly([[9,26],[31,14],[120,21],[99,34]],'#B99074');
   for(let y=35;y<66;y+=10){r(13,y,82,5,dark);for(let x=15;x<94;x+=7)r(x,y,4,4,glass);r(12,y+6,84,2,stone);}

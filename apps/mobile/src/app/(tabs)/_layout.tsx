@@ -3,7 +3,7 @@ import { Text } from "react-native";
 import { palette } from "@breadcrumb/shared";
 
 export default function TabLayout() {
-  return <Tabs screenOptions={{
+  return <Tabs tabBar={()=>null} screenOptions={{
     headerStyle: { backgroundColor: palette.cream }, headerTintColor: palette.crust,
     headerTitleStyle:{fontFamily:'PressStart2P_400Regular',fontSize:9},tabBarLabelStyle:{fontFamily:'PressStart2P_400Regular',fontSize:6},
     tabBarActiveTintColor: palette.crust, tabBarInactiveTintColor: "#8B7B6E",

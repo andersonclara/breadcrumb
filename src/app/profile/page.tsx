@@ -1,3 +1,4 @@
+import {LocationSettings} from '@/components/location-sharing';
 import {ProfileEditor} from '@/components/profile-editor';
 import {ToastLogo} from '@/components/pixel-art';
 import {CommunityManager} from '@/components/community-manager';
@@ -29,6 +30,6 @@ export default async function ProfilePage({searchParams}:{searchParams:Promise<{
     {error || !profile ? <p role="alert">Your profile could not be loaded. Check that the database migration has been applied.</p> :
       <p>{profile.banned ? "Your account is banned." : !canAct(profile) && profile.suspended_until
         ? `Suspended until ${new Date(profile.suspended_until).toLocaleString("en-US", { timeZone: "America/New_York" })} ET.` : "Your account is active."}</p>}
-    <CommunityManager/><form action={signOut}><button className="button">Sign out</button></form>
+    <LocationSettings/><CommunityManager/><form action={signOut}><button className="button">Sign out</button></form>
   </main>;
 }

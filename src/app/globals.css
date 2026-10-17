@@ -27,3 +27,119 @@
 
 .avatar-carousel-options{display:grid;gap:10px}.avatar-carousel-row{padding:12px 0;border-bottom:1px solid #d7c4a1;touch-action:pan-y;user-select:none}.avatar-option-label{font:7px/2 Pixel,monospace;display:block;margin-bottom:8px}.avatar-option-controls{display:flex;align-items:center;gap:14px}.avatar-arrow{width:44px;height:42px;flex-shrink:0;border:2px solid #9e7045;background:#f7c86e;box-shadow:2px 2px #9e7045;font-size:30px;line-height:1}.avatar-arrow:hover{background:#ffdb8e}.avatar-option-current{display:flex;align-items:center;justify-content:center;gap:10px;flex:1;min-width:0;font:8px/2 Pixel,monospace}.avatar-option-current small{font:10px monospace;color:#9a7957}.avatar-color-preview{width:24px;height:24px;border:2px solid #8c6949;display:block}.avatar-swipe-hint{font:5px/2 Pixel,monospace;text-align:center}.profile-editor>h2{margin:28px 0 16px}.profile-edit-brand{display:flex;align-items:center;gap:16px;margin-top:25px}.profile-edit-page{max-width:760px}.arrow-workshop .avatar-stage{background:linear-gradient(#dce7c2 75%,#b4ce91 75%);border-color:#b4c28c}.profile-editor .avatar-stage{position:sticky;top:20px;align-self:start}.profile-editor .auth-form{max-width:500px}
 
+
+html,body,body *{cursor:url("/original-toast-cursor.png") 16 16,url("/original-toast-cursor.svg") 16 16,auto!important}button:disabled{cursor:not-allowed!important}input,textarea,[contenteditable="true"]{cursor:text!important}
+
+.pixel-map.crumb-dropping,.pixel-map.crumb-dropping *{cursor:none!important}
+
+/* A warm baguette thumb with sparse diagonal scoring and a smooth parchment rail. */
+:root{--scroll-track:#F5E6C8;--scroll-crust:#A56A3E;--scroll-gold:#F4BC58;--scroll-highlight:#FFF1B8}
+*{scrollbar-width:thin;scrollbar-color:var(--scroll-gold) var(--scroll-track)}
+*::-webkit-scrollbar{width:13px;height:13px}
+*::-webkit-scrollbar-track{background:var(--scroll-track);border-inline:1px solid #DEC79D}
+*::-webkit-scrollbar-thumb{background:linear-gradient(125deg,transparent 42%,#FFF1B8 43% 48%,#D9953D 49% 52%,transparent 53%) center/100% 26px repeat-y,linear-gradient(90deg,#D99B42,#F8CB76 35%,#EDAD4C 80%,#C78937);border:1px solid #A56A3E;box-shadow:inset 2px 0 #FFE3A1,inset -2px 0 #D6953C;border-radius:999px;min-height:64px;min-width:64px}
+*::-webkit-scrollbar-thumb:hover{background-color:#FFD178;box-shadow:inset 2px 2px #FFF7D6,inset -2px -2px #D9953D}
+*::-webkit-scrollbar-thumb:active{background-color:#D9953D}
+*::-webkit-scrollbar-corner{background:var(--scroll-track)}
+*::-webkit-scrollbar:horizontal{height:12px}
+*::-webkit-scrollbar-track:horizontal{background:var(--scroll-track);border-inline:0;border-block:1px solid #DEC79D}
+@supports selector(::-webkit-scrollbar){*{scrollbar-width:auto;scrollbar-color:auto}}
+@media(forced-colors:active){*{scrollbar-width:auto;scrollbar-color:auto}*::-webkit-scrollbar-track,*::-webkit-scrollbar-thumb{background:revert;border-color:revert;box-shadow:none}}
+
+*::-webkit-scrollbar-thumb:horizontal{background:linear-gradient(125deg,transparent 42%,#FFF1B8 43% 48%,#D9953D 49% 52%,transparent 53%) center/26px 100% repeat-x,linear-gradient(0deg,#D99B42,#F8CB76 35%,#EDAD4C 80%,#C78937);box-shadow:inset 0 2px #FFE3A1,inset 0 -2px #D6953C}
+
+/* Keep primary navigation visible while page and panel content scroll. */
+.game-header{position:sticky;top:0;z-index:40;flex-shrink:0}
+.social-header{position:sticky;top:0;z-index:40;background:var(--community-bg,#F5E9D5);padding-block:18px;margin-top:-18px;box-shadow:0 2px 0 #C5AE8C}
+
+/* Center the shared login/sign-up card with breathing room on short screens. */
+.auth-page{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:56px 20px;min-height:100dvh}
+.auth-card{width:100%;flex-shrink:0;margin:auto}
+@media(max-width:500px){.auth-page{padding:36px 14px}}
+
+/* Campus noticeboard: joined communities, fresh finds, and community-backed loaves. */
+.game-sidebar{gap:20px;padding-top:25px;background:linear-gradient(#FFF5DF,#F8EACD)}
+.sidebar-title .pixel-kicker{color:#8C633F;font-size:6px;line-height:2.1}.sidebar-title h1{font-size:25px;line-height:1.65;margin:14px 0}.sidebar-title>p:last-child{font-size:12px;line-height:1.9;margin-bottom:0}
+.campus-summary{display:grid;grid-template-columns:1fr 1fr;border:2px solid #BC905C;background:#FFF9E9;box-shadow:3px 3px #E0C494}.campus-summary>div{padding:14px 8px;display:flex;flex-direction:column;gap:9px;align-items:center}.campus-summary>div+div{border-left:2px dashed #D7B887}.campus-summary strong{font:20px Pixel,monospace;color:#9E6044}.campus-summary span{font:6px/1.8 Pixel,monospace;color:#806044}
+.game-sidebar .game-rule{border:0;border-left:3px solid #E4AB50;background:#FFECC7;padding:12px 14px}.game-sidebar .game-rule strong{font-size:6px;line-height:2;margin:0 0 7px}.game-sidebar .game-rule p{font-size:11px;line-height:1.8}.sidebar-feed .pixel-kicker{font-size:7px;line-height:2}.friend-sharing{background:#F1F3DA;border:1px solid #C3C89C;padding:13px}.friend-sharing strong{font-size:6px;line-height:2}.friend-sharing .text-button{font-size:7px;color:#527757}
+.community-map-tabs{min-height:72px;flex-wrap:wrap;padding:12px 16px;gap:10px;background:#FFF5DF}.map-nav-label{font:6px/1.8 Pixel,monospace;color:#8C633F;max-width:95px;flex-shrink:0}.community-map-tabs>div{flex:1}.community-map-tabs [role=tab]{border-width:2px;box-shadow:2px 2px #C6A373;border-radius:3px;padding:10px 13px;font:7px/1.7 Pixel,monospace}.community-map-tabs [role=tab][aria-selected=true]{box-shadow:inset 0 -3px #49382C22,2px 2px #8B6748}.community-map-tabs .loaf-filter{padding:10px;font:6px/1.8 Pixel,monospace;border:2px solid #BA8A4D;background:#FFF4D2;white-space:nowrap}.community-map-tabs .loaf-filter[aria-pressed=true]{background:#E7AD49;color:#49382C;border-color:#966237}.category-select-label{gap:7px}.category-select-label select{border-radius:3px;background:#FFFAED}.add-community-link{font-size:6px;color:#8C633F}
+.map-top-label{padding:12px 15px;border:2px solid #9D6C40;background:#FFF3CE;box-shadow:3px 3px #8C633F44;display:flex;flex-direction:column;gap:7px;max-width:calc(100% - 95px)}.map-stamp-kicker{font:5px/1.8 Pixel,monospace;letter-spacing:.6px;color:#927046}.map-top-label strong{font:9px/1.8 Pixel,monospace;color:#805034}.map-top-label .map-sub{font:10px/1.5 ui-monospace,monospace;color:#8C704C}.map-help{font:11px/1.6 ui-monospace,monospace;letter-spacing:0;padding:6px 11px;border:1px solid #CFB07C;background:#FFF4D7E8}
+@media(max-width:900px){.map-nav-label{display:none}.community-map-tabs{gap:8px;padding:10px;min-height:62px}.community-map-tabs [role=tab]{font-size:6px;padding:9px}.community-map-tabs .loaf-filter{font-size:5px;padding:9px 6px}.map-top-label{padding:9px 11px;gap:5px}.map-top-label strong{font-size:7px}.map-stamp-kicker{font-size:4px}.map-top-label .map-sub{font-size:9px}}
+/* Breadcrumb composer: a small campus notice, pinned to the overworld. */
+.game-panel.composer-panel{width:min(470px,calc(100% - 36px));padding:0;background:#fff8e8;border-color:#98623b;scroll-padding:20px}
+.composer-panel>.panel-heading{position:sticky;top:0;z-index:2;margin:0;padding:11px 22px;background:#f4dfb3;border-bottom:2px solid #c3935b}
+.composer-panel>.panel-heading>button{min-width:40px;min-height:40px}
+.crumb-composer{padding:23px;display:flex;flex-direction:column;gap:21px}
+.composer-intro{display:flex;align-items:center;gap:17px}
+.composer-toast{flex-shrink:0;background:#ffe5a1;border:2px solid #d8a34f;box-shadow:4px 4px 0 #edcb8a;padding:3px}
+.composer-intro .pixel-kicker{font-size:6px;color:#956133}
+.composer-intro h2{font-size:19px;line-height:1.6;margin:8px 0 3px}
+.composer-intro p{margin:0;color:#806449}
+.composer-location{display:flex;align-items:center;gap:12px;background:#edf3df;border:2px solid #9caf7b;padding:13px}
+.composer-pin{display:grid;place-items:center;width:27px;height:27px;flex-shrink:0;background:#6e8c52;color:#fff7d9;border:2px solid #496039;font-size:23px}
+.composer-location>div{flex:1;min-width:0}.composer-location strong{font-size:12px}.composer-location small{display:block;font-size:10px;line-height:1.6;margin-top:4px;color:#64724e}
+.composer-location button{min-height:44px;border:0;background:none;color:#48633c;font:bold 10px monospace;padding:6px}
+.game-panel .crumb-composer label{margin:0;font:7px/1.8 Pixel,monospace;letter-spacing:.2px}
+.game-panel .crumb-composer input,.game-panel .crumb-composer textarea,.game-panel .crumb-composer select{font:14px/1.6 ui-monospace,Consolas,monospace;letter-spacing:0;background:#fffdf4;border:2px solid #c9a980;padding:13px;margin-top:10px}
+.game-panel .crumb-composer input{font-weight:bold;font-size:16px;border-color:#b38b54;box-shadow:inset 3px 3px #f4e9d2}
+.game-panel .crumb-composer textarea{height:auto;min-height:96px;resize:vertical}
+.composer-field-help{display:flex;justify-content:space-between;gap:8px;margin-top:7px;font:10px/1.5 ui-monospace,monospace;color:#8a7258;letter-spacing:0;font-weight:normal}
+.composer-optional{font:9px monospace;color:#987e61;margin-left:6px}
+.composer-categories{border:0;padding:0;margin:0;min-width:0}.composer-categories legend{font:7px/1.8 Pixel,monospace;margin-bottom:10px}
+.composer-categories>div{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.composer-categories button{position:relative;display:flex;align-items:center;gap:8px;text-align:left;border:2px solid #deccb0;background:#fbf0da;padding:11px 10px;min-height:44px;font-size:11px}
+.composer-categories button[aria-pressed=true]{border-color:#906032;background:#ffe4a1;box-shadow:2px 2px #c79851;font-weight:bold}
+.composer-category-dot{width:8px;height:8px;flex-shrink:0;box-shadow:1px 1px #49382c40}.composer-check{margin-left:auto;color:#7d552e}
+.composer-related{border-top:2px dashed #d5bd91;padding-top:15px}.composer-related>p{margin:3px 0 9px}
+.composer-related-card{padding:12px;background:#f2eddc;border:1px solid #d6c9a6;margin-top:9px;font-size:11px}.composer-related-card>div{display:flex;align-items:center;gap:10px}.composer-related-card strong{overflow-wrap:anywhere}.composer-related-card>div+div{justify-content:flex-end;flex-wrap:wrap;margin-top:9px}.composer-related-card button{border:1px solid #b49b71;background:#fff8e6;min-height:36px;padding:7px;font-size:10px}
+.composer-footer{display:flex;flex-direction:column;gap:10px;border-top:2px dashed #d5bd91;padding-top:16px}.composer-readiness{font:10px/1.6 monospace;text-align:center;color:#806449}.game-panel .composer-submit{width:100%;margin:0;background:#f6c45b;border-color:#7d4e2f;box-shadow:4px 4px #7d4e2f;min-height:58px}.composer-submit>span:last-child{margin-left:auto}.composer-submit:hover{background:#ffd780}.composer-submit:disabled{transform:none}
+@media(max-width:700px){.game-panel.composer-panel{width:calc(100% - 20px)}.crumb-composer{padding:18px;gap:20px}.composer-intro h2{font-size:16px}.composer-intro .pixel-kicker{font-size:5px}.composer-toast svg{width:52px;height:52px}}
+/* A flour-dusted recipe card, with a red notebook margin and ruled paper. */
+.game-panel.composer-panel{background:#fff8e8;box-shadow:7px 7px 0 #68442b44,12px 12px 0 #f5e2b8;border-color:#9e7047}
+.composer-panel>.panel-heading{background:#efdbb1;border-bottom-style:dashed}
+.crumb-composer{position:relative;padding-left:36px;background:linear-gradient(90deg,transparent 23px,#dba88e 23px,#dba88e 25px,transparent 25px),repeating-linear-gradient(0deg,transparent,transparent 27px,#c9af7820 27px,#c9af7820 28px)}
+.recipe-masthead{display:flex;justify-content:space-between;gap:12px;padding-bottom:11px;border-bottom:2px solid #a66b48;font:6px/1.8 Pixel,monospace;letter-spacing:.4px;color:#996348}
+.composer-intro{align-items:center}.composer-toast{background:#ffe6a5;box-shadow:3px 3px #dcb16b;transform:rotate(-5deg)}
+.composer-intro h2{color:#805137}.composer-intro p{font-style:italic}
+.recipe-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;border-block:1px solid #d7b98a;padding:14px 0}
+.recipe-meta>div{display:flex;flex-direction:column;gap:7px}.recipe-meta span{font:6px/1.7 Pixel,monospace;color:#996348}.recipe-meta strong{font:11px/1.5 ui-monospace,monospace;font-weight:bold}
+.recipe-ingredients{padding:15px;background:#f7ebd0;border:1px solid #d7b98a;box-shadow:2px 2px #dcc29755}
+.recipe-ingredients h3,.recipe-finish{font:11px/1.8 Pixel,monospace;color:#805137;margin:0 0 13px}
+.recipe-ingredients ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}.recipe-ingredients li{display:flex;align-items:center;gap:10px;font-size:12px;color:#6d553a}.recipe-ingredients .recipe-ingredient-check{width:20px;height:20px;display:grid;place-items:center;border:1px solid #b8a274;color:#9a8159;font-size:15px;flex-shrink:0}.recipe-ingredients li.is-ready>.recipe-ingredient-check{background:#72834e;color:#fff8df}.recipe-ingredients small{font-style:italic;color:#987d58}
+.game-panel .recipe-method{text-align:center;font:7px/1.8 Pixel,monospace;color:#a2644d;margin:0;padding:4px 0}
+.composer-location{background:#f4e8cc;border-color:#c6af80}.composer-pin{background:#a8804d;border-color:#7c5938}.composer-location button{color:#805b37}
+.game-panel .crumb-composer input,.game-panel .crumb-composer textarea{background:#fffdf3dd;border-width:0 0 2px;box-shadow:none;border-bottom-color:#bca175}
+.composer-categories button{background:#fff8e8}.composer-categories button[aria-pressed=true]{background:#f8dda0}
+.recipe-finish{text-align:center;margin:0}.composer-footer{border-color:#bfa175}.composer-readiness{font-style:italic}
+@media(max-width:700px){.crumb-composer{padding-left:30px;background-position:-5px 0,0 0}.recipe-masthead{font-size:5px}.recipe-meta strong{font-size:10px}.recipe-ingredients{padding:13px}.recipe-ingredients li{font-size:11px;gap:8px}.composer-intro{gap:12px}.composer-intro h2{font-size:14px}}
+
+/* Recipe spacing: 24px between sections, 12px inside fields, stable wrapping. */
+.game-panel.composer-panel{scroll-padding-top:88px}
+.crumb-composer{gap:24px;padding-top:24px;padding-right:24px;padding-bottom:32px}
+.crumb-composer>*{min-width:0;flex-shrink:0}
+.recipe-masthead{align-items:center;flex-wrap:wrap;row-gap:8px;padding-bottom:14px}
+.composer-intro{gap:20px;padding-block:4px}
+.composer-intro>div:last-child{display:grid;gap:9px;min-width:0}
+.game-panel .composer-intro h2,.game-panel .composer-intro p{margin:0;overflow-wrap:anywhere}
+.composer-intro h2{line-height:1.8}.composer-toast svg{display:block}
+.recipe-meta{gap:16px;padding-block:18px}.recipe-meta>div{gap:10px;min-width:0}.recipe-meta strong{overflow-wrap:anywhere}
+.recipe-ingredients{padding:18px}.recipe-ingredients h3{margin:0 0 16px}.recipe-ingredients ul{gap:12px}.recipe-ingredients li{min-height:24px;line-height:1.7;align-items:flex-start}.recipe-ingredient-copy{flex:1;min-width:0}.recipe-ingredients small{display:inline-block;margin-left:5px}
+.game-panel .crumb-composer>label{display:grid;gap:12px;line-height:2}
+.game-panel .crumb-composer input,.game-panel .crumb-composer select,.game-panel .crumb-composer textarea{margin:0;min-width:0;min-height:48px}
+.game-panel .crumb-composer textarea{min-height:112px}
+.crumb-composer .composer-field-help{margin:0;align-items:flex-start;line-height:1.7}.composer-field-help>span:last-child{flex-shrink:0}
+.composer-optional{margin:0}.composer-categories legend{margin-bottom:12px;line-height:2}.composer-categories>div{gap:12px}.composer-categories button{min-width:0;min-height:48px;line-height:1.6;padding:12px}
+.composer-location{gap:12px;padding:16px;align-items:flex-start}.composer-location strong{display:block;line-height:1.7}.composer-location small{margin-top:6px}.composer-location button{flex-shrink:0;align-self:center;padding-inline:8px}.composer-pin{margin-top:2px}
+.composer-related{padding-top:20px}.composer-related-card{padding:16px;margin-top:12px}.composer-related-card>div+div{gap:10px;margin-top:12px}.composer-related-card svg{flex-shrink:0}
+.composer-footer{gap:16px;padding-top:24px}.composer-readiness{overflow-wrap:anywhere}.game-panel .composer-submit{gap:12px;line-height:2;padding:14px 16px}.composer-submit svg{flex-shrink:0}
+@media(max-width:700px){.crumb-composer{padding:24px 18px 30px 30px;gap:24px}.composer-panel>.panel-heading{padding:10px 18px}.composer-intro{gap:16px}.composer-intro>div:last-child{gap:8px}.recipe-meta{gap:12px}.recipe-ingredients{padding:16px}.composer-location{padding:12px;gap:10px}.composer-categories>div{gap:10px}.composer-categories button{padding:11px 9px;gap:7px}.composer-related-card>div+div{justify-content:flex-start}}
+@media(max-width:360px){.composer-intro{align-items:flex-start}.recipe-meta{grid-template-columns:1fr}.recipe-meta>div{flex-direction:row;justify-content:space-between;align-items:baseline;gap:12px}.recipe-meta strong{text-align:right}.composer-location{flex-wrap:wrap}.composer-location>div{flex-basis:calc(100% - 40px)}.composer-location button{margin-left:auto}.composer-categories>div{grid-template-columns:1fr}.composer-field-help{flex-wrap:wrap}}
+
+.composer-label-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px 12px}
+.game-panel .crumb-composer .recipe-post-field{display:grid;gap:14px;padding:18px}
+.recipe-post-heading{font:11px/1.8 Pixel,monospace;color:#805137}
+.game-panel .recipe-post-field textarea{min-height:168px;padding:14px;line-height:1.8;background:#fffdf4;border:1px solid #c9af84;resize:vertical}
+.recipe-meta.recipe-meta-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.recipe-meta-controls .recipe-prep-time{grid-column:1/-1;flex-direction:row;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.game-panel .crumb-composer .recipe-meta-field{display:flex;flex-direction:column;gap:10px;min-width:0;margin:0}
+.game-panel .crumb-composer .recipe-meta-field select{width:100%;min-width:0;min-height:48px;margin:0;padding:10px 8px;font-size:12px;background:#fff8e8;border:1px solid #bca175}

@@ -4,7 +4,7 @@ import type { CrumbCategory } from './index';
 import type {Community,CommunityId} from './communities';
 export { campus };
 export type Coordinate = { latitude: number; longitude: number };
-export type WorldCrumb = Coordinate & { id:string; community_id?:CommunityId; title:string; description:string|null; category:CrumbCategory; state:'crumb'|'rising'|'full_loaf'|'stale'; confirm_count:number; dispute_count:number; related_posts:number; created_at:string; expires_at:string; my_vote:number|null; is_author:boolean };
+export type WorldCrumb = Coordinate & { id:string; community_id?:CommunityId; title:string; description:string|null; category:CrumbCategory; state:'crumb'|'rising'|'full_loaf'|'stale'|'burnt'; confirm_count:number; dispute_count:number; related_posts:number; created_at:string; expires_at:string; my_vote:number|null; is_author:boolean };
 export type Friend = { id:string; handle:string; avatar:AvatarConfig; accepted:boolean; incoming:boolean };
 export type Presence = Coordinate & {id:string; handle:string; avatar:AvatarConfig; updated_at:string; expires_at:string; moving?:boolean};
 export type World = { profile:{id:string;handle:string;avatar:AvatarConfig;avatar_completed:boolean;friend_code:string}|null; crumbs:WorldCrumb[]; friends:Friend[]; presence:Presence[];communities?:Community[] };

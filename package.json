@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "dev:web": "next dev",
@@ -17,7 +20,9 @@
     "test": "vitest run",
     "check": "npm run lint && npm run typecheck && npm test"
   },
-  "engines": { "node": ">=24 <25" },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "overrides": {
     "react-native-reanimated": "4.5.1",
     "react-native-worklets": "0.10.1",
@@ -45,6 +50,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.10",
+    "@mapbox/vector-tile": "^3.0.0",
     "@tailwindcss/turbopack": "^4",
     "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^24.19.2",
@@ -52,6 +58,7 @@
     "@types/react-dom": "~19.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "pbf": "^5.1.2",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.5"

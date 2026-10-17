@@ -69,3 +69,75 @@ Location names are hidden below zoom 8 on both maps. Mobile supports one-finger 
 Eight original pixel illustrations replace the generic roofs at The Swamp, Century Tower, O?Dome, Reitz, Marston, Library West, Plaza of the Americas, and Malachowsky. Their bases stay geographically anchored; the facade drawings deliberately show an oblique view rather than trace a roof. Preview all eight at /landmark-preview.png. Generate it with node scripts/render-landmark-qa.mjs. Reference pages: https://www.eng.ufl.edu/about/new-buildings/malachowsky-hall-for-data-science-information-technology/ , https://www.oconnellcenter.ufl.edu/img_3287_website/ , https://marston.uflib.ufl.edu/ .
 
 The toast-shaped action tears off a piece; the next map tap drops it and opens the composer. No post is written until the composer is submitted. Desktop supports trackpad pinch (Ctrl-wheel), Safari gesture events, and two touch pointers. Real hardware gesture checks remain pending.
+
+### Campus landscaping
+
+Terrain uses cached OpenStreetMap woodland, park, grass/meadow, water and playing-field polygons. Canopy sprites are sampled inside woodland boundaries, excluding building footprints and mapped walkways; these illustrate tree cover rather than surveyed individual tree locations. Unmapped open land retains the base grass color. The decorative Plaza illustration is omitted so mapped paths remain visible. Alachua (the French Fries sculpture) is a separate pixel landmark approximately positioned beside the Marston entrance; its illustrated width uses the artist's published 50-foot dimension.
+
+### UF building catalog and naming coverage
+
+The map builder now prefers UF public building-footprint geometry, official GroundName values, and GroundNum building numbers from https://services9.arcgis.com/IiuFUnlkob76Az9k/ArcGIS/rest/services/UF_Building_and_Greek_Footprints_view/FeatureServer . Refresh with `node scripts/fetch-uf-building-catalog.mjs`, then `node scripts/build-campus-map.mjs`. The whole stadium bowl uses the OSM perimeter because the UF stadium record outlines a stand.
+
+Named buildings show labels at zoom 16 and above; landmark labels appear at zoom 8. Officially numbered but unnamed buildings show their UF building number. The snapshot currently has 1,247 named/numbered building outlines; 2,670 remaining OSM outlines have no sourced name (the bounds include surrounding neighborhoods). They are not assigned invented names.
+
+Century Tower is emphasized at 1.65 times its real-height projection. Pixel facades remain illustrative: official footprints establish location/extents, but generic sprites do not reconstruct complex footprints, elevations, rooflines or actual exterior details. Verified facade references and missing-name research are still needed for full real-world accuracy.
+
+### Ground materials
+
+UFColorBasemapStandard vector tiles now supply real lawn, woodland, planter, artificial turf, water, brick/paver, concrete, asphalt, gravel, wood and sand/dirt polygons. Source: https://tiles.arcgis.com/tiles/IiuFUnlkob76Az9k/arcgis/rest/services/UFColorBasemapStandard/VectorTileServer . The material classification is taken from its published style symbols. Brick and pavers are grouped by UF; this does not establish that an area is cobblestone. Unknown/unmapped ground is neutral beige. Pixel textures illustrate these recorded materials rather than recreating each paving pattern.
+
+Refresh: `node scripts/fetch-uf-ground.mjs`, then `node scripts/build-campus-map.mjs`. Tiles are cached at zoom 16 and clipped to remove tile-buffer overlap, retaining polygon holes. Ground renders above fallback OSM roads/paths and below buildings/people, with detail textures only when zoomed in. Clients read the cached polygons and make no GIS requests.
+
+### Building ground infill and scale
+
+Building sprites now use footprint depth plus projected wall height instead of shrinking long buildings to a fixed sprite aspect ratio. Century Tower retains its monument emphasis. Unknown ground within building footprints is filled from the nearest mapped grass, brick/paver or concrete surface (limited to roughly 38m at the inference grid resolution); interiors without a nearby suitable surface default to pale-yellow path. Courtyard holes are excluded. These polygons are marked `inferred: true` and drawn beneath surveyed material polygons, so actual recorded ground remains authoritative. Concrete paths use the requested pale-yellow palette. This visual infill does not classify unmapped land elsewhere.
+
+### Toast cursor and crumb placement
+
+Web sessions use the 32px Full Loaf PNG cursor, with an SVG fallback, including SVG map children. Native touch input does not display a cursor. The toast button plays its complete tear-and-fall sequence before entering placement mode. Every map placement plays a shared 1.35-second screen-sized loaf/crumb animation, with a falling bite, bounce and crumb scatter, on web and native. The composer opens after the animation so the native modal cannot hide it. Placement is a draft; only submitting the form writes the post. The animation timer is canceled when another placement or an existing crumb is selected, and on screen unmount. Web reduced-motion preferences skip directly to the landing portion.
+
+### Building exploration
+
+Desktop ground/building browser tooltips are removed. Only major buildings reveal a location-style name on hover when labels are hidden at the current zoom. Buildings highlight on hover/focus and remain highlighted while selected; clicking (or tapping on mobile) frames the structure and opens its Full Loaf events. The list uses active community posts with Full Loaf state, inside or within 20m of the building bounds; it is a proximity association rather than a confirmed venue assignment. Toast placement mode takes precedence over building exploration. Bottom navigation is removed on both platforms, with Communities available from the header. Malachowsky has 15% visual emphasis, preserving its geographic anchor.
+
+### Remaining unmapped ground
+
+Neutral/unclassified ground now uses the same green grass treatment as the map fallback, as requested. A short-range inference pass extends adjacent mapped brick/paver or pale-yellow concrete surfaces by at most two 3.17m raster cells into unclassified gaps. It never replaces recorded materials. Existing building-footprint infill remains above this pass. These continuations are marked inferred, and the green fallback is illustrative rather than a claim of surveyed grass.
+
+### Cursor-origin placement
+
+Mouse placement now replaces the system cursor with the identical 32px golden-toast sprite at the click position, tears off its corner, and drops the crumb up to 72 screen pixels below it. The selected geographic point is the actual landing position; the fall is shortened near the map edge. The regular cursor is hidden over the map until completion to avoid a duplicate toast. Touch placement retains its visible toast illustration. Successful form submission no longer replays a second floating-toast animation on web.
+
+### Building click behavior
+
+A single building click/tap opens its event panel after a 400ms double-click recognition window. A second click/tap on the same building within that window cancels the panel/centering action and starts a crumb draft at the building footprint center. Mouse animation still starts from the clicked cursor position. This applies even while carrying a crumb. Panning or beginning a pinch cancels a pending building click. Keyboard activation opens the building panel, whose post action remains available. Empty map ground keeps its single-click placement behavior.
+
+Current landmark emphasis: Century Tower uses 2x the real-height projection; Malachowsky uses 1.35x its footprint-based illustration; Library West and Marston use 1.25x. All retain their geographic anchors and the map focus calculation uses the enlarged display bounds.
+
+Hover-name update: all building sprites now show a cream-and-gold location popup on pointer hover or keyboard focus, at any zoom level. Hovered names render above other building labels. Missing sourced names display Campus building. Existing zoom-dependent map labels remain.
+
+### Campus noticeboard UI
+
+The map toolbar highlights joined communities, links to profile community management, keeps category selection in Show, and offers a Full Loaves toggle. Both category and Full Loaf filters affect the map and its displayed crumb count. The map stamp reads Campus Crumbs with the current community and filtered count. The web sidebar shows current-community live crumbs, Full Loaf counts, a short corroboration explanation, fresh posts and optional friend-avatar sharing. Desktop instructions read Drag / Zoom / Double-click buildings to post; mobile uses Pan / Pinch / Double-tap buildings to post.
+
+### Visual event progress
+
+Confirmation thresholds remain backend rules and are no longer explained or counted toward a target in the product UI. Golden map imagery shows crumb fragments, a smaller rising toast, and a full golden loaf. Map markers remain clickable/tappable to open event details, while feeds use status labels instead of /3 counters. The sidebar corroboration tutorial is removed. Backend vote/grouping logic is unchanged.
+
+### Profile location and toast status
+
+Location sharing controls and explanations live in Profile on web and mobile. Web sharing survives internal navigation and stops when the tab is hidden or the account signs out. Sharing remains friends-only, approximate, and off by default.
+
+Migration 007 keeps events active and visible as burnt toast when three independent users deny or report conflicting information (spam/other); overlapping votes/reports count once per person, and banned users do not contribute. Privacy/harassment removal rules remain unchanged. The toast-status filter offers all, fresh crumbs, rising, full loaves, burnt, and stale, alongside the separate category filter. Removed events are not restored by the migration.
+
+Migration 008 removes and scrubs an event at seven independent disputes, clearing its notifications and excluding it from the map/feed. Three to six disputes remain burnt toast. Duplicate votes do not count twice. Existing privacy/harassment moderation is preserved.
+
+### Breadcrumb composer refresh
+
+Web and mobile submission use a golden toast header, a movable location card, headline and detail character counts, a category grid, community selection, and a clear posting action with pending feedback. Related finds offer confirmation or a grouped update. Moving the pin preserves the draft and re-enters map placement. Mobile uses keyboard avoidance for the submission sheet.
+
+The submission composer now reads as a recipe card: warm ruled paper and notebook margin, prep/makes/serve metadata, a completion-aware ingredient checklist, numbered form steps, recipe notes, and a Ready to serve footer. All recipe copy still maps to the existing event fields and submit action.
+
+Recipe fields now represent event data: Ingredients is the single free-form post body; its first line becomes the compact map title, with the full text preserved. Prep time is stamped on submission, Serves follows community selection, and Flavor follows category selection. Posted details show the saved server-created timestamp in America/New_York.
+
+Post location is now an optional nearby-building selector. It offers up to 12 named building footprints within 150 meters of the original map click; selecting a building uses its geographic center. The default keeps the precise original map coordinate, and selecting that option again restores it after any building choice. Nearby options always stay anchored to the original click, not the last chosen building.
