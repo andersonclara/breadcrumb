@@ -75,7 +75,10 @@ export function parseJsonLd(body) {
   const walk = value => {
     if (!value || typeof value !== 'object') return;
     if (array(value['@type']).some(type => /Event$/.test(type))) rows.push(value);
-    for (const child of Object.values(value)) Array.isArray(child) ? child.forEach(walk) : walk(child);
+    for (const child of Object.values(value)) {
+      if (Array.isArray(child)) child.forEach(walk);
+      else walk(child);
+    }
   };
   $('script[type="application/ld+json"]').each((_, e) => walk(JSON.parse($(e).text())));
   return rows.map(normalizeEvent);

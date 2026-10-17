@@ -1,20 +1,28 @@
 "use server";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSupabaseConfig } from "@/lib/env";
 import { normalizeUfEmail } from "@/lib/auth/rules";
 import { createClient } from "@/lib/supabase/server";
-import {passwordLogin} from '@/lib/auth/password';
+import {createAuth0Account,passwordLogin} from '@/lib/auth/password';
+import {auth0Config,trustedClientIp} from '@/lib/auth/auth0';
 
 export type LoginState = { message: string; sent: boolean };
+// Forwarded to Auth0 for per-student brute-force protection, only where the header is trustworthy.
+async function clientIp(){return trustedClientIp(await headers());}
 export async function signInPassword(_previous:LoginState,formData:FormData):Promise<LoginState>{
  if(!getSupabaseConfig())return {message:'Sign-in will be available once Supabase is connected.',sent:false};
  let result;
- try{result=await passwordLogin(await createClient(),formData.get('identifier'),formData.get('password'));}catch{return {message:'Could not connect. Please try again.',sent:false};}
+ try{result=await passwordLogin(await createClient(),formData.get('identifier'),formData.get('password'),await clientIp());}catch{return {message:'Could not connect. Please try again.',sent:false};}
  if(result.error)return {message:result.error,sent:false};
  redirect(result.next!);
 }
 export async function createUfAccount(previous:LoginState,formData:FormData):Promise<LoginState>{
- return sendMagicLink(previous,formData);
+ if(!getSupabaseConfig()||!auth0Config())return sendMagicLink(previous,formData);
+ let result;
+ try{result=await createAuth0Account(await createClient(),{email:formData.get('email'),username:formData.get('username'),password:formData.get('password'),confirm:formData.get('confirm')},await clientIp());}catch{return {message:'Could not create your account. Please try again.',sent:false};}
+ if(result.error)return {message:result.error,sent:false};
+ redirect(result.next!);
 }
 export async function sendMagicLink(_previous: LoginState, formData: FormData): Promise<LoginState> {
   const email = normalizeUfEmail(formData.get("email"));

@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { getSupabaseConfig } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeUfEmail, canAct } from "@/lib/auth/rules";
+import { auth0Config } from "@/lib/auth/auth0";
 
 import {signOut} from '@/app/auth/actions';
 
@@ -21,11 +22,12 @@ export default async function ProfilePage({searchParams}:{searchParams:Promise<{
   if (!user || !normalizeUfEmail(user.email) || !user.email_confirmed_at) redirect("/login");
   const { data: profile, error } = await supabase.from("profiles").select("handle, banned, suspended_until, avatar, account_completed, avatar_completed").eq("id", user.id).single();
   const onboarding=!profile?.account_completed||!profile?.avatar_completed;
-  if(profile&&(onboarding||params.edit==='1'||params.setup==='1'))return <main className="pixel-page profile-edit-page"><Link href="/">? CAMPUS</Link><div className="profile-edit-brand"><ToastLogo size={70}/><p className="pixel-kicker">{onboarding?'UF EMAIL VERIFIED / WELCOME TO BREADCRUMB':'YOUR CAMPUS PROFILE'}</p></div><ProfileEditor initialUsername={profile.handle} initialAvatar={validAvatar(profile.avatar)?profile.avatar:defaultAvatar} accountCompleted={!!profile.account_completed} onboarding={onboarding}/></main>;
+  const auth0Passwords=Boolean(auth0Config());
+  if(profile&&(onboarding||params.edit==='1'||params.setup==='1'))return <main className="pixel-page profile-edit-page"><Link href="/">? CAMPUS</Link><div className="profile-edit-brand"><ToastLogo size={70}/><p className="pixel-kicker">{onboarding?'UF EMAIL VERIFIED / WELCOME TO BREADCRUMB':'YOUR CAMPUS PROFILE'}</p></div><ProfileEditor initialUsername={profile.handle} initialAvatar={validAvatar(profile.avatar)?profile.avatar:defaultAvatar} accountCompleted={!!profile.account_completed} onboarding={onboarding} passwordManagedByAuth0={auth0Passwords}/></main>;
   return <main className="mx-auto max-w-3xl space-y-6 px-6 py-16">
     <Link href="/">← Back to the map</Link><h1 className="text-4xl font-semibold">Your profile</h1>
     <p className="text-xl">{profile?.handle ?? "UF community member"}</p>
-    <Link href="/profile?edit=1" className="text-button">EDIT USERNAME OR PASSWORD</Link>
+    <Link href="/profile?edit=1" className="text-button">{auth0Passwords?'EDIT USERNAME':'EDIT USERNAME OR PASSWORD'}</Link>
     <ProfileAvatar initial={validAvatar(profile?.avatar)?profile.avatar:defaultAvatar}/>
     {error || !profile ? <p role="alert">Your profile could not be loaded. Check that the database migration has been applied.</p> :
       <p>{profile.banned ? "Your account is banned." : !canAct(profile) && profile.suspended_until

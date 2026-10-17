@@ -27,6 +27,25 @@ npx supabase@latest db reset
 
 These commands use `supabase/config.toml` and apply the migration. Copy local API details from CLI output to `.env.local`. Local emails appear at `http://localhost:54324`. `db reset` destroys the local database; do not run it against a remote project. Hosted cron extensions are optional and not part of the core migration.
 
+## 1A Auth0 username/password accounts
+
+Auth0 holds Breadcrumb passwords; the pixel login form talks to Auth0 from the server. See [AUTH.md](AUTH.md) for the flow and the no-verification limitation.
+
+1. In Auth0, create a **Regular Web Application** (or reuse one). Copy its Domain, Client ID, and Client Secret into `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` in `.env.local`. `SUPABASE_SERVICE_ROLE_KEY` is also required.
+2. Open Application → Settings → Advanced → **Grant Types**, enable **Password**, and save. On the same Settings page, turn on **Trust Token Endpoint IP Header**, so brute-force protection uses each student's IP.
+3. Open Application → **Connections** and enable **Username-Password-Authentication**. Nothing else is needed.
+4. Open Authentication → Database → Username-Password-Authentication. Leave **Disable Sign Ups** off and **Requires Username** off; usernames live in Breadcrumb. Choose a password policy of Fair or Good.
+5. Open Branding → Email Templates → **Verification Email** and turn it off, so Auth0 does not send mail that UF filters.
+6. Open Actions → Library → Build Custom → **Pre User Registration**, then deploy this Action and add it to the Pre User Registration flow:
+
+   ```js
+   exports.onExecutePreUserRegistration = async (event, api) => {
+     if (!/@ufl\.edu$/i.test(event.user.email ?? '')) api.access.deny('not_uf', 'Use your @ufl.edu email.');
+   };
+   ```
+
+7. Restart `npm run dev`. On `/login`, Create Account should show email, username, password, and confirm fields.
+
 ## 2 Optional Mapbox account
 
 The current game-like map uses a cached OpenStreetMap dataset and does not need a Mapbox token or Google Maps key. An already configured public Mapbox token can remain in `.env.local` for possible future conventional map views; it is not used by the pixel renderer. See [the pixel-world guide](PIXEL_WORLD.md) for data attribution and location-sharing behavior.
