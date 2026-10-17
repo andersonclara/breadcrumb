@@ -1,0 +1,73 @@
+{
+  "id": "bo-diddley-html",
+  "format": "city",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:43.127Z",
+  "completedAt": "2026-10-17T03:35:43.833Z",
+  "requestedUrl": "https://www.gainesvillefl.gov/Venues/Bo-Diddley-Plaza",
+  "url": "https://www.gainesvillefl.gov/Venues/Bo-Diddley-Plaza",
+  "status": 200,
+  "contentType": "text/html; charset=utf-8",
+  "robots": {
+    "url": "https://www.gainesvillefl.gov/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 100056,
+  "count": 9,
+  "fieldCoverage": {
+    "name": 9,
+    "description": 9,
+    "location": 9,
+    "start": 9,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 9,
+    "url": 9,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "end",
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2026-10-17T00:00:00.000Z",
+    "max": "2026-12-31T00:00:00.000Z",
+    "futureOrToday": 9,
+    "datesCompared": 9,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "The Great Pumpkin Bash",
+      "start": "2026-10-17",
+      "location": "Bo Diddley Plaza, 111 E. University Ave., 32601",
+      "url": "https://www.gainesvillefl.gov/Events-directory/PRCA-Events/The-Great-Pumpkin-Bash",
+      "category": [
+        "Cultural events",
+        "Exhibitions & festivals",
+        "Kids & family",
+        "Youth events"
+      ]
+    },
+    {
+      "name": "Free Yoga at the Plaza",
+      "start": "2026-10-19",
+      "location": "Bo Diddley Plaza, 111 E. University Ave., 32601",
+      "url": "https://www.gainesvillefl.gov/Events-directory/PRCA-Events/Free-Yoga-at-the-Plaza-MonWed",
+      "category": [
+        "Community events & fundraisers"
+      ]
+    }
+  ],
+  "usefulRecordsParsed": true
+}

@@ -1,0 +1,860 @@
+[
+  {
+    "id": "gatorconnect",
+    "startedAt": "2026-10-17T03:36:22.800Z",
+    "completedAt": "2026-10-17T03:36:23.237Z",
+    "requestedUrl": "https://gatorconnect.ufl.edu/events",
+    "url": "https://gatorconnect.ufl.edu/events",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://gatorconnect.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 8284,
+    "title": "- GatorConnect",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "engage"
+    ]
+  },
+  {
+    "id": "uf-calendar",
+    "startedAt": "2026-10-17T03:36:23.255Z",
+    "completedAt": "2026-10-17T03:36:23.528Z",
+    "requestedUrl": "https://calendar.ufl.edu/",
+    "url": "https://calendar.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://calendar.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 219125,
+    "title": "Calendar | University of FloridaCalendar - University of Florida",
+    "feeds": [],
+    "terms": [
+      "https://privacy.ufl.edu/privacystatement.html"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "livewhale",
+      "engage"
+    ]
+  },
+  {
+    "id": "student-engagement",
+    "startedAt": "2026-10-17T03:36:23.587Z",
+    "completedAt": "2026-10-17T03:36:24.422Z",
+    "requestedUrl": "https://studentengagement.ufl.edu/",
+    "url": "https://studentengagement.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://studentengagement.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 124559,
+    "title": "Student Engagement",
+    "feeds": [
+      "https://studentengagement.ufl.edu/feed/",
+      "https://studentengagement.ufl.edu/comments/feed/"
+    ],
+    "terms": [
+      "https://policy.ufl.edu/policy/online-internet-privacy-statement/",
+      "https://policy.ufl.edu/"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "livewhale",
+      "wp-json",
+      "engage"
+    ]
+  },
+  {
+    "id": "gatornights",
+    "startedAt": "2026-10-17T03:36:24.531Z",
+    "completedAt": "2026-10-17T03:36:25.495Z",
+    "requestedUrl": "https://studentengagement.ufl.edu/gatornights/",
+    "url": "https://studentengagement.ufl.edu/gatornights/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://studentengagement.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 137465,
+    "title": "GatorNights – Student Engagement",
+    "feeds": [
+      "https://studentengagement.ufl.edu/feed/",
+      "https://studentengagement.ufl.edu/comments/feed/"
+    ],
+    "terms": [
+      "https://policy.ufl.edu/policy/online-internet-privacy-statement/",
+      "https://policy.ufl.edu/"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "livewhale",
+      "wp-json",
+      "engage"
+    ]
+  },
+  {
+    "id": "recsports",
+    "startedAt": "2026-10-17T03:36:25.552Z",
+    "url": "https://recsports.ufl.edu/",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://recsports.ufl.edu/robots.txt",
+      "status": null,
+      "allowed": false,
+      "note": "Robots fetch failed: UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "uf-arts",
+    "startedAt": "2026-10-17T03:36:25.586Z",
+    "completedAt": "2026-10-17T03:36:28.002Z",
+    "requestedUrl": "https://arts.ufl.edu/news-events/events/",
+    "url": "https://arts.ufl.edu/news-events/events/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://arts.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 216557,
+    "title": "Events - University of Florida | College of the Arts",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [
+      "WebSite",
+      "SearchAction",
+      "EntryPoint",
+      "Organization",
+      "ImageObject",
+      "WebPage",
+      "BreadcrumbList",
+      "ListItem",
+      "ReadAction"
+    ],
+    "platformHints": [
+      "wp-json"
+    ]
+  },
+  {
+    "id": "uf-performing-arts",
+    "startedAt": "2026-10-17T03:36:28.116Z",
+    "completedAt": "2026-10-17T03:36:29.523Z",
+    "requestedUrl": "https://performingarts.ufl.edu/events/",
+    "url": "https://performingarts.ufl.edu/events/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://performingarts.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 149643,
+    "title": "Events",
+    "feeds": [
+      "webcal://performingarts.ufl.edu/?ec3_ical"
+    ],
+    "terms": [
+      "http://privacy.ufl.edu/privacy-policies-and-procedures/onlineinternet-privacy-statement/"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "wp-json"
+    ]
+  },
+  {
+    "id": "athletics",
+    "startedAt": "2026-10-17T03:36:29.656Z",
+    "completedAt": "2026-10-17T03:36:30.105Z",
+    "requestedUrl": "https://floridagators.com/",
+    "url": "https://floridagators.com/",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "robots": {
+      "url": "https://floridagators.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": 30
+    },
+    "redirects": [],
+    "bytes": 1183192,
+    "title": "Florida Gators - Official Athletics Website",
+    "feeds": [],
+    "terms": [
+      "https://sidearmsports.com/terms-of-service",
+      "https://www.sidearmsports.com/privacy-policy"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "sidearm",
+      "ticketmaster"
+    ]
+  },
+  {
+    "id": "uf-closures",
+    "startedAt": "2026-10-17T03:36:30.358Z",
+    "url": "https://campusclosures.ufl.edu/",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://campusclosures.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "note": "Robots URL returned HTML; conservative stop.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "gainesville-city",
+    "startedAt": "2026-10-17T03:36:30.436Z",
+    "completedAt": "2026-10-17T03:36:30.824Z",
+    "requestedUrl": "https://www.gainesvillefl.gov/Events-directory",
+    "url": "https://www.gainesvillefl.gov/Events-directory",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.gainesvillefl.gov/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 385482,
+    "title": "Events Welcome to the City of Gainesville",
+    "feeds": [],
+    "terms": [
+      "https://www.gainesvillefl.gov/Government-Pages/Government/Departments/Communications-Department/Social-Media-Terms-of-Use",
+      "https://www.gainesvillefl.gov/Disclaimer-and-Privacy-Policy"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "wix",
+      "eventbrite"
+    ]
+  },
+  {
+    "id": "gainesvilleshows",
+    "startedAt": "2026-10-17T03:36:30.982Z",
+    "completedAt": "2026-10-17T03:36:31.617Z",
+    "requestedUrl": "https://www.gainesvilleshows.com/",
+    "url": "https://www.gainesvilleshows.com/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.gainesvilleshows.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 575106,
+    "title": "GainesvilleShows.com",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [
+      "Organization",
+      "ImageObject",
+      "ContactPoint",
+      "City",
+      "State",
+      "WebSite",
+      "SearchAction",
+      "EntryPoint"
+    ],
+    "platformHints": []
+  },
+  {
+    "id": "gainesvilleevents",
+    "startedAt": "2026-10-17T03:36:31.812Z",
+    "completedAt": "2026-10-17T03:36:32.128Z",
+    "requestedUrl": "https://gainesvilleevents.com/",
+    "url": "https://gainesvilleevents.com/",
+    "status": 200,
+    "contentType": "text/html",
+    "robots": {
+      "url": "https://gainesvilleevents.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 1007334,
+    "title": "Gainesville Events Calendar — What's Happening in Gainesville, FL",
+    "feeds": [
+      "https://gainesvilleevents.com/feed.ics"
+    ],
+    "terms": [
+      "https://gainesvilleevents.com/event/gainesvilleshows-62685c53e7/",
+      "https://gainesvilleevents.com/privacy/"
+    ],
+    "jsonLdTypes": [
+      "Organization"
+    ],
+    "platformHints": [
+      "engage",
+      "ticketmaster"
+    ]
+  },
+  {
+    "id": "visit-gainesville",
+    "startedAt": "2026-10-17T03:36:32.410Z",
+    "completedAt": "2026-10-17T03:36:32.531Z",
+    "requestedUrl": "https://www.visitgainesville.com/events/",
+    "url": "https://www.visitgainesville.com/events/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.visitgainesville.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 198582,
+    "title": "Events - Visit Gainesville",
+    "feeds": [],
+    "terms": [
+      "https://www.visitgainesville.com/privacy-policy/"
+    ],
+    "jsonLdTypes": [
+      "BreadcrumbList",
+      "ListItem"
+    ],
+    "platformHints": [
+      "tribe-events",
+      "wp-json"
+    ]
+  },
+  {
+    "id": "heartwood",
+    "startedAt": "2026-10-17T03:36:32.554Z",
+    "completedAt": "2026-10-17T03:36:32.851Z",
+    "requestedUrl": "https://www.heartwoodsoundstage.com/events",
+    "url": "https://www.heartwoodsoundstage.com/events",
+    "status": 404,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.heartwoodsoundstage.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "error": "HTTP_404",
+    "retryAfter": null,
+    "bytes": 0
+  },
+  {
+    "id": "highdive",
+    "startedAt": "2026-10-17T03:36:32.855Z",
+    "url": "https://highdivegainesville.com/",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://highdivegainesville.com/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "note": "Robots URL returned HTML; conservative stop.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "wooly",
+    "startedAt": "2026-10-17T03:36:33.335Z",
+    "completedAt": "2026-10-17T03:36:33.579Z",
+    "requestedUrl": "https://thewooly.co/",
+    "url": "https://thewooly.co/",
+    "status": 200,
+    "contentType": "text/html",
+    "robots": {
+      "url": "https://thewooly.co/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 114,
+    "title": "",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": []
+  },
+  {
+    "id": "bo-diddley",
+    "startedAt": "2026-10-17T03:36:33.580Z",
+    "completedAt": "2026-10-17T03:36:33.853Z",
+    "requestedUrl": "https://www.gainesvillefl.gov/Parks/Bo-Diddley-Plaza",
+    "url": "https://www.gainesvillefl.gov/Parks/Bo-Diddley-Plaza",
+    "status": 404,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.gainesvillefl.gov/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "error": "HTTP_404",
+    "retryAfter": null,
+    "bytes": 0
+  },
+  {
+    "id": "swamp-restaurant",
+    "startedAt": "2026-10-17T03:36:33.854Z",
+    "completedAt": "2026-10-17T03:36:34.116Z",
+    "requestedUrl": "https://www.swamprestaurant.com/",
+    "url": "https://www.swamprestaurant.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.swamprestaurant.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 75632,
+    "title": "The Swamp Restaurant in Gainesville | GNV's Best Bar & Grill",
+    "feeds": [],
+    "terms": [
+      "https://www.swamprestaurant.com/privacy-policy"
+    ],
+    "jsonLdTypes": [
+      "Restaurant",
+      "PostalAddress",
+      "GeoCoordinates",
+      "AggregateRating",
+      "OpeningHoursSpecification",
+      "BreadcrumbList",
+      "ListItem"
+    ],
+    "platformHints": []
+  },
+  {
+    "id": "uf-dining",
+    "startedAt": "2026-10-17T03:36:34.158Z",
+    "url": "https://dineoncampus.com/uf",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://dineoncampus.com/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "uf-alerts",
+    "startedAt": "2026-10-17T03:36:34.302Z",
+    "completedAt": "2026-10-17T03:36:36.201Z",
+    "requestedUrl": "https://ufalert.ufl.edu/",
+    "url": "https://ufalert.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://ufalert.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 79945,
+    "title": "UF Alert",
+    "feeds": [
+      "https://ufalert.ufl.edu/feed/",
+      "https://ufalert.ufl.edu/comments/feed/"
+    ],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "wp-json"
+    ]
+  },
+  {
+    "id": "florida-museum",
+    "startedAt": "2026-10-17T03:36:36.296Z",
+    "completedAt": "2026-10-17T03:36:36.708Z",
+    "requestedUrl": "https://www.floridamuseum.ufl.edu/calendar/",
+    "url": "https://www.floridamuseum.ufl.edu/calendar/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.floridamuseum.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 105673,
+    "title": "Events Calendar – Florida Museum",
+    "feeds": [
+      "https://www.floridamuseum.ufl.edu/calendar/feed/",
+      "webcal://www.floridamuseum.ufl.edu/?post_type=tribe_events&ical=1&eventDisplay=list",
+      "https://www.floridamuseum.ufl.edu/calendar/list/?ical=1"
+    ],
+    "terms": [
+      "https://www.floridamuseum.ufl.edu/about/copyright/",
+      "https://www.google.com/policies/privacy/",
+      "http://privacy.ufl.edu/privacy-policies-and-procedures/onlineinternet-privacy-statement/"
+    ],
+    "jsonLdTypes": [
+      "Event",
+      "Place",
+      "PostalAddress",
+      "GeoCoordinates",
+      "Person"
+    ],
+    "platformHints": [
+      "tribe-events",
+      "wp-json"
+    ]
+  },
+  {
+    "id": "harn-museum",
+    "startedAt": "2026-10-17T03:36:36.729Z",
+    "completedAt": "2026-10-17T03:36:40.106Z",
+    "requestedUrl": "https://harn.ufl.edu/events/",
+    "url": "https://harn.ufl.edu/calendar/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://harn.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [
+      {
+        "url": "https://harn.ufl.edu/events/",
+        "status": 301,
+        "to": "https://harn.ufl.edu/calendar/"
+      }
+    ],
+    "bytes": 102809,
+    "title": "Events from October 16, 2024 – October 26, 2024 – Harn Museum of Art",
+    "feeds": [
+      "https://harn.ufl.edu/feed/",
+      "https://harn.ufl.edu/calendar/?ical=1"
+    ],
+    "terms": [
+      "https://privacy.ufl.edu/privacy-policies-and-procedures/onlineinternet-privacy-statement/"
+    ],
+    "jsonLdTypes": [
+      "CollectionPage",
+      "ImageObject",
+      "BreadcrumbList",
+      "ListItem",
+      "WebSite",
+      "SearchAction",
+      "EntryPoint",
+      "PropertyValueSpecification",
+      "Event",
+      "Place",
+      "PostalAddress",
+      "Person"
+    ],
+    "platformHints": [
+      "tribe-events",
+      "wp-json"
+    ]
+  },
+  {
+    "id": "uf-libraries",
+    "startedAt": "2026-10-17T03:36:40.211Z",
+    "completedAt": "2026-10-17T03:36:40.445Z",
+    "requestedUrl": "https://libcal.uflib.ufl.edu/",
+    "url": "https://libcal.uflib.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://libcal.uflib.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": 10
+    },
+    "redirects": [],
+    "bytes": 41383,
+    "title": "LibCal -\n        UF Libraries",
+    "feeds": [],
+    "terms": [
+      "http://privacy.ufl.edu/privacy-policies-and-procedures/onlineinternet-privacy-statement/",
+      "https://policies.google.com/privacy"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "libcal"
+    ]
+  },
+  {
+    "id": "santa-fe",
+    "startedAt": "2026-10-17T03:36:40.456Z",
+    "completedAt": "2026-10-17T03:36:42.412Z",
+    "requestedUrl": "https://www.sfcollege.edu/calendar/",
+    "url": "https://www.sfcollege.edu/events.html",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.sfcollege.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [
+      {
+        "url": "https://www.sfcollege.edu/calendar/",
+        "status": 301,
+        "to": "https://www.sfcollege.edu/events.html"
+      }
+    ],
+    "bytes": 38953,
+    "title": "Events",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [
+      "CollegeOrUniversity",
+      "PostalAddress",
+      "WebPage"
+    ],
+    "platformHints": []
+  },
+  {
+    "id": "acm-uf",
+    "startedAt": "2026-10-17T03:36:42.447Z",
+    "completedAt": "2026-10-17T03:36:42.971Z",
+    "requestedUrl": "https://uf-acm.com/",
+    "url": "https://uf-acm.com/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://uf-acm.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 708,
+    "title": "UF ACM",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": []
+  },
+  {
+    "id": "swamphacks",
+    "startedAt": "2026-10-17T03:36:42.973Z",
+    "completedAt": "2026-10-17T03:36:43.603Z",
+    "requestedUrl": "https://swamphacks.com/",
+    "url": "https://xii.swamphacks.com/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://xii.swamphacks.com/robots.txt",
+      "status": 404,
+      "allowed": true,
+      "note": "No robots file; not a reuse license.",
+      "crawlDelay": null
+    },
+    "redirects": [
+      {
+        "url": "https://swamphacks.com/",
+        "status": 301,
+        "to": "https://xii.swamphacks.com/"
+      }
+    ],
+    "bytes": 467,
+    "title": "SwampHacks XII",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": []
+  },
+  {
+    "id": "uf-swe",
+    "startedAt": "2026-10-17T03:36:43.606Z",
+    "completedAt": "2026-10-17T03:36:45.768Z",
+    "requestedUrl": "https://uf.swe.org/",
+    "url": "https://uf.swe.org/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://uf.swe.org/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 160292,
+    "title": "Home - University of FloridaScroll to topScroll to top",
+    "feeds": [
+      "https://uf.swe.org/feed/",
+      "https://uf.swe.org/comments/feed/"
+    ],
+    "terms": [
+      "https://swe.org/about-swe/privacy-policy/"
+    ],
+    "jsonLdTypes": [
+      "Person",
+      "Organization",
+      "ImageObject",
+      "WebSite",
+      "SearchAction",
+      "WebPage",
+      "Article"
+    ],
+    "platformHints": [
+      "wp-json"
+    ]
+  },
+  {
+    "id": "fest",
+    "startedAt": "2026-10-17T03:36:45.855Z",
+    "completedAt": "2026-10-17T03:36:46.136Z",
+    "requestedUrl": "https://thefestfl.com/schedule/",
+    "url": "https://thefestfl.com/schedule/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://thefestfl.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 333354,
+    "title": "Schedule - THE FEST 24 - October 23-25, 2026 - Gainesville, FL",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "wix"
+    ]
+  },
+  {
+    "id": "gator-perks",
+    "startedAt": "2026-10-17T03:36:46.229Z",
+    "completedAt": "2026-10-17T03:36:47.628Z",
+    "requestedUrl": "https://worklife.hr.ufl.edu/gatorperks/food-restaurants/",
+    "url": "https://worklife.hr.ufl.edu/gatorperks/food-restaurants/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://worklife.hr.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 102118,
+    "title": "Food & Restaurants – Worklife",
+    "feeds": [],
+    "terms": [
+      "https://privacy.ufl.edu/policies/onlineinternet-privacy-policy-/"
+    ],
+    "jsonLdTypes": [
+      "WebSite",
+      "SearchAction",
+      "EntryPoint",
+      "Organization",
+      "ImageObject",
+      "WebPage",
+      "BreadcrumbList",
+      "ListItem",
+      "ReadAction"
+    ],
+    "platformHints": [
+      "wp-json"
+    ]
+  },
+  {
+    "id": "gatorbites",
+    "startedAt": "2026-10-17T03:36:47.671Z",
+    "completedAt": "2026-10-17T03:36:48.479Z",
+    "requestedUrl": "https://www.gatorbites.io/how-it-works",
+    "url": "https://www.gatorbites.io/how-it-works",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.gatorbites.io/robots.txt",
+      "status": 404,
+      "allowed": true,
+      "note": "No robots file; not a reuse license.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 42891,
+    "title": "How It Works | GatorBites",
+    "feeds": [],
+    "terms": [],
+    "jsonLdTypes": [],
+    "platformHints": []
+  },
+  {
+    "id": "rts",
+    "startedAt": "2026-10-17T03:36:48.491Z",
+    "completedAt": "2026-10-17T03:36:48.927Z",
+    "requestedUrl": "https://go-rts.com/",
+    "url": "https://go-rts.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://go-rts.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 175336,
+    "title": "Regional Transit System (RTS)",
+    "feeds": [
+      "https://go-rts.com/feed/",
+      "https://go-rts.com/comments/feed/"
+    ],
+    "terms": [
+      "https://go-rts.com/rtsconnect-privacy-policy/",
+      "https://go-rts.com/rts-rtsconnect-terms-of-use/",
+      "http://go-rts.com/americans-with-disabilities-act/"
+    ],
+    "jsonLdTypes": [],
+    "platformHints": [
+      "wp-json",
+      "engage"
+    ]
+  }
+]

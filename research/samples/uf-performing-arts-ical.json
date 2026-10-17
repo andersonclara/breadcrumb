@@ -1,0 +1,77 @@
+{
+  "id": "uf-performing-arts-ical",
+  "format": "ical",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:27.900Z",
+  "completedAt": "2026-10-17T03:35:28.846Z",
+  "requestedUrl": "https://performingarts.ufl.edu/?ec3_ical",
+  "url": "https://performingarts.ufl.edu/?ec3_ical",
+  "status": 200,
+  "contentType": "text/calendar; charset=UTF-8",
+  "robots": {
+    "url": "https://performingarts.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 64792,
+  "count": 195,
+  "fieldCoverage": {
+    "name": 195,
+    "description": 195,
+    "location": 0,
+    "start": 195,
+    "end": 195,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 195,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "location",
+    "organizer",
+    "price",
+    "category",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2025-03-09T01:00:00.000Z",
+    "max": "2027-04-25T01:00:00.000Z",
+    "futureOrToday": 67,
+    "datesCompared": 195,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Lyrics for Life",
+      "start": "2025-03-09T01:00:00Z",
+      "end": "2025-03-09T03:00:00Z",
+      "timezone": "UTC",
+      "location": null,
+      "url": "https://performingarts.ufl.edu/events/lyrics-for-life-2025/",
+      "category": [],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    },
+    {
+      "name": "2025|2026 Season Preview",
+      "start": "2025-07-22T23:00:00Z",
+      "end": "2025-07-23T01:00:00Z",
+      "timezone": "UTC",
+      "location": null,
+      "url": "https://performingarts.ufl.edu/events/20252026-season-preview/",
+      "category": [],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    }
+  ],
+  "usefulRecordsParsed": true
+}

@@ -1,0 +1,67 @@
+{
+  "id": "uf-calendar-rss",
+  "format": "rss",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:23.233Z",
+  "completedAt": "2026-10-17T03:35:25.330Z",
+  "requestedUrl": "https://calendar.ufl.edu/live/rss/events",
+  "url": "https://calendar.ufl.edu/live/rss/events",
+  "status": 200,
+  "contentType": "application/xml; charset=UTF-8",
+  "robots": {
+    "url": "https://calendar.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 2544709,
+  "count": 1000,
+  "fieldCoverage": {
+    "name": 1000,
+    "description": 930,
+    "location": 0,
+    "start": 0,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 1000,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "location",
+    "start",
+    "end",
+    "organizer",
+    "price",
+    "category",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "Ethics of Abortion Workshop",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://calendar.ufl.edu/clas_philosophy/event/58082-ethics-of-abortion-workshop",
+      "category": [],
+      "publishedAt": "Fri, 16 Oct 2026 04:00:00 +0000"
+    },
+    {
+      "name": "Ethics of Abortion Workshop",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://calendar.ufl.edu/clas_humanities/event/58535-ethics-of-abortion-workshop",
+      "category": [],
+      "publishedAt": "Fri, 16 Oct 2026 04:00:00 +0000"
+    }
+  ],
+  "usefulRecordsParsed": true
+}

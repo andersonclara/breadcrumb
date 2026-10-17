@@ -1,0 +1,6 @@
+{
+  "name": "breadcrumb-yikyak-preserved-experiment",
+  "private": true,
+  "type": "module",
+  "dependencies": { "sidechat.js": "2.6.6" }
+}

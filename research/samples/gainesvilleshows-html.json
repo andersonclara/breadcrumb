@@ -1,0 +1,72 @@
+{
+  "id": "gainesvilleshows-html",
+  "format": "shows",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:37:30.481Z",
+  "completedAt": "2026-10-17T03:37:30.762Z",
+  "requestedUrl": "https://www.gainesvilleshows.com/upcoming",
+  "url": "https://www.gainesvilleshows.com/upcoming",
+  "status": 200,
+  "contentType": "text/html; charset=utf-8",
+  "robots": {
+    "url": "https://www.gainesvilleshows.com/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 407009,
+  "count": 8,
+  "fieldCoverage": {
+    "name": 8,
+    "description": 0,
+    "location": 8,
+    "start": 8,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 8,
+    "url": 8,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "uniqueUrls": 8,
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "description",
+    "end",
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2026-10-16T00:00:00.000Z",
+    "max": "2026-10-16T00:00:00.000Z",
+    "futureOrToday": 0,
+    "datesCompared": 8,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Svdden Death, Hamro",
+      "start": "2026-10-16",
+      "location": "Vivid Music Hall",
+      "url": "https://www.gainesvilleshows.com/event/2026-10-16-vivid-music-hall-svdden-death",
+      "category": [
+        "Live music (source context)"
+      ]
+    },
+    {
+      "name": "Memo, Dude, Chill, Fie Scoobie, Fakksonly",
+      "start": "2026-10-16",
+      "location": "Loosey's",
+      "url": "https://www.gainesvilleshows.com/event/2026-10-16-looseys-memo",
+      "category": [
+        "Live music (source context)"
+      ]
+    }
+  ],
+  "usefulRecordsParsed": true
+}

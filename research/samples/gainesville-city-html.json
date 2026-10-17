@@ -1,0 +1,73 @@
+{
+  "id": "gainesville-city-html",
+  "format": "city",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:42.153Z",
+  "completedAt": "2026-10-17T03:35:42.979Z",
+  "requestedUrl": "https://www.gainesvillefl.gov/Events-directory",
+  "url": "https://www.gainesvillefl.gov/Events-directory",
+  "status": 200,
+  "contentType": "text/html; charset=utf-8",
+  "robots": {
+    "url": "https://www.gainesvillefl.gov/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 385483,
+  "count": 10,
+  "fieldCoverage": {
+    "name": 10,
+    "description": 10,
+    "location": 10,
+    "start": 10,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 10,
+    "url": 10,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "end",
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2026-10-17T00:00:00.000Z",
+    "max": "2026-10-20T00:00:00.000Z",
+    "futureOrToday": 10,
+    "datesCompared": 10,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Fall Wildflower Walks",
+      "start": "2026-10-17",
+      "location": "Morningside Nature Center, 3540 E. University Ave., 32641",
+      "url": "https://www.gainesvillefl.gov/Events-directory/PRCA-Events/Fall-Wildflower-Walks",
+      "category": [
+        "Kids & family",
+        "Talks & workshops"
+      ]
+    },
+    {
+      "name": "The Art of Death: Plein air painting at Evergreen Cemetery",
+      "start": "2026-10-17",
+      "location": "Evergreen Cemetery, 401 SE 21st Ave., 32641",
+      "url": "https://www.gainesvillefl.gov/Events-directory/PRCA-Events/Art-of-Death",
+      "category": [
+        "Cultural events",
+        "Music & arts",
+        "Nature"
+      ]
+    }
+  ],
+  "usefulRecordsParsed": true
+}

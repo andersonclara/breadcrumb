@@ -1,0 +1,18 @@
+{
+  "id": "florida-museum-ical",
+  "format": "ical",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:29.625Z",
+  "url": "https://www.floridamuseum.ufl.edu/calendar/list/?ical=1",
+  "status": null,
+  "error": "ROBOTS_STOP",
+  "robots": {
+    "url": "https://www.floridamuseum.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": false,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 0,
+  "usefulRecordsParsed": false
+}

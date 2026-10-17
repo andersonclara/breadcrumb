@@ -1,0 +1,15 @@
+{
+  "name": "breadcrumb-source-research",
+  "private": true,
+  "type": "module",
+  "description": "Isolated read-only external-source experiments; not application dependencies",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "dependencies": {
+    "cheerio": "1.2.0",
+    "fast-xml-parser": "5.11.2",
+    "ical.js": "2.2.1",
+    "robots-parser": "3.0.1"
+  }
+}

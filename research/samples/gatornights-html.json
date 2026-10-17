@@ -1,0 +1,63 @@
+{
+  "id": "gatornights-html",
+  "format": "gatornights",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:40.971Z",
+  "completedAt": "2026-10-17T03:35:42.093Z",
+  "requestedUrl": "https://studentengagement.ufl.edu/gatornights/",
+  "url": "https://studentengagement.ufl.edu/gatornights/",
+  "status": 200,
+  "contentType": "text/html; charset=UTF-8",
+  "robots": {
+    "url": "https://studentengagement.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 137465,
+  "count": 3,
+  "fieldCoverage": {
+    "name": 3,
+    "description": 3,
+    "location": 3,
+    "start": 3,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 3,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "end",
+    "organizer",
+    "price",
+    "category",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "DIY Craft Bar",
+      "start": "2026-10-07T12:00:00",
+      "timezone": "America/New_York (inferred from UF campus; source gives local clock only)",
+      "location": "Reitz Union",
+      "url": "https://studentengagement.ufl.edu/gatornights/",
+      "price": null
+    },
+    {
+      "name": "Fall Festival",
+      "start": "2026-10-27T11:00:00",
+      "timezone": "America/New_York (inferred from UF campus; source gives local clock only)",
+      "location": "Reitz Union North Lawn",
+      "url": "https://studentengagement.ufl.edu/gatornights/",
+      "price": null
+    }
+  ],
+  "usefulRecordsParsed": true
+}

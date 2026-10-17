@@ -1,0 +1,74 @@
+{
+  "id": "harn-ical",
+  "format": "ical",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:30.006Z",
+  "completedAt": "2026-10-17T03:35:34.973Z",
+  "requestedUrl": "https://harn.ufl.edu/calendar/?ical=1",
+  "url": "https://harn.ufl.edu/calendar/?ical=1",
+  "status": 200,
+  "contentType": "text/calendar; charset=UTF-8",
+  "robots": {
+    "url": "https://harn.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 11409,
+  "count": 9,
+  "fieldCoverage": {
+    "name": 9,
+    "description": 9,
+    "location": 5,
+    "start": 9,
+    "end": 9,
+    "organizer": 4,
+    "price": 0,
+    "category": 9,
+    "url": 9,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "Weekend Tours",
+      "start": "2026-10-17T14:00:00",
+      "end": "2026-10-17T15:00:00",
+      "timezone": "America/Chicago",
+      "location": "Harn Museum of Art, 3259 Hull Road, Gainesville, FL, 32608, United States",
+      "url": "https://harn.ufl.edu/event/weekend-tours-12/",
+      "category": [
+        "College Students",
+        "Tours"
+      ],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    },
+    {
+      "name": "Art Break",
+      "start": "2026-10-21T15:00:00",
+      "end": "2026-10-21T17:00:00",
+      "timezone": "America/Chicago",
+      "location": null,
+      "url": "https://harn.ufl.edu/event/art-break/",
+      "category": [
+        "College Students",
+        "Family Friendly"
+      ],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    }
+  ],
+  "usefulRecordsParsed": true
+}
