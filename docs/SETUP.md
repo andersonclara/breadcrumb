@@ -7,12 +7,12 @@ The local scaffold runs without service accounts. Follow these steps together wi
 1. Sign up at https://supabase.com/dashboard and create a project named `breadcrumb`. Choose a region near Florida, such as US East, if offered. Save the database password in your password manager.
 2. Once provisioned, copy the project URL and publishable key from the project's Connect dialog into `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local`.
 3. Copy a server secret key (or legacy service-role key) into `SUPABASE_SERVICE_ROLE_KEY`. This key bypasses RLS and belongs only in server environment variables.
-4. On a **fresh project**, run `supabase/migrations/20261017000100_initial_schema.sql`, then `supabase/migrations/20261017000200_pixel_world.sql` in SQL Editor. They create the schema, RLS, account restrictions, moderation, avatars, friendships, and game RPCs. On the existing project, run only the new pixel-world migration once. If you use SQL Editor, it does not record CLI migration history; baseline these migrations before switching to `db push`.
+4. On a **fresh project**, apply files in `supabase/migrations/` in filename order, starting with the initial schema. On an existing project, apply only missing migrations. The pixel-world, campus expansion, communities, custom communities, and event-ingestion migrations extend the original schema; see [event ingestion](EVENT_INGESTION.md). If you use SQL Editor, it does not record CLI migration history; baseline applied migrations before switching to `db push`.
 5. In Authentication → URL Configuration, set Site URL to `http://localhost:3000` and allow `http://localhost:3000/auth/confirm`. When deployed, replace Site URL with the production URL and allow its `/auth/confirm` URL too.
 6. Enable email sign-in and email confirmations. In **both** Confirm signup and Magic Link email templates, use the contents of `supabase/templates/magic-link.html`. The callback accepts token hashes and PKCE codes, so the login works across devices.
 7. Configure a custom SMTP provider before testing with UF student addresses. Supabase's default email service restricts delivery to project team addresses and is unsuitable for a campus demo. Sender verification may require a domain. We can choose the provider together.
 8. Restart `npm run dev`, visit `/login`, and request a link for a real `@ufl.edu` inbox. Click it, verify `/profile`, sign out, and sign in again. A non-UF address must be rejected. Check a second browser too.
-9. Enable `pg_cron` in Database → Extensions, then run `supabase/jobs.sql` once to schedule expiry and club reminders. Event syncing is deferred until its endpoint and public source exist.
+9. Enable `pg_cron` in Database → Extensions, then run `supabase/jobs.sql` after all migrations to schedule expiry and club reminders. Public-feed syncing has its own protected endpoint and optional GitHub schedule; see [event ingestion](EVENT_INGESTION.md). Instagram collection is manual and excluded from scheduled jobs.
 
 The database rejects non-UF signups even if a caller bypasses the web form. The server write guard additionally requires confirmed email and an active profile. New projects should apply the migration **before** creating test users.
 
@@ -33,13 +33,15 @@ The current game-like map uses a cached OpenStreetMap dataset and does not need 
 
 ## 3 Gemini
 
-Create a project and API key at https://aistudio.google.com. Put the key in `GEMINI_API_KEY` and choose an available model identifier for `GEMINI_MODEL`. No model is hard-coded because availability varies by account. The server-only SDK factory is ready in `src/lib/ai/client.ts`; parsing, chat tools, embeddings, and AI routes are future feature work. Embeddings must use 768 output dimensions to match the initial schema, or use a migration to change the column dimension.
+Create a project and API key at https://aistudio.google.com. Put the key in `GEMINI_API_KEY` and choose an available model identifier for `GEMINI_MODEL`. Manual event/flyer extraction can use `GEMINI_EVENT_MODEL` as a separate override; see [event ingestion](EVENT_INGESTION.md). Embeddings remain unimplemented and would need 768 output dimensions to match the initial schema, or a migration to change the column dimension.
+
+Ask Breadcrumb prefers Groq `openai/gpt-oss-120b` when `GROQ_API_KEY` is present. `GROQ_MODEL` optionally overrides it, and `ASK_AI_PROVIDER=gemini` explicitly selects Gemini instead. Keep all AI keys server-only. Apply the Ask migration after event ingestion, only if it is missing, and see [the Ask backend guide](ASK_BACKEND.md) for the API contract and live verification.
 
 ## 4 Vercel
 
 Import the GitHub repository at https://vercel.com/new using the Next.js preset, Node.js 24, and the default build command. Add the same environment variables in the dashboard, with `NEXT_PUBLIC_SITE_URL` set to your deployment's canonical URL. Public environment variables are embedded at build time, so redeploy after changing them. Add the production callback URL and Site URL in Supabase and update Mapbox token restrictions.
 
-Generate `CRON_SECRET` locally when event syncing is implemented. The initial app does not expose a sync endpoint or schedule any external calls. Domain registration, account creation, project provisioning, deployment, and billing choices remain interactive steps with you.
+Configure a server-only `CRON_SECRET` of at least 32 characters before enabling the protected event-sync endpoint. The optional GitHub scheduler remains gated by repository configuration; Instagram collection stays manual. See [event ingestion](EVENT_INGESTION.md) before activating any schedule. Domain registration, account creation, project provisioning, deployment, and billing choices remain interactive steps with you.
 
 ## Verify the connected environment
 

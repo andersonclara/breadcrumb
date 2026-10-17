@@ -1,7 +1,7 @@
 // Research experiment, not an ingestion service. Records/descriptions remain in memory.
 import { mkdir, writeFile } from 'node:fs/promises';
 import { collect, sourceStats } from './sources.mjs';
-import { clock, localDay, addDays, CAMPUS_ZONE, localParts } from './time.mjs';
+import { clock, addDays, CAMPUS_ZONE, localParts } from './time.mjs';
 import { clean } from '../lib/parse.mjs';
 
 const now = new Date();

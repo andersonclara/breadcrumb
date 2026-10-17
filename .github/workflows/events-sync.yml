@@ -1,0 +1,28 @@
+name: Sync published event feeds
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,37 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: event-feed-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    # Recurring runs remain off until repository configuration is ready.
+    if: github.event_name == 'workflow_dispatch' || vars.EVENT_SYNC_ENABLED == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      EVENT_SYNC_SOURCES: ${{ vars.EVENT_SYNC_SOURCES || 'gatorconnect,uf-calendar,libraries,arts,gatornights' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts --omit=dev
+      - run: npm run events:sync

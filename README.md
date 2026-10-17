@@ -2,6 +2,19 @@
 
 Leave a crumb. Spread the word.
 
+Event ingestion now has source adapters, Supabase staging/upserts, an upcoming
+events API, and a manual Instagram bootstrap capped at 150 posts and $5 in Apify
+charges. Apply the event-ingestion migration before running it. See
+[the ingestion guide](docs/EVENT_INGESTION.md) for source coverage, commands,
+review, and scheduler setup. A checked-in scheduler is not evidence of a running
+hosted job; Instagram remains manual.
+
+Ask Breadcrumb now has a public discovery backend with source-linked event/Crumb
+results, conversational filters, and database-backed rate limits. It prefers
+Groq GPT-OSS 120B when configured and also supports Gemini. Hosted retrieval and
+Groq responses have been checked; the Ask frontend is still separate work. See
+[the Ask backend guide](docs/ASK_BACKEND.md) for configuration and the API contract.
+
 A community map of what's happening around the University of Florida, presented as an 8-bit campus world. Next.js powers the web app; React Native and Expo power iPhone and Android. Both render the same pixel map, avatar outfits, breadcrumbs, and loaves using one Supabase backend.
 
 ## Run locally
@@ -14,7 +27,7 @@ if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
 npm run dev
 ```
 
-Open http://localhost:3000 (or the alternate port printed by Next.js). The pixel campus map renders without credentials. Add Supabase configuration and apply both migrations to connect saved avatars, friends, location sharing, and live posts. No mock people or campus events are presented as live data. Preserve an existing `.env.local`; only copy the example for a new setup.
+Open http://localhost:3000 (or the alternate port printed by Next.js). The pixel campus map renders without credentials. Add Supabase configuration and apply all missing migrations in order to connect saved avatars, friends, location sharing, communities, live posts, and imported events. No mock people or campus events are presented as live data. Preserve an existing `.env.local`; only copy the example for a new setup.
 
 ## Run on iPhone and Android
 
@@ -33,19 +46,19 @@ See [the mobile setup guide](apps/mobile/README.md) for environment configuratio
 - Accepted-friend requests and opt-in, foreground-only location sharing, rounded to about 100 meters and expiring after 90 seconds.
 - Breadcrumb placement, validation, disputes, reports, a live feed, related-post suggestions, and deduplicated three-confirmation Full Loaves.
 - UF-only web magic-link sign-in and native email-code sign-in, sign-out, session persistence, and a reusable server write guard accepting web cookies or mobile bearer tokens.
-- Supabase browser, server, and service clients; service credentials and Gemini stay server-only.
+- Supabase browser, server, and service clients; service credentials and AI provider keys stay server-only.
 - Initial SQL migration for places, profiles, crumbs, votes, reports, strikes, events, subscriptions, notifications, and sync logs. It includes RLS, category lifespans, three-confirmation Full Loaves, moderation, and Realtime publication entries.
 - Optional cron SQL for expiry and event reminders; CLI configuration and email templates for local Supabase.
 - UI dependencies and shadcn aliases ready for web feature work, native Expo Router tabs, and CI checks for both platforms.
 - `@breadcrumb/shared` supplies map data, sprites, outfit validation, categories, coordinates, and account rules. `@breadcrumb/client` supplies the shared campus polling hook.
 
-Chatbot, Radar settings, push notifications, event importing, flyer scanning, and deployment remain feature work. Campus state refreshes every five seconds. New game writes use a guarded API and transactionally rate-limited auth-scoped SQL functions; they do not require a service-role key. See [the pixel-world guide](docs/PIXEL_WORLD.md) for the exact privacy, grouping, and rollout rules.
+Chatbot UI, Radar settings, push notifications, event-map UI, and deployment remain feature work. Source adapters and manual Instagram/flyer extraction are documented in [the ingestion guide](docs/EVENT_INGESTION.md). Campus state refreshes every five seconds. New game writes use a guarded API and transactionally rate-limited auth-scoped SQL functions; they do not require a service-role key. See [the pixel-world guide](docs/PIXEL_WORLD.md) for the exact privacy, grouping, and rollout rules.
 
 ## Connect accounts
 
 Follow [the setup walkthrough](docs/SETUP.md) for a new environment. The existing Breadcrumb Supabase project is shared by both clients; do not create a second database or rerun the initial migration for mobile. SMTP/domain setup and deployment remain deferred. The email template now also includes `{{ .Token }}` for mobile sign-in; update both hosted templates before testing native authentication.
 
-Apply **`supabase/migrations/20261017000200_pixel_world.sql`** once to the existing database to enable the new features. Until it is applied, the map/outfit preview render and the client displays a setup message instead of fake live state.
+Apply only missing files in **`supabase/migrations/`**, in filename order. The existing project's baseline, event-ingestion, and Ask migrations were applied through SQL Editor; do not rerun them. SQL Editor execution must be reconciled separately with CLI migration history. Until the required schema is present, the map/outfit preview renders and connected features display setup errors instead of fake live state.
 
 ## Check the environment
 
@@ -82,6 +95,6 @@ Keep `.env.local` out of git. All teammates should apply schema changes through 
 
 ## Validation limits
 
-The expanded test suite includes 38 checks for avatars, friends-only location access, expiry, rate limits, grouping, moderation, and authentication. Embedded database tests substitute PostGIS, so hosted migration verification is still required. The pixel-map and sprite artwork was rendered and visually inspected; browser and phone interaction tests remain pending. SMTP is still required for real UF email delivery. See the pixel-world guide for the current verification details, including unrelated research-script lint warnings.
+The test suite covers avatars, friends-only location access, expiry, rate limits, grouping, moderation, authentication, and event ingestion. Embedded database tests substitute PostGIS, so hosted migration verification is still required. The pixel-map and sprite artwork was rendered and visually inspected; browser and phone interaction tests remain pending. SMTP is still required for real UF email delivery. See the pixel-world and event-ingestion guides for verification details.
 
 The workspace dependency audit reports unresolved advisories in the Expo/React Native toolchain and the existing ESLint dependency chain. Some suggested fixes require incompatible SDK/framework downgrades, so no forced upgrade or downgrade was applied. Review compatible patches before releasing app binaries. The dependency tree remains pinned to the SDK's expected native versions.
