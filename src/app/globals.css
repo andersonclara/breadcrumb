@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+:root { --background: #f5e9d5; --foreground: #774d35; }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: #f5e9d5;
+  --color-toasted: #d59a55;
+  --color-crust: #774d35;
+  --color-sage: #a4b99a;
+  --color-coral: #e37b64;
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+body { background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #774d35; outline-offset: 4px; }
+.eyebrow { font-size: 10px; letter-spacing: .16em; font-weight: 700; }
+.button { display: inline-block; border-radius: 999px; padding: 12px 24px; background: #774d35; color: #fffaf1; font-size: 14px; font-weight: 600; }
+.button:hover { background: #5f3b28; }
+.bread-mark { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 12px 12px 8px 8px; background: #d59a55; color: #774d35; }
+.map-placeholder { background-color: #e3e5d4; background-image: linear-gradient(25deg, transparent 45%, #faf5e9 45%, #faf5e9 48%, transparent 48%), linear-gradient(105deg, transparent 40%, #faf5e9 40%, #faf5e9 43%, transparent 43%), repeating-linear-gradient(0deg, transparent, transparent 95px, #cdd5bf 96px, #cdd5bf 97px); background-size: 340px 240px, 400px 320px, 100% 100%; }
