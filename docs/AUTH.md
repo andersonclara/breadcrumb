@@ -14,6 +14,8 @@ When `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` are set, Auth0
 - **Log in** accepts the email or the Breadcrumb username. Usernames resolve to the email on the server, and Auth0 checks the password. Mobile logs in through `/api/auth/password` and signs up through `/api/auth/signup`.
 - Supabase still provides sessions, RLS, RPCs, and Realtime. Each Supabase user gets a random, unused password so `complete_account` works, and stores its Auth0 ID in `app_metadata.auth0_sub`.
 
+**BreadPass slice:** to create an account, the student drags a knife through a pixel loaf at a server-chosen spot (`src/components/loaf-slicer.tsx`; mobile `apps/mobile/src/components/loaf-slicer.tsx`). The server checks the signed, single-use, 2-minute challenge and the drag (full cut, near the mark, human timing, not a perfectly uniform line) in `src/lib/auth/loaf.ts`. It then sends Auth0 a 5-minute slice token bound to the email. The Pre User Registration Action (`auth0/actions/pre-user-registration.cjs`) re-verifies that token with the shared `LOAF_SECRET`, so sign-ups that skip the app are denied, and it records `human_check: loaf_slice` in user metadata. This stops casual scripts, not a determined bot that fakes drag paths; Cloudflare Turnstile could be added behind it.
+
 **Known limitations (hackathon):** nobody proves they own the @ufl.edu address they type, so one person can create many accounts, use someone else's address, or stack confirmations. Fix later with email verification from a verified sender domain, or UF Microsoft sign-in. Password change and reset are not built yet, because Auth0 resets need email.
 
 Leave the `AUTH0_*` values blank to keep the Supabase email sign-up described above.

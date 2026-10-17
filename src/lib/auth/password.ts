@@ -2,7 +2,8 @@ import 'server-only';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {normalizeUfLogin,normalizeUfEmail,signupPasswordError} from '@breadcrumb/shared';
 import {createAdminClient} from '@/lib/supabase/admin';
-import {auth0Authenticate,auth0Config,auth0Signup} from '@/lib/auth/auth0';
+import {auth0Authenticate,auth0Config,auth0Signup,SLICE_MESSAGE} from '@/lib/auth/auth0';
+import {checkSlice,loafSecret,mintSliceToken} from '@/lib/auth/loaf';
 import {AccountLinkError,openSupabaseSession} from '@/lib/auth/bridge';
 
 async function nextPath(client:SupabaseClient,userId:string){
@@ -40,7 +41,7 @@ export async function passwordLogin(client:SupabaseClient,identifier:unknown,pas
 
 // Auth0 sign-up with a @ufl.edu address, username, and password. No email is sent, so ownership
 // of the address is not verified (accepted hackathon limitation; see docs/AUTH.md).
-export async function createAuth0Account(client:SupabaseClient,input:{email:unknown;username:unknown;password:unknown;confirm:unknown},ip?:string|null){
+export async function createAuth0Account(client:SupabaseClient,input:{email:unknown;username:unknown;password:unknown;confirm:unknown;loafChallenge?:unknown;loafTrace?:unknown},ip?:string|null){
  const email=normalizeUfEmail(input.email);
  if(!email)return {error:'Use your @ufl.edu email address.'};
  const username=normalizeUfLogin(input.username);
@@ -48,10 +49,14 @@ export async function createAuth0Account(client:SupabaseClient,input:{email:unkn
  const passwordError=signupPasswordError(input.password,input.confirm);
  if(passwordError)return {error:passwordError};
  const password=input.password as string;
+ // BreadPass human check: only when LOAF_SECRET is set (the Auth0 Action then requires the token).
+ const secret=loafSecret();
+ if(secret&&!checkSlice(secret,input.loafChallenge,input.loafTrace).ok)return {error:SLICE_MESSAGE};
+ const sliceToken=secret?mintSliceToken(secret,email):null;
  const taken=await createAdminClient().rpc('login_email_for_username',{p_username:username});
  if(taken.error){console.error(`Username availability check failed: ${taken.error.code ?? 'unknown'}`);return {error:'Could not check that username. Please try again.'};}
  if(taken.data&&taken.data!==email)return {error:'That username is taken.'};
- const signup=await auth0Signup(email,password);
+ const signup=await auth0Signup(email,password,sliceToken);
  if(signup.error)return {error:signup.error};
  const identity=await auth0Authenticate(email,password,ip);
  if('error' in identity)return {error:identity.error};
