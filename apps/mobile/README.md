@@ -29,13 +29,13 @@ EXPO_PUBLIC_API_URL=http://your-computers-LAN-IP:3000
 
 During this setup, only the existing public Supabase URL and public key were copied automatically from the web environment into the ignored mobile `.env.local`. Existing mobile environment files are preserved. No Gemini key, database password, cron secret, or Supabase service key belongs in this directory or in an `EXPO_PUBLIC_` variable.
 
-`EXPO_PUBLIC_API_URL` is for future calls to Next.js API routes. On a physical phone, localhost means the phone itself; use your computer's LAN address and the actual Next.js port. The current native basemap and direct Supabase auth do not require the local Next.js server. For a release, use the deployed HTTPS API URL.
+`EXPO_PUBLIC_API_URL` connects posting, avatar saving, friends, and sharing to Next.js. Keep the Next.js server running alongside Expo. In development, the helper replaces a configured localhost hostname with the Metro LAN hostname so phones can reach your computer. Keep the port correct; use an explicit LAN URL when using an Expo tunnel. For a release, use your deployed HTTPS API URL. The cached map and direct Supabase reads/auth do not require that local server.
 
 ## Maps
 
-The app uses `react-native-maps`, which is bundled in Expo Go. iPhone uses Apple Maps by default; Android uses Google Maps. No location permission is requested by this foundation. The map starts at UF and does not send or store a user's current location. The full browser app continues to use Mapbox.
+The app now uses a shared pixel-art map built from real UF roads and building footprints, rendered with `react-native-svg` in Expo Go. It matches the browser game's campus world and does not require Apple, Google, or Mapbox API keys. Attribution and a downloadable source snapshot are included. See [the pixel-world guide](../../docs/PIXEL_WORLD.md).
 
-Expo Go supplies the native map configuration for previews. An Android store/development binary needs your Google Maps API configuration, package ID, and signing restrictions before release. Final iOS bundle ID, Android package ID, app icons, and EAS project configuration are intentionally deferred until publishing is planned.
+Location permission is requested only when the user chooses to share with friends. Sharing is foreground-only, off by default, and rounded to about 100 meters before upload. Accepted friends see short-lived walking avatar markers; strangers cannot read those positions. Map position can also be selected manually when posting, without GPS. Final bundle/package IDs, store icons, and EAS publishing remain deferred.
 
 ## Sign-in
 
@@ -47,13 +47,14 @@ Sessions persist in AsyncStorage following Supabase's React Native client patter
 
 ## Included and next work
 
-- Native UF basemap and category legend.
-- Map, Live Buzz, Ask, and Radar navigation. Buzz, Ask, and Radar are placeholder screens.
+- Pixel UF campus map with pan/zoom, category filters, breadcrumb placement, confirmation, disputes, and reports.
+- Avatar customization, friend codes/requests, and opt-in friends-only avatar locations.
+- Map, Live Buzz, Ask, and Radar navigation. Live Buzz shows active crumbs; Ask and Radar are placeholders.
 - UF email-code sign-in, restoration, sign-out, and app-state session refresh.
 - Shared category definitions, palette, coordinates, and UF account rules from `@breadcrumb/shared`.
-- `src/lib/api.ts` supplies a fetch helper for future Next.js routes, attaching the user's access token.
+- `src/lib/api.ts` attaches the user's access token to guarded Next.js writes.
 
-Crumb posting, live data subscriptions, feed content, chat, notification permissions, store assets, and signed app binaries are future feature work. No mock reports are presented as live data.
+Apply `supabase/migrations/20261017000200_pixel_world.sql` once to the existing database to enable these features, preserving the original schema. State refreshes every five seconds. Chat, push notifications, store assets, and signed app binaries remain future work. No mock people or reports are presented as live data.
 
 ## Validate
 
@@ -67,4 +68,4 @@ npm run export --workspace=@breadcrumb/mobile
 
 The root lockfile manages all npm workspaces; do not create a second lockfile in this directory. The root web app and mobile app use React 19.2.3 to avoid duplicate React runtimes. Root npm overrides pin the native navigation/animation dependencies to SDK 57-compatible versions. When upgrading Expo, update these pins using Expo's compatibility checks.
 
-Hermes bundle export verifies compilation for both native targets. It does not exercise native map rendering, on-device navigation, persisted sessions, or email delivery. Those need real-device checks. Use [Expo's monorepo guide](https://docs.expo.dev/guides/monorepos/), [SDK 57 native maps guide](https://docs.expo.dev/versions/v57.0.0/sdk/map-view/), and [Supabase React Native auth guide](https://supabase.com/docs/guides/auth/quickstarts/react-native) for platform setup.
+Hermes bundle export verifies compilation for both native targets. It does not exercise touch panning, permission prompts, persisted sessions, two-friend interaction, or email delivery; those need real-device checks after SMTP setup. Use [Expo's monorepo guide](https://docs.expo.dev/guides/monorepos/), [SDK 57 SVG guide](https://docs.expo.dev/versions/v57.0.0/sdk/svg/), and [Supabase React Native auth guide](https://supabase.com/docs/guides/auth/quickstarts/react-native) for platform setup.

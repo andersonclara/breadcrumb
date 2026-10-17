@@ -1,0 +1,5 @@
+{
+ "name":"@breadcrumb/client","version":"0.1.0","private":true,"type":"module","exports":{".":"./src/index.ts"},
+ "dependencies":{"@breadcrumb/shared":"*"},
+ "peerDependencies":{"react":"19.2.3","@supabase/supabase-js":"^2.118.0"}
+}

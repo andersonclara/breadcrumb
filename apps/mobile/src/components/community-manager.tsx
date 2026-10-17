@@ -1,0 +1,11 @@
+import {useState} from 'react';
+import {Pressable,Text,TextInput,View} from 'react-native';
+import {communities} from '@breadcrumb/shared';
+import {useCampus} from '@/providers/world-provider';
+import {GameButton,gameStyles as s} from './game-ui';
+const colors=['#BD4B83','#307D69','#3B7FAD','#7454B3','#D78636'];
+export function CommunityManager(){
+ const {world,act,pending}=useCampus();const [name,setName]=useState(''),[description,setDescription]=useState(''),[accent,setAccent]=useState(colors[0]);
+ const directory=world.communities??communities.map(c=>({...c,joined:c.id==='campus',featured:true,created_by:null}));
+ return <View style={{gap:20}}><Text style={s.title}>YOUR COMMUNITIES</Text><Text style={s.body}>Add communities to show them as tabs on your map. Membership never shares your location.</Text>{directory.filter(c=>c.featured||c.created_by||c.joined||communities.some(p=>p.id===c.id)).map(c=><View key={c.id} style={{gap:12,borderWidth:2,borderColor:c.accent,backgroundColor:c.background,padding:18}}><Text style={[s.label,{color:c.accent}]}>{c.name.toUpperCase()}</Text><Text style={s.body}>{c.description}</Text>{c.id==='campus'?<Text style={s.body}>Always on your map</Text>:<GameButton disabled={pending} onPress={()=>{void act(c.joined?'community_leave':'community_join',{community_id:c.id}).catch(()=>{});}}>{c.joined?'REMOVE FROM MY TABS':'ADD TO MY TABS'}</GameButton>}</View>)}<Text style={s.title}>START A COMMUNITY</Text><TextInput style={s.input} accessibilityLabel="Community name" placeholder="e.g. Computer Science" value={name} onChangeText={setName} maxLength={48}/><TextInput style={s.input} accessibilityLabel="Community description" placeholder="Who is this space for?" value={description} onChangeText={setDescription} maxLength={280} multiline/><Text style={s.label}>ACCENT COLOR</Text><View style={s.row}>{colors.map(c=><Pressable key={c} accessibilityRole="button" accessibilityLabel={`Choose ${c}`} accessibilityState={{selected:accent===c}} onPress={()=>setAccent(c)} style={{width:40,height:40,backgroundColor:c,borderWidth:accent===c?4:2,borderColor:accent===c?'#49382C':'#FFFFFF'}}/>)}</View><GameButton disabled={pending||name.trim().length<3} onPress={()=>{void act('community_create',{name,description,accent}).then(()=>{setName('');setDescription('');}).catch(()=>{});}}>CREATE & ADD COMMUNITY</GameButton></View>;
+}

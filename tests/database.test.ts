@@ -27,12 +27,140 @@ beforeAll(async () => {
     .replace(/^create index places_name_search .*;$/gm, "")
     .replace(/^alter publication .*;$/gm, "");
   await db.exec(migration);
+  await db.exec(`
+    create function extensions.st_makepoint(double precision,double precision) returns point language sql immutable as $$select point($1,$2)$$;
+    create function extensions.st_setsrid(point,integer) returns point language sql immutable as $$select $1$$;
+    create function extensions.st_x(point) returns double precision language sql immutable as $$select $1[0]$$;
+    create function extensions.st_y(point) returns double precision language sql immutable as $$select $1[1]$$;
+    create function extensions.st_dwithin(point,point,double precision) returns boolean language sql immutable as $$select sqrt(power(($1[0]-$2[0])*96750,2)+power(($1[1]-$2[1])*111320,2))<=$3$$;
+  `);
+  const pixelMigration=readFileSync(new URL('../supabase/migrations/20261017000200_pixel_world.sql',import.meta.url),'utf8')
+    .replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point');
+  await db.exec(pixelMigration);
+  const expanded=readFileSync(new URL('../supabase/migrations/20261017000300_expanded_campus.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point');
+  await db.exec(expanded);
+  await db.exec(readFileSync(new URL('../supabase/migrations/20261017000400_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
+  await db.exec(readFileSync(new URL('../supabase/migrations/20261017000500_custom_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
+
+
 });
 afterAll(async () => { await db?.close(); });
 beforeEach(async () => {
+  await db.exec("select set_config('request.jwt.claim.sub','',false)");
+  const seeds=(await db.query<{id:string;name:string;accent:string;background:string;description:string;position:number;featured:boolean}>("select * from public.communities where created_by is null and id not like 'community-%'" )).rows;
   await db.exec("truncate auth.users, public.places, public.sync_runs cascade");
+  for(const c of seeds)await db.query("insert into public.communities(id,name,accent,background,description,position,featured) values($1,$2,$3,$4,$5,$6,$7)",[c.id,c.name,c.accent,c.background,c.description,c.position,c.featured]);
+  await db.exec("delete from public.communities where id like 'community-%'");
   users = Array.from({ length: 8 }, () => randomUUID());
   for (const id of users) await db.query("insert into auth.users values($1,$2,now())", [id, `${id}@ufl.edu`]);
+});
+
+async function action(user:string,name:string,data:unknown={}){
+ await db.query("select set_config('request.jwt.claim.sub',$1,false)",[user]);
+ return (await db.query<{result:{ok:boolean;id:string;grouped:boolean}}>('select public.pixel_action($1,$2::jsonb) as result',[name,JSON.stringify(data)])).rows[0].result;
+}
+async function world(user:string|null){
+ await db.query("select set_config('request.jwt.claim.sub',$1,false)",[user??'']);
+ return (await db.query<{result:{presence:{id:string;latitude:number;longitude:number}[];friends:{id:string;accepted:boolean}[];crumbs:{id:string;related_posts:number}[]}}>('select public.pixel_world() as result')).rows[0].result;
+}
+const outfit={skin:1,hair:0,shirt:0,pants:0,hairstyle:0,top:0,accessory:0};
+describe('avatars, friends, and related breadcrumbs',()=>{
+ it('enforces self-selected community access for reads, confirmations, and direct browser queries',async()=>{
+  await action(users[0],'avatar',outfit);await action(users[1],'avatar',outfit);
+  const post={latitude:29.6465,longitude:-82.347,title:'Girls study meetup',category:'event',community_id:'girls'};
+  await expect(action(users[0],'create',post)).rejects.toThrow('Join');
+  await action(users[0],'community_join',{community_id:'girls'});
+  const created=await action(users[0],'create',post);
+  expect((await world(users[0])).crumbs.some(c=>c.id===created.id)).toBe(true);
+  expect((await world(users[1])).crumbs.some(c=>c.id===created.id)).toBe(false);
+  expect((await world(null)).crumbs.some(c=>c.id===created.id)).toBe(false);
+  await expect(action(users[1],'vote',{id:created.id,value:1})).rejects.toThrow('Join');
+  await db.exec('set role anon');try{expect((await db.query('select id from public.crumbs')).rows).toHaveLength(0);}finally{await db.exec('reset role');}
+  await action(users[1],'community_join',{community_id:'girls'});await action(users[1],'vote',{id:created.id,value:1});
+  await action(users[1],'community_leave',{community_id:'girls'});
+  expect((await world(users[1])).crumbs.some(c=>c.id===created.id)).toBe(false);
+ });
+ it('keeps duplicate-topic grouping and subscriber notifications inside a community',async()=>{
+  for(const uid of users.slice(0,3))await action(uid,'avatar',outfit);
+  await action(users[0],'community_join',{community_id:'sports'});
+  await db.query("insert into public.subscriptions(user_id,kind) values($1,'campus'),($2,'campus')",[users[1],users[2]]);
+  await action(users[2],'community_join',{community_id:'sports'});
+  const post={latitude:29.6465,longitude:-82.347,title:'Pickup soccer today',category:'event'};
+  const sports=await action(users[0],'create',{...post,community_id:'sports'});
+  expect((await db.query('select user_id from public.notifications where crumb_id=$1',[sports.id])).rows).toEqual([{user_id:users[2]}]);
+  const campus=await action(users[1],'create',post);expect(campus.grouped).toBe(false);expect(campus.id).not.toBe(sports.id);
+  await expect(action(users[1],'create',{...post,join_id:sports.id})).rejects.toThrow('no longer');
+ });
+ it('lets users create a named, themed community and join it automatically',async()=>{
+  await action(users[0],'community_create',{name:'Computer Science',description:'Find your CS crew',accent:'#7454B3'});
+  const row=(await db.query<{id:string;created_by:string}>("select id,created_by from public.communities where name='Computer Science'")).rows[0];
+  expect(row.created_by).toBe(users[0]);
+  expect((await db.query('select user_id from public.community_memberships where community_id=$1',[row.id])).rows).toEqual([{user_id:users[0]}]);
+  await expect(action(users[1],'community_create',{name:'computer science',description:'duplicate',accent:'#7454B3'})).rejects.toThrow('already exists');
+  await expect(action(users[1],'community_create',{name:'Bad color',description:'',accent:'url(secret)'})).rejects.toThrow('color');
+ });
+ it('supports medical and veterinary map areas while rejecting locations beyond campus bounds',async()=>{
+  await action(users[0],'avatar',outfit);
+  for(const latitude of [29.638,29.625]){
+   const result=await action(users[0],'create',{latitude,longitude:-82.354,title:'Campus area '+latitude,category:'event'});
+   expect((await world(users[0])).crumbs.some(c=>c.id===result.id)).toBe(true);
+   await action(users[0],'presence',{latitude,longitude:-82.354});
+  }
+  await expect(action(users[0],'presence',{latitude:29.60,longitude:-82.354})).rejects.toThrow('campus');
+ });
+ it('requires valid avatars and stores per-account customization',async()=>{
+  await expect(action(users[0],'avatar',{...outfit,skin:100})).rejects.toThrow('Invalid avatar');
+  await expect(action(users[0],'avatar',{...outfit,skin:'1'})).rejects.toThrow('Invalid avatar');
+  await action(users[0],'avatar',outfit);
+  expect((await db.query<{avatar_completed:boolean}>('select avatar_completed from public.profiles where id=$1',[users[0]])).rows[0].avatar_completed).toBe(true);
+ });
+ it('never exposes locations to strangers or unaccepted requests, and revokes removed friends',async()=>{
+  await action(users[0],'avatar',outfit);
+  await action(users[0],'presence',{latitude:29.64651234,longitude:-82.34712345});
+  expect((await world(null)).presence).toEqual([]);
+  expect((await world(users[1])).presence).toEqual([]);
+  const code=(await db.query<{friend_code:string}>('select friend_code from public.profiles where id=$1',[users[0]])).rows[0].friend_code;
+  await action(users[1],'friend_request',{code});
+  expect((await world(users[1])).presence).toEqual([]);
+  const friendship=(await world(users[0])).friends[0].id;
+  await expect(action(users[1],'friend_accept',{id:friendship})).rejects.toThrow('Friend request not found');
+  await action(users[0],'friend_accept',{id:friendship});
+  const p=(await world(users[1])).presence[0];expect(p.id).toBe(users[0]);expect(p.latitude).not.toBe(29.64651234);
+  expect((await world(users[2])).presence).toEqual([]);
+  await action(users[0],'friend_remove',{id:friendship});expect((await world(users[1])).presence).toEqual([]);
+ });
+ it('expires and withdraws presence, and blocks out-of-campus sharing',async()=>{
+  await action(users[0],'avatar',outfit);
+  await expect(action(users[0],'presence',{latitude:0,longitude:0})).rejects.toThrow('UF campus');
+  await action(users[0],'presence',{latitude:29.6465,longitude:-82.347});
+  await db.query("update public.avatar_presence set expires_at=now()-interval '1 second' where user_id=$1",[users[0]]);
+  expect((await world(users[0])).presence).toEqual([]);
+  await action(users[0],'presence',{latitude:29.6465,longitude:-82.347});await action(users[0],'presence_stop');
+  expect((await db.query('select * from public.avatar_presence')).rows).toHaveLength(0);
+ });
+ it('groups matching nearby posts and deduplicates their authors against votes',async()=>{
+  for(const u of users.slice(0,4))await action(u,'avatar',outfit);
+  const post={title:'Free pizza at Turlington',category:'freebie',latitude:29.6465,longitude:-82.347};
+  const first=await action(users[0],'create',post);
+  const joined=await action(users[1],'create',{...post,title:'Turlington free pizza'});
+  expect(joined.id).toBe(first.id);expect(joined.grouped).toBe(true);
+  await action(users[1],'vote',{id:first.id,value:1});expect((await getCrumb(first.id)).confirm_count).toBe(1);
+  await action(users[2],'create',{...post,title:'Still pizza here',join_id:first.id});
+  await action(users[3],'vote',{id:first.id,value:1});expect((await getCrumb(first.id)).loaf).toBe('full_loaf');
+  expect((await world(null)).crumbs[0].related_posts).toBe(2);
+  await expect(action(users[0],'create',post)).rejects.toThrow('already posted');
+ });
+ it('keeps distinct topics and distant posts separate and limits posting',async()=>{
+  await action(users[0],'avatar',outfit);const p={title:'Free pizza',category:'freebie',latitude:29.6465,longitude:-82.347};
+  const first=await action(users[0],'create',p),far=await action(users[0],'create',{...p,latitude:29.65});expect(far.id).not.toBe(first.id);
+  for(let i=0;i<3;i++)await action(users[0],'create',{...p,title:`Different topic ${i}`});
+  await expect(action(users[0],'create',{...p,title:'One too many'})).rejects.toThrow('Please wait');
+ });
+ it('does not grant anonymous mutation access or access to raw location tables',async()=>{
+  await db.exec('set role anon');
+  try{await expect(db.query("select public.pixel_action('avatar',$1::jsonb)",[JSON.stringify(outfit)])).rejects.toThrow('permission denied');await expect(db.query('select * from public.avatar_presence')).rejects.toThrow('permission denied');}
+  finally{await db.exec('reset role');}
+ });
 });
 
 async function crumb(author = users[0], category = "freebie") {

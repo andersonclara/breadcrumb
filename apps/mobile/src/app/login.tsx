@@ -1,11 +1,14 @@
 import { useState } from "react";
+import {Link,router} from 'expo-router';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { normalizeUfEmail, palette } from "@breadcrumb/shared";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/auth-provider";
+import {useCampus} from '@/providers/world-provider';
 
 export default function LoginScreen() {
   const { session, loading, error } = useAuth();
+  const {stop}=useCampus();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -28,8 +31,9 @@ export default function LoginScreen() {
     if (!/^\d{6,10}$/.test(code.trim())) { setMessage("Enter the full numeric code from your email."); return; }
     setPending(true);
     try {
-      const { error: verifyError } = await supabase.auth.verifyOtp({ email: sentTo, token: code.trim(), type: "email" });
+      const { data, error: verifyError } = await supabase.auth.verifyOtp({ email: sentTo, token: code.trim(), type: "email" });
       setMessage(verifyError ? "That code is invalid or expired. Try again or request a new one." : "You're signed in.");
+      if(!verifyError&&data.user){const {data:profile}=await supabase.from('profiles').select('avatar_completed').eq('id',data.user.id).single();router.replace(profile?.avatar_completed?'/':'/avatar');}
     } catch { setMessage("Could not connect. Check your internet connection and try again."); }
     finally { setPending(false); }
   }
@@ -37,6 +41,7 @@ export default function LoginScreen() {
     if (!supabase) return;
     setPending(true);
     try {
+      await stop();
       const { error: signOutError } = await supabase.auth.signOut();
       if (signOutError) setMessage("Could not sign out. Please try again.");
       else { setSentTo(null); setCode(""); setMessage(""); }
@@ -62,6 +67,7 @@ export default function LoginScreen() {
         {sentTo && <Pressable accessibilityRole="button" disabled={pending} onPress={() => { setSentTo(null); setCode(""); setMessage(""); }}><Text style={styles.link}>Request a new code or change email</Text></Pressable>}
       </>}
       {session && <Pressable accessibilityRole="button" disabled={pending} onPress={signOut} style={styles.button}><Text style={styles.buttonText}>Sign out</Text></Pressable>}
+      {session&&<Link href="/profile" style={styles.link}>YOUR PROFILE →</Link>}
       <Text accessibilityLiveRegion="polite" style={styles.message}>{message || error || (!supabase ? "Sign-in will be available once Supabase is connected." : "")}</Text>
     </ScrollView>
   </KeyboardAvoidingView>;
@@ -71,12 +77,12 @@ const styles = StyleSheet.create({
   loading: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: palette.cream },
   content: { padding: 28, paddingTop: 44, gap: 16, flexGrow: 1 },
   eyebrow: { color: palette.crust, fontSize: 10, letterSpacing: 2, fontWeight: "700" },
-  title: { color: palette.crust, fontSize: 34, fontWeight: "700", lineHeight: 40 },
+  title: { color: palette.crust, fontFamily:'PressStart2P_400Regular',fontSize:18,lineHeight:32 },
   description: { color: palette.crust, fontSize: 15, lineHeight: 25, marginBottom: 12 },
   label: { color: palette.crust, fontSize: 13, fontWeight: "700" },
-  input: { backgroundColor: "#FFFAF1", color: palette.crust, borderWidth: 1, borderColor: "#774D3540", borderRadius: 14, padding: 16, fontSize: 16 },
-  button: { backgroundColor: palette.crust, borderRadius: 28, padding: 17, alignItems: "center", minHeight: 50 },
-  buttonText: { color: "#FFFAF1", fontWeight: "700", fontSize: 14 },
+  input: { backgroundColor: "#FFFAF1", color: palette.crust, borderWidth: 2, borderColor: "#774D35", padding: 16, fontSize: 16 },
+  button: { backgroundColor: '#F4BC55',borderWidth:2,borderColor:'#49382C', padding: 17, alignItems: "center", minHeight: 50 },
+  buttonText: { color: '#49382C', fontFamily:'PressStart2P_400Regular', fontSize: 8,lineHeight:16 },
   disabled: { opacity: 0.5 },
   link: { color: palette.crust, textDecorationLine: "underline", paddingVertical: 10 },
   message: { color: palette.crust, fontSize: 13, lineHeight: 22 },

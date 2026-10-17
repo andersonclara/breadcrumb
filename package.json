@@ -24,6 +24,7 @@
     "react-native-gesture-handler": "2.32.0"
   },
   "dependencies": {
+    "@breadcrumb/client": "*",
     "@breadcrumb/shared": "*",
     "@google/genai": "^2.30.0",
     "@supabase/ssr": "^0.12.7",
