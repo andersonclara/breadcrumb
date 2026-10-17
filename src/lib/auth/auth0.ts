@@ -44,7 +44,14 @@ export async function auth0Signup(email:string,password:string):Promise<{error?:
  return {error:generic};
 }
 
-export async function auth0Authenticate(email:string,password:string,ip?:string|null):Promise<{sub:string;email:string}|{error:string}>{
+// The student's IP for Auth0 brute-force protection. x-forwarded-for is client-controlled unless a
+// trusted proxy overwrites it (Vercel does), so it is only used there; elsewhere Auth0 sees the server IP.
+export function trustedClientIp(headers:Headers,env:Record<string,string|undefined>=process.env){
+ if(env.VERCEL!=='1')return null;
+ return headers.get('x-forwarded-for')?.split(',')[0]?.trim()||null;
+}
+
+export async function auth0Authenticate(email:string,password:string,ip?:string|null):Promise<{sub:string;email:string}|{error:string;code?:string}>{
  const config=auth0Config();if(!config)return {error:generic};
  // Lets Auth0 brute-force protection see the student's IP instead of the server's
  // (requires "Trust Token Endpoint IP Header" on the Auth0 application).
@@ -52,7 +59,7 @@ export async function auth0Authenticate(email:string,password:string,ip?:string|
  const token=await call('/oauth/token',{headers,body:{grant_type:'http://auth0.com/oauth/grant-type/password-realm',realm:config.connection,client_id:config.clientId,client_secret:config.clientSecret,username:email,password,scope:'openid email'}});
  if(!token.ok){
   log('login',token.status,token.data);
-  if(token.data.error==='invalid_grant')return {error:'Email/username or password is incorrect.'};
+  if(token.data.error==='invalid_grant')return {error:'Email/username or password is incorrect.',code:'invalid_grant'};
   if(token.data.error==='too_many_attempts')return {error:'Too many attempts. Please try again later.'};
   if(token.data.error==='unauthorized_client')console.error('Auth0 login: enable the Password grant type on the Auth0 application.');
   return {error:generic};

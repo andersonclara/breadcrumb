@@ -5,11 +5,11 @@ import { getSupabaseConfig } from "@/lib/env";
 import { normalizeUfEmail } from "@/lib/auth/rules";
 import { createClient } from "@/lib/supabase/server";
 import {createAuth0Account,passwordLogin} from '@/lib/auth/password';
-import {auth0Config} from '@/lib/auth/auth0';
+import {auth0Config,trustedClientIp} from '@/lib/auth/auth0';
 
 export type LoginState = { message: string; sent: boolean };
-// First hop only; forwarded to Auth0 for per-student brute-force protection.
-async function clientIp(){return (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim()||null;}
+// Forwarded to Auth0 for per-student brute-force protection, only where the header is trustworthy.
+async function clientIp(){return trustedClientIp(await headers());}
 export async function signInPassword(_previous:LoginState,formData:FormData):Promise<LoginState>{
  if(!getSupabaseConfig())return {message:'Sign-in will be available once Supabase is connected.',sent:false};
  let result;

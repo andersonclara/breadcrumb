@@ -3,7 +3,7 @@ import type {SupabaseClient} from '@supabase/supabase-js';
 import {normalizeUfLogin,normalizeUfEmail,signupPasswordError} from '@breadcrumb/shared';
 import {createAdminClient} from '@/lib/supabase/admin';
 import {auth0Authenticate,auth0Config,auth0Signup} from '@/lib/auth/auth0';
-import {openSupabaseSession} from '@/lib/auth/bridge';
+import {AccountLinkError,openSupabaseSession} from '@/lib/auth/bridge';
 
 async function nextPath(client:SupabaseClient,userId:string){
  const {data:profile}=await client.from('profiles').select('account_completed,avatar_completed').eq('id',userId).single();
@@ -24,9 +24,13 @@ export async function passwordLogin(client:SupabaseClient,identifier:unknown,pas
  // Auth0 owns passwords when configured; the Supabase session is opened only after Auth0 accepts.
  if(auth0Config()){
   const identity=await auth0Authenticate(email,password,ip);
-  if('error' in identity)return {error:identity.error};
-  const {session,userId}=await openSupabaseSession(client,identity);
-  return {session,next:await nextPath(client,userId)};
+  if(!('error' in identity)){
+   try{
+    const {session,userId}=await openSupabaseSession(client,identity,{legacyPassword:password});
+    return {session,next:await nextPath(client,userId)};
+   }catch(e){if(!(e instanceof AccountLinkError))throw e;}
+  }else if(identity.code!=='invalid_grant')return {error:identity.error};
+  // Accounts created before Auth0 still sign in with their original Supabase password.
  }
  const {data,error}=await client.auth.signInWithPassword({email,password});
  if(error||!data.user||!data.session)return {error:error?.code==='email_not_confirmed'?'Confirm your UF email before signing in.':'Email/username or password is incorrect.'};
@@ -51,7 +55,9 @@ export async function createAuth0Account(client:SupabaseClient,input:{email:unkn
  if(signup.error)return {error:signup.error};
  const identity=await auth0Authenticate(email,password,ip);
  if('error' in identity)return {error:identity.error};
- const {session}=await openSupabaseSession(client,identity);
+ let session;
+ try{({session}=await openSupabaseSession(client,identity,{legacyPassword:password}));}
+ catch(e){if(e instanceof AccountLinkError)return {error:'This UF email already has a Breadcrumb account. Log in with its existing password instead.'};throw e;}
  const {error}=await client.rpc('complete_account',{p_username:username});
  // The account exists either way; a username problem is fixable on the profile setup page.
  if(error)console.error(`complete_account after Auth0 signup failed: ${error.code ?? 'unknown'}`);
