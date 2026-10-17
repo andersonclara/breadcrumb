@@ -1,14 +1,10 @@
 "use client";
-import { useActionState } from "react";
-import { sendMagicLink } from "@/app/auth/actions";
-
-export function LoginForm({ configured }: { configured: boolean }) {
-  const [state, action, pending] = useActionState(sendMagicLink, { message: "", sent: false });
-  return <form action={action} className="space-y-5">
-    <div><label className="mb-2 block text-sm font-semibold" htmlFor="email">UF email address</label>
-      <input id="email" name="email" type="email" autoComplete="email" placeholder="you@ufl.edu" required disabled={!configured || pending}
-        className="w-full border-2 border-crust bg-cream px-4 py-3 disabled:opacity-50" /></div>
-    <button disabled={!configured || pending} className="button w-full disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Sending…" : "Email me a sign-in link"}</button>
-    <p role="status" aria-live="polite" className="text-sm leading-6">{state.message || (!configured ? "Supabase is not connected yet. Anonymous browsing is available." : "No password needed. Use the link in your UF inbox to sign in.")}</p>
-  </form>;
+import {useActionState,useState} from 'react';
+import {createUfAccount,signInPassword} from '@/app/auth/actions';
+export function LoginForm({configured}:{configured:boolean}){
+ const [mode,setMode]=useState<'login'|'signup'>('login'),[showPassword,setShowPassword]=useState(false);
+ const [login,loginAction,loginPending]=useActionState(signInPassword,{message:'',sent:false});
+ const [signup,signupAction,signupPending]=useActionState(createUfAccount,{message:'',sent:false});
+ const pending=loginPending||signupPending,state=mode==='login'?login:signup;
+ return <div><h2>{mode==='login'?'WELCOME BACK.':'JOIN THE LOAF.'}</h2>{mode==='login'&&<p className="auth-copy">Sign in with your UF email or Breadcrumb username.</p>}<form key={mode} action={mode==='login'?loginAction:signupAction} className="auth-form"><label htmlFor="identity">{mode==='login'?'EMAIL OR USERNAME':'UF EMAIL ADDRESS'}</label><input id="identity" name={mode==='login'?'identifier':'email'} type={mode==='login'?'text':'email'} autoComplete={mode==='login'?'username':'email'} autoCapitalize="none" spellCheck={false} placeholder={mode==='login'?'you@ufl.edu or your username':'you@ufl.edu'} required disabled={!configured||pending}/>{mode==='login'&&<><label htmlFor="password">PASSWORD</label><div className="password-input"><input id="password" name="password" type={showPassword?'text':'password'} autoComplete="current-password" required maxLength={128} disabled={!configured||pending}/><button type="button" aria-label={showPassword?'Hide password':'Show password'} onClick={()=>setShowPassword(!showPassword)}>{showPassword?'HIDE':'SHOW'}</button></div></>}<button className="pixel-button auth-submit" disabled={!configured||pending}>{pending?'PLEASE WAIT…':mode==='login'?'LOG IN \u2192':'CREATE ACCOUNT'}</button><p role="status" aria-live="polite" className="auth-message">{state.message||(!configured?'Sign-in will be available once Supabase is connected.':'')}</p></form>{mode==='login'&&<p className="auth-copy">Don&apos;t have an account? <button type="button" className="text-button" onClick={()=>setMode('signup')}>CREATE ACCOUNT</button></p>}{mode!=='login'&&<p className="auth-copy">Already have an account? <button type="button" className="text-button" onClick={()=>setMode('login')}>LOG IN</button></p>}</div>;
 }

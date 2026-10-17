@@ -41,6 +41,9 @@ beforeAll(async () => {
   await db.exec(expanded);
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000400_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000500_custom_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
+  await db.exec('alter table auth.users add column encrypted_password text');
+  await db.exec(readFileSync(new URL('../supabase/migrations/20261017000600_username_accounts.sql',import.meta.url),'utf8'));
+
 
 
 });
@@ -52,7 +55,7 @@ beforeEach(async () => {
   for(const c of seeds)await db.query("insert into public.communities(id,name,accent,background,description,position,featured) values($1,$2,$3,$4,$5,$6,$7)",[c.id,c.name,c.accent,c.background,c.description,c.position,c.featured]);
   await db.exec("delete from public.communities where id like 'community-%'");
   users = Array.from({ length: 8 }, () => randomUUID());
-  for (const id of users) await db.query("insert into auth.users values($1,$2,now())", [id, `${id}@ufl.edu`]);
+  for (const id of users) await db.query("insert into auth.users(id,email,email_confirmed_at) values($1,$2,now())", [id, `${id}@ufl.edu`]);
 });
 
 async function action(user:string,name:string,data:unknown={}){
@@ -65,6 +68,20 @@ async function world(user:string|null){
 }
 const outfit={skin:1,hair:0,shirt:0,pants:0,hairstyle:0,top:0,accessory:0};
 describe('avatars, friends, and related breadcrumbs',()=>{
+ it('defaults usernames from UF email, allows verified changes, and protects login email resolution',async()=>{
+  const id=randomUUID();await db.query("insert into auth.users(id,email,email_confirmed_at) values($1,'albert@ufl.edu',now())",[id]);
+  expect((await db.query<{handle:string}>('select handle from public.profiles where id=$1',[id])).rows[0].handle).toBe('albert');
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)",[id]);
+  await expect(db.query("select public.complete_account('cool_albert')")).rejects.toThrow('Set a password');
+  await db.query("update auth.users set encrypted_password='managed-by-auth' where id=$1",[id]);
+  await db.query("select public.complete_account('Cool_Albert')");
+  expect((await db.query<{handle:string;account_completed:boolean}>('select handle,account_completed from public.profiles where id=$1',[id])).rows[0]).toEqual({handle:'cool_albert',account_completed:true});
+  await db.exec('set role anon');try{await expect(db.query("select public.login_email_for_username('cool_albert')")).rejects.toThrow('permission');}finally{await db.exec('reset role');}
+  await db.exec('set role authenticated');try{await expect(db.query("select public.login_email_for_username('cool_albert')")).rejects.toThrow('permission');}finally{await db.exec('reset role');}
+  await db.exec('set role service_role');try{expect((await db.query<{email:string}>("select public.login_email_for_username('COOL_ALBERT') as email")).rows[0].email).toBe('albert@ufl.edu');}finally{await db.exec('reset role');}
+  await db.query("update auth.users set encrypted_password='managed-by-auth' where id=$1",[users[0]]);await db.query("select set_config('request.jwt.claim.sub',$1,false)",[users[0]]);
+  await expect(db.query("select public.complete_account('cool_albert')")).rejects.toThrow('already taken');
+ });
  it('enforces self-selected community access for reads, confirmations, and direct browser queries',async()=>{
   await action(users[0],'avatar',outfit);await action(users[1],'avatar',outfit);
   const post={latitude:29.6465,longitude:-82.347,title:'Girls study meetup',category:'event',community_id:'girls'};
@@ -178,7 +195,7 @@ async function getCrumb(id: string) {
 describe("initial database", () => {
   it("creates private profiles and blocks non-UF auth users", async () => {
     expect((await db.query("select * from public.profiles")).rows).toHaveLength(8);
-    await expect(db.query("insert into auth.users values($1,'outsider@gmail.com',now())", [randomUUID()])).rejects.toThrow("UF email");
+    await expect(db.query("insert into auth.users(id,email,email_confirmed_at) values($1,'outsider@gmail.com',now())", [randomUUID()])).rejects.toThrow("UF email");
     await expect(db.query("update auth.users set email = 'outsider@gmail.com' where id = $1", [users[0]])).rejects.toThrow("UF email");
   });
   it("requires three independent confirmations and prevents self-votes", async () => {

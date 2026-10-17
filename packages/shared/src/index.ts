@@ -20,6 +20,7 @@ export * from './walking';
 export * from './campus-landmarks';
 export * from './communities';
 export * from './camera';
+export * from './login';
 
 export function normalizeUfEmail(value: unknown): string | null {
   if (typeof value !== "string") return null;

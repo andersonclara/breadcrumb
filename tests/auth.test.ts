@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
+import {normalizeUfLogin,signupPasswordError} from '@breadcrumb/shared';
 import { canAct, normalizeUfEmail } from "../src/lib/auth/rules";
 
 describe("UF account rules", () => {
+  it('accepts UF emails and editable usernames without assuming usernames are email addresses',()=>{
+   expect(normalizeUfLogin('  ALBERT@UFL.EDU ')).toBe('albert@ufl.edu');expect(normalizeUfLogin('Cool_Albert')).toBe('cool_albert');
+   for(const value of ['a@gmail.com','a@ufl.edu.evil.test','two words','../bad','x',null])expect(normalizeUfLogin(value)).toBeNull();
+  });
+  it('requires matching passwords while preserving significant whitespace',()=>{
+   expect(signupPasswordError('long password','long password')).toBeNull();expect(signupPasswordError('short','short')).toBeTruthy();
+   expect(signupPasswordError('  password  ','password')).toContain('match');
+  });
   it("normalizes UF addresses", () => expect(normalizeUfEmail("  Student+test@UFL.EDU  ")).toBe("student+test@ufl.edu"));
   it.each([null, "", "a@gmail.com", "a@ufl.edu.evil.test", "a@sub.ufl.edu", "a@@ufl.edu", "a b@ufl.edu", "@ufl.edu"])("rejects invalid address %s", value => {
     expect(normalizeUfEmail(value)).toBeNull();
