@@ -1,5 +1,29 @@
 # Breadcrumb external data findings
 
+## Nightlife and flyer update — October 17, 2026
+
+See the [nightlife report](nightlife/REPORT.md), [timestamped evidence](nightlife/EVIDENCE.md) and [retest commands](nightlife/README.md). Public website/feed experiments parsed **28 Gainesville promoter listings**, two dated First Magnitude event details plus food-truck cards, two Loosey's event details, seven undated Salty Dog weekday offers, and Swamp Head REST/iCal records (20/27; overlapping methods, not 47 unique events).
+
+Three actual publisher-linked flyers were processed locally with Windows OCR and OpenCV across 11 variants, then visually reviewed. Contrast recovered one missed date; another crop returned an incorrect clock and small-print conditions remained missing. Flyer extraction is technically viable with explicit uncertainty/review. These were **website images, not Instagram downloads**. No full images/transcripts, authenticated responses, app integration or paid vision calls were added. [Manual comparison](nightlife/evidence/manual-review.json) records the observed successes and errors. Source reuse/AI rights remain source-specific.
+
+## Morning second-pass update — October 17, 2026
+
+The later [coverage and exploration report](phase2/REPORT.md) supersedes first-pass limitations where stated. Its six-feed snapshot returned **1,981 rows**, **1,735 non-cancelled starts in 30 days**, and **1,693 candidate groups**, not verified unique events. It confirmed gaming/robotics/free-admission candidates and exposed gaps in live availability, Women in STEM weekend coverage and dated bar specials. [Exact second-pass evidence](phase2/EVIDENCE.md) and [retest commands](phase2/README.md) are separate; original samples below remain historical evidence.
+
+| Source / question | Updated status | What changed | Limit / next step |
+|---|---|---|---|
+| UF Calendar | WORKING | All six reported pages in the requested window fetched; documented search/details parsed | Respect all-day precision and cross-listings; not a campus census |
+| Student Engagement / Gator Market | WORKING | 13 seasonal activity cards and four market dates parsed | Earlier empty RSS did not mean no events; past dates/vendor fees need careful interpretation |
+| Campus Closures | PARTIAL | Official frontend-linked ArcGIS layers returned geometry/status records | Earlier robots HTML stop came from our helper; published records still have missing dates, current activity unconfirmed |
+| Heartwood | PARTIAL | 63 live cards plus a detail with explicit 2026 date | Earlier parser only saw 2025 archive; card years still require details |
+| Careers / Engineering / TAPS | PARTIAL | Real cards or RSS notices retrieved | Date anomalies, archived events and publication/effective dates need review; later Engineering request timed out |
+| WiCSE | NEEDS ACCESS | Public calendar identified | iCal robots exclusion honored; organizer/API route prepared but not credential-tested |
+| Live food / bar-special answers | PARTIAL | Six explicit free/provided-food candidates, no dated bar-special match tonight | Published mention is not current stock or open eligibility; user/organizer confirmation remains central |
+
+See [product research opportunities](phase2/OPPORTUNITIES.md). No application/backend, database, scheduled task or authenticated social experiment was added. Yik Yak remains preserved and was not newly executed.
+
+## First-pass snapshot (historical; see update above)
+
 Investigated **2026-10-17 UTC**, starting 03:24 UTC (evening of October 16 in Gainesville). Research only; no application, database, frontend, authentication integration, ingestion pipeline or job was changed.
 
 **The strongest technical candidates are GatorConnect public feeds and UF Calendar's LiveWhale JSON API.** Libraries, Arts, GatorNights and local calendars add useful coverage. Technical success does not establish a license to redistribute descriptions/images or supply content to Gemini.

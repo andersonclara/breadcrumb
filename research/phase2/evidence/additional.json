@@ -1,0 +1,566 @@
+[
+  {
+    "id": "student-engagement-cards",
+    "format": "season",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:37.802Z",
+    "completedAt": "2026-10-17T12:12:40.157Z",
+    "requestedUrl": "https://studentengagement.ufl.edu/",
+    "url": "https://studentengagement.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://studentengagement.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 124559,
+    "count": 13,
+    "fieldCoverage": {
+      "name": 13,
+      "description": 13,
+      "location": 12,
+      "start": 13,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 13,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-13T00:00:00.000Z",
+      "max": "2026-12-02T00:00:00.000Z",
+      "futureOrToday": 12,
+      "datesCompared": 13,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Housing Fair",
+        "start": "2026-10-13",
+        "location": "Reitz Union North Lawn",
+        "url": "https://studentengagement.ufl.edu/",
+        "schedule": "Oct 13; 10 AM – 1 PM"
+      },
+      {
+        "name": "Mocha Monday",
+        "start": "2026-10-19",
+        "location": "Student Engagement Portal, Level 2",
+        "url": "https://studentengagement.ufl.edu/",
+        "schedule": "Oct 19; 9 AM – 11 AM"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 1,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  },
+  {
+    "id": "gator-market-dates",
+    "format": "market",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:40.312Z",
+    "completedAt": "2026-10-17T12:12:44.359Z",
+    "requestedUrl": "https://union.ufl.edu/gatormarket/",
+    "url": "https://union.ufl.edu/gatormarket/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://union.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 235950,
+    "count": 4,
+    "fieldCoverage": {
+      "name": 4,
+      "description": 0,
+      "location": 4,
+      "start": 4,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 4,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-08-26T00:00:00.000Z",
+      "max": "2026-11-18T00:00:00.000Z",
+      "futureOrToday": 2,
+      "datesCompared": 4,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Gator Market",
+        "start": "2026-08-26",
+        "location": "Reitz Union North Lawn",
+        "url": "https://union.ufl.edu/gatormarket/",
+        "schedule": "10:00 AM - 3:00 PM"
+      },
+      {
+        "name": "Gator Market",
+        "start": "2026-09-16",
+        "location": "Reitz Union North Lawn",
+        "url": "https://union.ufl.edu/gatormarket/",
+        "schedule": "10:00 AM - 3:00 PM"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  },
+  {
+    "id": "careers-cards",
+    "format": "careers",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:44.520Z",
+    "completedAt": "2026-10-17T12:12:45.193Z",
+    "requestedUrl": "https://careerhub.ufl.edu/events/",
+    "url": "https://careerhub.ufl.edu/events/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://careerhub.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 222378,
+    "count": 10,
+    "fieldCoverage": {
+      "name": 10,
+      "description": 0,
+      "location": 8,
+      "start": 10,
+      "end": 1,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 10,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 10,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-02-02T00:00:00.000Z",
+      "max": "2026-10-20T00:00:00.000Z",
+      "futureOrToday": 9,
+      "datesCompared": 10,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Spring 2026 Career Showcase Week",
+        "start": "2026-02-02",
+        "end": "2027-01-25",
+        "location": "Multiple Locations - See description!",
+        "url": "https://careerhub.ufl.edu/events/2026/02/02/spring-2026-career-showcase-week/",
+        "schedule": "8am - 6pm"
+      },
+      {
+        "name": "CPWc3overview_10-19_YScull",
+        "start": "2026-10-19",
+        "end": null,
+        "location": "Norman Hall",
+        "url": "https://careerhub.ufl.edu/events/2026/10/19/cpwc3overview_10-19_yscull/",
+        "schedule": "10am - 11am"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": [
+      "https://careerhub.ufl.edu/events/page/2/",
+      "https://careerhub.ufl.edu/events/page/3/",
+      "https://careerhub.ufl.edu/events/page/8/"
+    ]
+  },
+  {
+    "id": "careers-page2",
+    "format": "careers",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:49.081Z",
+    "completedAt": "2026-10-17T12:12:49.365Z",
+    "requestedUrl": "https://careerhub.ufl.edu/events/page/2/",
+    "url": "https://careerhub.ufl.edu/events/page/2/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://careerhub.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 223022,
+    "count": 10,
+    "fieldCoverage": {
+      "name": 10,
+      "description": 0,
+      "location": 10,
+      "start": 10,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 10,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 10,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-21T00:00:00.000Z",
+      "max": "2026-10-27T00:00:00.000Z",
+      "futureOrToday": 10,
+      "datesCompared": 10,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Drop-in to Prepare for Careers in Health, Sport, and Tourism Fair",
+        "start": "2026-10-21",
+        "end": null,
+        "location": "Florida Gym",
+        "url": "https://careerhub.ufl.edu/events/2026/10/21/drop-in-to-prepare-for-careers-in-health-sport-and-tourism-fair-2/",
+        "schedule": "2:30pm - 3:45pm"
+      },
+      {
+        "name": "resumecl_10-21_jjewell",
+        "start": "2026-10-21",
+        "end": null,
+        "location": "See description for location details!",
+        "url": "https://careerhub.ufl.edu/events/2026/10/21/resumecl_10-21_jjewell/",
+        "schedule": "3:30pm - 7:30pm"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": [
+      "https://careerhub.ufl.edu/events/page/3/",
+      "https://careerhub.ufl.edu/events/page/4/",
+      "https://careerhub.ufl.edu/events/page/8/"
+    ]
+  },
+  {
+    "id": "heartwood-live-cards",
+    "format": "heartwood",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:53.004Z",
+    "completedAt": "2026-10-17T12:12:53.152Z",
+    "requestedUrl": "https://www.heartwoodsoundstage.com/shows",
+    "url": "https://www.heartwoodsoundstage.com/shows",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.heartwoodsoundstage.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 184601,
+    "count": 63,
+    "fieldCoverage": {
+      "name": 63,
+      "description": 0,
+      "location": 63,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 63,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 63,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Butcher Babies W/ Living Dead Girl",
+        "start": null,
+        "location": "Heartwood Soundstage (source context)",
+        "url": "https://www.heartwoodsoundstage.com/shows/butcher-babies-17-oct",
+        "schedule": "Oct 17; 8:00 pm; year not present in card"
+      },
+      {
+        "name": "For the Animals: Chili Cook Off & Music Fest",
+        "start": null,
+        "location": "Heartwood Soundstage (source context)",
+        "url": "https://www.heartwoodsoundstage.com/shows/for-the-animals-chili-cook-off-music-fest-18-oct",
+        "schedule": "Oct 18; 12:00 pm; year not present in card"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  },
+  {
+    "id": "heartwood-detail",
+    "format": "heartwood-detail",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:53.270Z",
+    "completedAt": "2026-10-17T12:12:54.174Z",
+    "requestedUrl": "https://www.heartwoodsoundstage.com/shows/butcher-babies-17-oct",
+    "url": "https://www.heartwoodsoundstage.com/shows/butcher-babies-17-oct",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.heartwoodsoundstage.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 45184,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 0,
+      "location": 1,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Butcher Babies W/ Living Dead Girl",
+        "location": "Heartwood Soundstage (source context)",
+        "url": "https://www.heartwoodsoundstage.com/shows/butcher-babies-17-oct",
+        "schedule": "October 17, 2026•8:00 pm"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  },
+  {
+    "id": "engineering-current-calendar",
+    "format": "engineering",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:54.199Z",
+    "completedAt": "2026-10-17T12:12:55.228Z",
+    "requestedUrl": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/",
+    "url": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.eng.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 112249,
+    "count": 6,
+    "fieldCoverage": {
+      "name": 6,
+      "description": 4,
+      "location": 4,
+      "start": 6,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 5,
+      "url": 6,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 6,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-09-28T00:00:00.000Z",
+      "max": "2026-10-28T00:00:00.000Z",
+      "futureOrToday": 2,
+      "datesCompared": 6,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "HWCOE Peer Advisor Training",
+        "start": "2026-09-28",
+        "location": "Reitz Union room 2355",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/hwcoe-peer-advisor-training/",
+        "category": [
+          "Workshop"
+        ],
+        "schedule": "4:00 pm - 5:30 pm"
+      },
+      {
+        "name": "ASCE GBM 3 with Kimley Horn",
+        "start": "2026-09-30",
+        "location": "Weil270",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/asce-gbm-3-with-kimley-horn/",
+        "category": [
+          "Student Organization"
+        ],
+        "schedule": "6:15 pm - 7:15 pm"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  },
+  {
+    "id": "engineering-robotics-ical",
+    "format": "ical",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:12:55.282Z",
+    "completedAt": "2026-10-17T12:12:55.743Z",
+    "requestedUrl": "https://www.eng.ufl.edu/undergraduate/news-events/events/gator-robotics-gbm-5/ical/",
+    "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/gator-robotics-gbm-5/ical/",
+    "status": 200,
+    "contentType": "text/calendar; charset=utf-8",
+    "robots": {
+      "url": "https://www.eng.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 1175,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 1,
+      "organizer": 0,
+      "price": 0,
+      "category": 1,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Gator Robotics GBM",
+        "start": "2025-10-16T18:00:00",
+        "end": "2025-10-16T19:00:00",
+        "timezone": "America/New_York",
+        "location": "Littlehall 0221, 1400 Stadium Road, Gainesville, Florida, 32601, United States",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/gator-robotics-gbm-5/",
+        "category": [
+          "General Body Meeting",
+          "Student Organization"
+        ],
+        "price": null,
+        "recurrence": false,
+        "allDay": false
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "multidayCards": 0,
+    "soldOutBadges": 0,
+    "paginationLinks": []
+  }
+]

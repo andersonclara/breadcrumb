@@ -1,0 +1,936 @@
+{
+  "schema": "breadcrumb-research-coverage-v1",
+  "testedAt": "2026-10-17T12:14:15.778Z",
+  "timezone": "America/New_York",
+  "windows": {
+    "today": "2026-10-17",
+    "saturday": "2026-10-17",
+    "mondayExclusive": "2026-10-19",
+    "horizonExclusive": "2026-11-16"
+  },
+  "requests": [
+    {
+      "source": "gatorconnect",
+      "startedAt": "2026-10-17T12:14:15.822Z",
+      "completedAt": "2026-10-17T12:14:16.352Z",
+      "requestedUrl": "https://gatorconnect.ufl.edu/events.rss",
+      "url": "https://gatorconnect.ufl.edu/events.rss",
+      "status": 200,
+      "contentType": "application/rss+xml; charset=utf-8",
+      "cache": {
+        "etag": null,
+        "lastModified": null,
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://gatorconnect.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 564617,
+      "count": 339
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:16.761Z",
+      "completedAt": "2026-10-17T12:14:17.121Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=1",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=1",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:15 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 330189,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 1,
+        "totalPages": 6
+      },
+      "count": 100
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:17.224Z",
+      "completedAt": "2026-10-17T12:14:18.083Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=2",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=2",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:16 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 334837,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 2,
+        "totalPages": 6
+      },
+      "count": 100
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:18.152Z",
+      "completedAt": "2026-10-17T12:14:19.133Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=3",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=3",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:17 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 328465,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 3,
+        "totalPages": 6
+      },
+      "count": 100
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:19.234Z",
+      "completedAt": "2026-10-17T12:14:20.198Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=4",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=4",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:18 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 332387,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 4,
+        "totalPages": 6
+      },
+      "count": 100
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:20.252Z",
+      "completedAt": "2026-10-17T12:14:21.070Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=5",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=5",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:19 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 318017,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 5,
+        "totalPages": 6
+      },
+      "count": 100
+    },
+    {
+      "source": "uf-calendar",
+      "startedAt": "2026-10-17T12:14:21.125Z",
+      "completedAt": "2026-10-17T12:14:22.058Z",
+      "requestedUrl": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=6",
+      "url": "https://calendar.ufl.edu/live/json/events/start_date/2026-10-17/end_date/2026-11-16/paginate/100?page=6",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": "Sat, 17 Oct 2026 12:14:20 GMT",
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://calendar.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 208881,
+      "pagination": {
+        "meta": null,
+        "total": 568,
+        "next": null,
+        "page": 6,
+        "totalPages": 6
+      },
+      "count": 68
+    },
+    {
+      "source": "libraries",
+      "startedAt": "2026-10-17T12:14:22.098Z",
+      "completedAt": "2026-10-17T12:14:22.363Z",
+      "requestedUrl": "https://libcal.uflib.ufl.edu/rss.php?iid=6&m=month&cid=22582",
+      "url": "https://libcal.uflib.ufl.edu/rss.php?iid=6&m=month&cid=22582",
+      "status": 200,
+      "contentType": "application/rss+xml; charset=utf-8",
+      "cache": {
+        "etag": null,
+        "lastModified": null,
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://libcal.uflib.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": 10
+      },
+      "redirects": [],
+      "bytes": 100386,
+      "count": 33
+    },
+    {
+      "source": "gatornights",
+      "startedAt": "2026-10-17T12:14:22.486Z",
+      "completedAt": "2026-10-17T12:14:24.403Z",
+      "requestedUrl": "https://studentengagement.ufl.edu/gatornights/",
+      "url": "https://studentengagement.ufl.edu/gatornights/",
+      "status": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": null,
+        "cacheControl": "no-store, no-cache, must-revalidate",
+        "age": null
+      },
+      "robots": {
+        "url": "https://studentengagement.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 137465,
+      "count": 3
+    },
+    {
+      "source": "gainesvilleevents",
+      "startedAt": "2026-10-17T12:14:24.526Z",
+      "completedAt": "2026-10-17T12:14:24.709Z",
+      "requestedUrl": "https://gainesvilleevents.com/feed.ics",
+      "url": "https://gainesvilleevents.com/feed.ics",
+      "status": 200,
+      "contentType": "text/calendar",
+      "cache": {
+        "etag": "\"a331f-65e0649b80bb3\"",
+        "lastModified": "Sat, 17 Oct 2026 09:55:59 GMT",
+        "cacheControl": "max-age=172800",
+        "age": null
+      },
+      "robots": {
+        "url": "https://gainesvilleevents.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 668447,
+      "count": 1014
+    },
+    {
+      "source": "arts",
+      "startedAt": "2026-10-17T12:14:25.320Z",
+      "completedAt": "2026-10-17T12:14:26.574Z",
+      "requestedUrl": "https://arts.ufl.edu/wp-json/tribe/events/v1/events?per_page=50&start_date=2026-10-17&end_date=2026-11-16",
+      "url": "https://arts.ufl.edu/wp-json/tribe/events/v1/events?per_page=50&start_date=2026-10-17&end_date=2026-11-16",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": null,
+        "cacheControl": null,
+        "age": null
+      },
+      "robots": {
+        "url": "https://arts.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 226807,
+      "pagination": {
+        "meta": null,
+        "total": 24,
+        "next": null,
+        "page": null,
+        "totalPages": 1
+      },
+      "count": 24
+    }
+  ],
+  "sources": [
+    {
+      "source": "gatorconnect",
+      "completeness": "Publisher feed snapshot; no paging established"
+    },
+    {
+      "source": "uf-calendar",
+      "requestedWindow": {
+        "day": "2026-10-17",
+        "endDay": "2026-11-16"
+      },
+      "pagesFetched": 6,
+      "reportedPages": 6,
+      "reportedTotal": 568,
+      "capReached": false,
+      "completeForReportedPages": true
+    },
+    {
+      "source": "libraries",
+      "completeness": "Advertised monthly RSS, no paging established"
+    },
+    {
+      "source": "gatornights",
+      "completeness": "Seasonal cards, no paging"
+    },
+    {
+      "source": "gainesvilleevents",
+      "completeness": "Advertised iCal snapshot, original-source authorization not inferred"
+    },
+    {
+      "source": "arts",
+      "completeness": "Returned window, no next page advertised",
+      "reportedTotal": 24
+    }
+  ],
+  "totalReturned": 1981,
+  "next30DaysBeforeGrouping": 1735,
+  "conservativeGroupedCandidates": 1693,
+  "candidateDuplicateGroups": 38,
+  "duplicateExtraRecords": 42,
+  "duplicateRule": "Exact normalized title + exact start instant/date + normalized place. Candidate grouping only: can merge separate parallel activities or miss aliases; no production dedupe implemented.",
+  "crossSourceDuplicateGroups": 1,
+  "crossSourceSharedUrlAndDayGroups": 0,
+  "crossSourceSharedTitleAndDayGroups": 30,
+  "sharedUrlClockDisagreementGroups": 0,
+  "duplicateExamples": [
+    {
+      "title": "UF Viola Day",
+      "day": "2026-10-17",
+      "sources": [
+        "uf-calendar",
+        "arts"
+      ],
+      "starts": [
+        "2026-10-17T09:30:00-04:00",
+        "2026-10-17T13:30:00Z"
+      ],
+      "sourceUrls": [
+        "https://calendar.ufl.edu/event/58463-uf-viola-day",
+        "https://arts.ufl.edu/event/uf-viola-day/"
+      ]
+    },
+    {
+      "title": "Guest Artist Recital: Tze-Ying Wu and Jacob Coleman",
+      "day": "2026-10-17",
+      "sources": [
+        "uf-calendar",
+        "arts"
+      ],
+      "starts": [
+        "2026-10-17T16:45:00-04:00",
+        "2026-10-17T20:45:00Z"
+      ],
+      "sourceUrls": [
+        "https://calendar.ufl.edu/event/58466-guest-artist-recital-tze-ying-wu-and-jacob-coleman",
+        "https://arts.ufl.edu/event/guest-artist-recital-tze-ying-wu-and-jacob-coleman/"
+      ]
+    }
+  ],
+  "sourceMetrics": [
+    {
+      "source": "gatorconnect",
+      "count": 339,
+      "fieldCoverage": {
+        "name": 339,
+        "description": 339,
+        "start": 339,
+        "end": 339,
+        "location": 339,
+        "organizer": 333,
+        "price": 0,
+        "tags": 0,
+        "category": 339,
+        "audiences": 0,
+        "lastModified": 0
+      },
+      "online": 0,
+      "cancelled": 0,
+      "registrationRequired": 0,
+      "next30Days": 335,
+      "exactClocks": 339,
+      "assumedCampusClocks": 0,
+      "dateOnly": 0,
+      "dateRange": {
+        "min": "2026-09-15",
+        "max": "2026-11-15"
+      }
+    },
+    {
+      "source": "uf-calendar",
+      "count": 568,
+      "fieldCoverage": {
+        "name": 568,
+        "description": 362,
+        "start": 568,
+        "end": 297,
+        "location": 495,
+        "organizer": 568,
+        "price": 228,
+        "tags": 366,
+        "category": 517,
+        "audiences": 0,
+        "lastModified": 568
+      },
+      "online": 71,
+      "cancelled": 1,
+      "registrationRequired": 15,
+      "next30Days": 565,
+      "exactClocks": 379,
+      "assumedCampusClocks": 0,
+      "dateOnly": 189,
+      "dateRange": {
+        "min": "2026-10-17",
+        "max": "2026-11-16"
+      }
+    },
+    {
+      "source": "libraries",
+      "count": 33,
+      "fieldCoverage": {
+        "name": 33,
+        "description": 33,
+        "start": 33,
+        "end": 33,
+        "location": 29,
+        "organizer": 0,
+        "price": 0,
+        "tags": 0,
+        "category": 15,
+        "audiences": 33,
+        "lastModified": 0
+      },
+      "online": 10,
+      "cancelled": 0,
+      "registrationRequired": 24,
+      "next30Days": 29,
+      "exactClocks": 0,
+      "assumedCampusClocks": 33,
+      "dateOnly": 0,
+      "dateRange": {
+        "min": "2026-10-19",
+        "max": "2026-11-17"
+      }
+    },
+    {
+      "source": "gatornights",
+      "count": 3,
+      "fieldCoverage": {
+        "name": 3,
+        "description": 3,
+        "start": 3,
+        "end": 0,
+        "location": 3,
+        "organizer": 0,
+        "price": 0,
+        "tags": 0,
+        "category": 0,
+        "audiences": 0,
+        "lastModified": 0
+      },
+      "online": 0,
+      "cancelled": 0,
+      "registrationRequired": 0,
+      "next30Days": 1,
+      "exactClocks": 0,
+      "assumedCampusClocks": 3,
+      "dateOnly": 0,
+      "dateRange": {
+        "min": "2026-10-07",
+        "max": "2026-12-02"
+      }
+    },
+    {
+      "source": "gainesvilleevents",
+      "count": 1014,
+      "fieldCoverage": {
+        "name": 1014,
+        "description": 1014,
+        "start": 1014,
+        "end": 1014,
+        "location": 962,
+        "organizer": 0,
+        "price": 0,
+        "tags": 0,
+        "category": 0,
+        "audiences": 0,
+        "lastModified": 0
+      },
+      "online": 2,
+      "cancelled": 0,
+      "registrationRequired": 0,
+      "next30Days": 781,
+      "exactClocks": 1014,
+      "assumedCampusClocks": 0,
+      "dateOnly": 0,
+      "dateRange": {
+        "min": "2026-10-16",
+        "max": "2027-03-13"
+      }
+    },
+    {
+      "source": "arts",
+      "count": 24,
+      "fieldCoverage": {
+        "name": 24,
+        "description": 24,
+        "start": 24,
+        "end": 24,
+        "location": 24,
+        "organizer": 0,
+        "price": 24,
+        "tags": 0,
+        "category": 0,
+        "audiences": 0,
+        "lastModified": 0
+      },
+      "online": 0,
+      "cancelled": 0,
+      "registrationRequired": 0,
+      "next30Days": 24,
+      "exactClocks": 24,
+      "assumedCampusClocks": 0,
+      "dateOnly": 0,
+      "dateRange": {
+        "min": "2026-10-17",
+        "max": "2026-11-15"
+      }
+    }
+  ],
+  "reitzAnchor": {
+    "latitude": 29.646507,
+    "longitude": -82.347789,
+    "method": "Median of publisher-provided coordinates on explicitly Reitz-located event records; approximate research anchor",
+    "evidenceUrls": [
+      "https://calendar.ufl.edu/live/events/58363-gator-market-at-the-reitz-union",
+      "https://calendar.ufl.edu/graduate-school/event/56632-3mt-preliminary-competition"
+    ]
+  },
+  "spatialMatches": 118,
+  "coordinateCoverageInWindow": 154,
+  "explicitFoodCandidates": 6,
+  "foodMentionWithoutFreeEvidence": 95,
+  "interestCounts30Days": {
+    "gaming": 31,
+    "robotics": 4,
+    "womenStem": 0,
+    "freeFood": 6,
+    "foodMention": 101,
+    "giveaways": 19,
+    "workshops": 162
+  },
+  "foodEvidenceAudit": [
+    {
+      "name": "FBLS GBM",
+      "source": "gatorconnect",
+      "start": "Wed, 21 Oct 2026 22:30:00 GMT",
+      "end": "Wed, 21 Oct 2026 23:30:00 GMT",
+      "precision": "explicit-offset",
+      "location": "Heavener Hall Room 260",
+      "url": "https://gatorconnect.ufl.edu/event/12747075",
+      "matchedFoodPhrase": "free pizza",
+      "eligibilityWarningDetected": false
+    },
+    {
+      "name": "FBLS GBM",
+      "source": "gatorconnect",
+      "start": "Wed, 28 Oct 2026 22:30:00 GMT",
+      "end": "Wed, 28 Oct 2026 23:30:00 GMT",
+      "precision": "explicit-offset",
+      "location": "Heavener Hall Room 260",
+      "url": "https://gatorconnect.ufl.edu/event/12747076",
+      "matchedFoodPhrase": "free pizza",
+      "eligibilityWarningDetected": false
+    }
+  ],
+  "acronymAmbiguityAudit": {
+    "sweAcronymCandidates": 0,
+    "note": "SWE alone can mean Society of Women Engineers or software engineering; not classified as Women in STEM without explicit context."
+  },
+  "questions": [
+    {
+      "id": "reitz-now",
+      "question": "What's happening near Reitz right now?",
+      "support": "NO_MATCH_IN_TESTED_SNAPSHOT",
+      "candidateCount": 0,
+      "bySource": {},
+      "rule": "Explicit start <= test instant < explicit end; duration <=24h; physical Reitz place; excludes date-only/online/cancelled.",
+      "limitations": [
+        "Scheduled overlap is not an eyewitness confirmation, crowd estimate, cancellation check or food-stock check."
+      ],
+      "examples": []
+    },
+    {
+      "id": "free-food-turlington",
+      "question": "Any free food at Turlington?",
+      "support": "NO_MATCH_IN_TESTED_SNAPSHOT",
+      "candidateCount": 0,
+      "bySource": {},
+      "rule": "Today + explicit Turlington location + free/provided-food phrase.",
+      "limitations": [
+        "Candidate mention only; free-food regex is unvalidated and cannot establish stock, eligibility, portion availability or that an event is running."
+      ],
+      "examples": []
+    },
+    {
+      "id": "women-stem-weekend",
+      "question": "Any Women in STEM events this weekend?",
+      "support": "NO_MATCH_IN_TESTED_SNAPSHOT",
+      "candidateCount": 0,
+      "bySource": {},
+      "rule": "Explicit Women in STEM/WiCSE/SWE phrase + event starts this Saturday/Sunday.",
+      "limitations": [
+        "Keyword candidates can miss acronyms; a general women-focused or STEM event alone does not satisfy this rule."
+      ],
+      "examples": []
+    },
+    {
+      "id": "gaming-30-days",
+      "question": "Are there any gaming events?",
+      "support": "PARTIAL",
+      "candidateCount": 31,
+      "bySource": {
+        "gatorconnect": 11,
+        "uf-calendar": 6,
+        "libraries": 2,
+        "gainesvilleevents": 12
+      },
+      "rule": "Explicit gaming/esports/GatorLAN/tabletop terms in next 30 days.",
+      "limitations": [
+        "Keyword hit can come from a secondary activity or host description; examples need human inspection."
+      ],
+      "examples": [
+        {
+          "name": "GBM #8 - Gator Gaming x Gator Esports",
+          "source": "gatorconnect",
+          "start": "Tue, 20 Oct 2026 22:00:00 GMT",
+          "end": "Wed, 21 Oct 2026 01:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Room G320 - Reitz Union",
+          "url": "https://gatorconnect.ufl.edu/event/12878609"
+        },
+        {
+          "name": "Hawthorne Hub",
+          "source": "gainesvilleevents",
+          "start": "2026-10-20T19:00:00Z",
+          "end": "2026-10-20T20:00:00Z",
+          "timezone": "UTC",
+          "precision": "explicit-offset",
+          "location": "Hawthorne Branch",
+          "url": "https://attend.aclib.us/event/16742296"
+        }
+      ]
+    },
+    {
+      "id": "robotics-30-days",
+      "question": "Are there any robotics events?",
+      "support": "PARTIAL",
+      "candidateCount": 4,
+      "bySource": {
+        "gatorconnect": 4
+      },
+      "rule": "Explicit robotics/robot/battlebot/VEX terms in next 30 days.",
+      "limitations": [
+        "No match is a coverage gap, not proof no robotics events exist."
+      ],
+      "examples": [
+        {
+          "name": "Gator Robotics GBM",
+          "source": "gatorconnect",
+          "start": "Thu, 22 Oct 2026 22:30:00 GMT",
+          "end": "Thu, 22 Oct 2026 23:30:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Little Hall",
+          "url": "https://gatorconnect.ufl.edu/event/12707148"
+        },
+        {
+          "name": "Gator Robotics GBM",
+          "source": "gatorconnect",
+          "start": "Thu, 29 Oct 2026 22:30:00 GMT",
+          "end": "Thu, 29 Oct 2026 23:30:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Little Hall",
+          "url": "https://gatorconnect.ufl.edu/event/12707149"
+        }
+      ]
+    },
+    {
+      "id": "gainesville-tonight",
+      "question": "I'm bored tonight. What's going on in Gainesville?",
+      "support": "PARTIAL",
+      "candidateCount": 23,
+      "bySource": {
+        "gatorconnect": 1,
+        "uf-calendar": 1,
+        "gainesvilleevents": 21
+      },
+      "rule": "Starts today at/after 17:00 America/New_York with a resolvable clock; 30-day combined source set.",
+      "limitations": [
+        "Geographic validity not independently established for every aggregator venue. Includes scheduled/ticketed events; no inferred quality rating."
+      ],
+      "examples": [
+        {
+          "name": "Cross Council Social",
+          "source": "gatorconnect",
+          "start": "Sat, 17 Oct 2026 23:00:00 GMT",
+          "end": "Sun, 18 Oct 2026 01:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Sig Ep",
+          "url": "https://gatorconnect.ufl.edu/event/12886709"
+        },
+        {
+          "name": "Florida Gators Softball vs Carson-Newman University",
+          "source": "uf-calendar",
+          "start": "2026-10-17T18:00:00-04:00",
+          "end": "2026-10-17T20:00:00-04:00",
+          "timezone": "America/New_York",
+          "precision": "explicit-offset",
+          "location": "Gainesville, Fla., Katie Seashole Pressly Stadium",
+          "url": "https://calendar.ufl.edu/event/57873-florida-gators-softball-vs-carson-newman"
+        }
+      ]
+    },
+    {
+      "id": "reitz-place-name",
+      "question": "What is scheduled at or around Reitz?",
+      "support": "PARTIAL",
+      "candidateCount": 104,
+      "bySource": {
+        "gatorconnect": 71,
+        "uf-calendar": 29,
+        "gatornights": 1,
+        "gainesvilleevents": 3
+      },
+      "rule": "Explicit Reitz/Arredondo place name in next 30 days.",
+      "limitations": [
+        "Name match is not a distance estimate and can miss adjacent places."
+      ],
+      "examples": [
+        {
+          "name": "Tau Beta Pi GatorTRAX 2",
+          "source": "gatorconnect",
+          "start": "Sat, 17 Oct 2026 13:00:00 GMT",
+          "end": "Sat, 17 Oct 2026 15:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Arrendondo Cafe at the Reitz Union",
+          "url": "https://gatorconnect.ufl.edu/event/12896212"
+        },
+        {
+          "name": "Hamlet Rehearsals",
+          "source": "gatorconnect",
+          "start": "Sat, 17 Oct 2026 17:00:00 GMT",
+          "end": "Sat, 17 Oct 2026 18:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Reitz Amphitheater",
+          "url": "https://gatorconnect.ufl.edu/event/12696995"
+        }
+      ]
+    },
+    {
+      "id": "walking-radius",
+      "question": "Any events within walking distance of Reitz?",
+      "support": "PARTIAL",
+      "candidateCount": 118,
+      "bySource": {
+        "uf-calendar": 118
+      },
+      "rule": "Physical event with published coordinates within 1km straight-line of publisher-derived Reitz anchor.",
+      "limitations": [
+        "Straight-line distance is not a pedestrian route, walking time, access check or accessibility guarantee. Events without coordinates remain unknown."
+      ],
+      "examples": [
+        {
+          "name": "HESCAH Symposium | Creative Commodities: Art, Ecology, and the Spanish Empire",
+          "source": "uf-calendar",
+          "start": "2026-10-17T00:00:00-04:00",
+          "end": null,
+          "timezone": "America/New_York",
+          "precision": "date-only",
+          "location": "Emerson Alumni Hall",
+          "price": "Free",
+          "url": "https://calendar.ufl.edu/event/58462-hescah-symposium-creative-commodities-art-ecology"
+        },
+        {
+          "name": "Into the Woods",
+          "source": "uf-calendar",
+          "start": "2026-10-17T00:00:00-04:00",
+          "end": null,
+          "timezone": "America/New_York",
+          "precision": "date-only",
+          "location": "Constans Theatre in the Nadine McGuire Theatre and Dance Pavilion",
+          "price": "15 - 22",
+          "url": "https://calendar.ufl.edu/event/58461-into-the-woods"
+        }
+      ]
+    },
+    {
+      "id": "free-admission",
+      "question": "Which events have published free admission?",
+      "support": "PARTIAL",
+      "candidateCount": 191,
+      "bySource": {
+        "uf-calendar": 173,
+        "arts": 18
+      },
+      "rule": "Explicit cost field equals free/no-charge/zero; no inference from free food or blank costs.",
+      "limitations": [
+        "Blank cost is unknown. Free admission does not guarantee free food or no registration."
+      ],
+      "examples": [
+        {
+          "name": "An Unreasonable Commitment to the Square",
+          "source": "uf-calendar",
+          "start": "2026-10-17T00:00:00-04:00",
+          "end": null,
+          "timezone": "America/New_York",
+          "precision": "date-only",
+          "location": "4Most Gallery & Studio",
+          "price": "Free",
+          "url": "https://calendar.ufl.edu/event/58457-an-unreasonable-commitment-to-the-square"
+        },
+        {
+          "name": "Excavating a Legacy: Dr. Kathleen Deagan",
+          "source": "uf-calendar",
+          "start": "2026-10-17T00:00:00-04:00",
+          "end": null,
+          "timezone": "America/New_York",
+          "precision": "date-only",
+          "location": "Marston Science Library 2nd Floor",
+          "price": "Free",
+          "url": "https://calendar.ufl.edu/event/58454-excavating-a-legacy-dr-kathleen-deagan"
+        }
+      ]
+    },
+    {
+      "id": "food-and-giveaways",
+      "question": "Where should we look for food, giveaways and free activities?",
+      "support": "PARTIAL",
+      "candidateCount": 25,
+      "bySource": {
+        "gatorconnect": 9,
+        "uf-calendar": 3,
+        "libraries": 1,
+        "gainesvilleevents": 12
+      },
+      "rule": "Published free/provided-food or giveaway/prize terms in next 30 days.",
+      "limitations": [
+        "A prize is not guaranteed for every attendee; food availability needs user/organizer confirmation."
+      ],
+      "examples": [
+        {
+          "name": "AASU x FLP 17th Annual Dodgeball/Field Day Tournament",
+          "source": "gatorconnect",
+          "start": "Sat, 17 Oct 2026 14:15:00 GMT",
+          "end": "Sat, 17 Oct 2026 19:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Flavet Field",
+          "url": "https://gatorconnect.ufl.edu/event/12889335"
+        },
+        {
+          "name": "BMES x EMBS Designathon",
+          "source": "gatorconnect",
+          "start": "Sat, 17 Oct 2026 12:00:00 GMT",
+          "end": "Sun, 18 Oct 2026 00:00:00 GMT",
+          "precision": "explicit-offset",
+          "location": "Matherly Hall",
+          "url": "https://gatorconnect.ufl.edu/event/12887340"
+        }
+      ]
+    },
+    {
+      "id": "bar-specials-tonight",
+      "question": "Which bars have specials tonight?",
+      "support": "NO_MATCH_IN_TESTED_SNAPSHOT",
+      "candidateCount": 0,
+      "bySource": {},
+      "rule": "Resolvable evening start today plus explicit happy-hour/drink-special phrase.",
+      "limitations": [
+        "Recurring merchant offers are tested separately; neither an old promo nor a generic bar event confirms a special tonight."
+      ],
+      "examples": []
+    }
+  ],
+  "liveStockConfirmed": false,
+  "limitations": [
+    "Bounded source snapshot, not a campus census.",
+    "No source content license inferred from successful retrieval.",
+    "Descriptions, editor/contact/attendee information and raw bodies were not retained.",
+    "No AI model or chatbot used to manufacture results; matching is transparent rules in this script.",
+    "No external geocoding or routing; no social data collected."
+  ]
+}

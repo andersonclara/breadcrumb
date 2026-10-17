@@ -1,0 +1,161 @@
+[
+  {
+    "id": "wicse",
+    "page": {
+      "startedAt": "2026-10-17T12:07:18.737Z",
+      "completedAt": "2026-10-17T12:07:18.868Z",
+      "requestedUrl": "https://ufwicse.com/events",
+      "url": "https://ufwicse.com/events",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": {
+        "url": "https://ufwicse.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 71891
+    },
+    "assets": [
+      {
+        "startedAt": "2026-10-17T12:07:18.895Z",
+        "completedAt": "2026-10-17T12:07:19.876Z",
+        "requestedUrl": "https://ufwicse.com/main.js",
+        "url": "https://ufwicse.com/main.js",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "robots": {
+          "url": "https://ufwicse.com/robots.txt",
+          "status": 200,
+          "allowed": true,
+          "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 1368447
+      }
+    ],
+    "publicCalendars": [
+      "https://calendar.google.com/calendar/embed?src=291pbpr99guo0kl6md2g0nghk8%40group.calendar.google.com&ctz=America%2FNew_York"
+    ],
+    "publicDataUrls": [],
+    "routeLiterals": [
+      "eventTask",
+      "EVENTUAL",
+      "/events",
+      "/event-archive",
+      "events",
+      "event-row",
+      "closure_listenable_",
+      "closure_lm_",
+      "REQUEST_TIME",
+      "EVENT",
+      "event-column",
+      "event-img",
+      "event-archive"
+    ]
+  },
+  {
+    "id": "closures",
+    "page": {
+      "startedAt": "2026-10-17T12:07:19.922Z",
+      "completedAt": "2026-10-17T12:07:20.086Z",
+      "requestedUrl": "https://campusclosures.ufl.edu/",
+      "url": "https://campusclosures.ufl.edu/",
+      "status": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "robots": {
+        "url": "https://campusclosures.ufl.edu/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 4558
+    },
+    "assets": [
+      {
+        "startedAt": "2026-10-17T12:07:20.095Z",
+        "completedAt": "2026-10-17T12:07:21.041Z",
+        "requestedUrl": "https://campusclosures.ufl.edu/main-es2015.3d9505e2480223f88e68.js",
+        "url": "https://campusclosures.ufl.edu/main-es2015.3d9505e2480223f88e68.js",
+        "status": 200,
+        "contentType": "application/javascript",
+        "robots": {
+          "url": "https://campusclosures.ufl.edu/robots.txt",
+          "status": 200,
+          "allowed": true,
+          "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 3877287
+      }
+    ],
+    "publicCalendars": [],
+    "publicDataUrls": [
+      "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?",
+      "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?"
+    ],
+    "routeLiterals": [
+      "EventService",
+      "eventService",
+      "api",
+      "EVENT_TAP",
+      "EVENT_LONG_TAP",
+      "api.getDataAsCsv",
+      "api.exportDataAsCSv",
+      "api.getDataAsExcel",
+      "api.exportDataAsExcel",
+      "api.getSheetDataForExcel",
+      "api.getMultipleSheetsAsExcel",
+      "api.exportMultipleSheetsAsExcel",
+      "api.getChartModels",
+      "api.createRangeChart",
+      "api.createCrossFilterChart",
+      "api.restoreChart",
+      "api.createPivotChart",
+      "Events",
+      "request",
+      "requeststart",
+      "requesterror",
+      "requestsuccess",
+      "requestend",
+      "RequestAnimationFrame",
+      "eventTask"
+    ]
+  },
+  {
+    "id": "heartwood",
+    "page": {
+      "startedAt": "2026-10-17T12:07:21.283Z",
+      "completedAt": "2026-10-17T12:07:21.418Z",
+      "requestedUrl": "https://www.heartwoodsoundstage.com/shows",
+      "url": "https://www.heartwoodsoundstage.com/shows",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": {
+        "url": "https://www.heartwoodsoundstage.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 184601
+    },
+    "assets": [],
+    "publicCalendars": [],
+    "publicDataUrls": [
+      "https://app.opendate.io/api/v2/public/fans"
+    ],
+    "routeLiterals": [
+      "events-calender-wrap",
+      "event-month",
+      "event-day",
+      "event-time-new"
+    ]
+  }
+]

@@ -1,0 +1,905 @@
+[
+  {
+    "id": "glory-gainesville",
+    "format": "glory",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:40.842Z",
+    "completedAt": "2026-10-17T12:35:42.473Z",
+    "requestedUrl": "https://glorydayspresents.com/",
+    "url": "https://glorydayspresents.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://glorydayspresents.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 165131,
+    "rowsBeforeCityFilter": 76,
+    "excludedNonGainesville": 48,
+    "count": 28,
+    "fieldCoverage": {
+      "name": 28,
+      "description": 0,
+      "location": 28,
+      "start": 28,
+      "end": 0,
+      "organizer": 27,
+      "price": 0,
+      "category": 0,
+      "url": 28,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 28,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "end",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-17T00:00:00.000Z",
+      "max": "2027-04-17T00:00:00.000Z",
+      "futureOrToday": 28,
+      "datesCompared": 28,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "The Shimmy Shake Revue – Almost Halloween Burlesque Show",
+        "start": "2026-10-17",
+        "end": null,
+        "timezone": "America/New_York (inferred for Gainesville only)",
+        "location": "Signal, Gainesville",
+        "url": "https://wl.seetickets.us/event/the-shimmy-shake-revue-almost-halloween-burlesque-show/702652?afflky=GloryDaysPresents",
+        "price": null,
+        "schedule": "Doors: 6:00pm"
+      },
+      {
+        "name": "Broadway Rave: MasqueRave Edition",
+        "start": "2026-10-17",
+        "end": null,
+        "timezone": "America/New_York (inferred for Gainesville only)",
+        "location": "Signal, Gainesville",
+        "url": "https://wl.seetickets.us/event/broadway-rave-masquerave-edition/701212?afflky=GloryDaysPresents",
+        "price": null,
+        "schedule": "Doors: 9:00pm"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 28,
+    "startIsDateOnly": 28,
+    "scheduleRecords": 28,
+    "note": "Schedule is doors time, not performance start; first published page only, explicitly city-filtered.",
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "magnitude-events-food",
+    "format": "magnitude-home",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:42.606Z",
+    "completedAt": "2026-10-17T12:35:42.761Z",
+    "requestedUrl": "https://www.fmbrewing.com/",
+    "url": "https://www.fmbrewing.com/",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"05b32f6b26ef8c39152e087712ed1ec3\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "82941"
+    },
+    "robots": {
+      "url": "https://www.fmbrewing.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 504670,
+    "rowsBeforeCityFilter": 8,
+    "count": 8,
+    "fieldCoverage": {
+      "name": 8,
+      "description": 3,
+      "location": 8,
+      "start": 2,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 8,
+      "url": 8,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 8,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-16T00:00:00.000Z",
+      "max": "2026-10-17T00:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 2,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Tommyknockers + Good Life Sausages",
+        "start": "2026-10-16",
+        "end": null,
+        "location": "First Magnitude Brewing Co., Gainesville (publisher venue context)",
+        "url": "https://www.fmbrewing.com/food-truck-cal/tommyknockers-s36rs",
+        "category": [
+          "Food truck"
+        ],
+        "schedule": "3:00 PM – 9:00 PM"
+      },
+      {
+        "name": "Stubbies Sausages + Taino Roots",
+        "start": "2026-10-17",
+        "end": null,
+        "location": "First Magnitude Brewing Co., Gainesville (publisher venue context)",
+        "url": "https://www.fmbrewing.com/food-truck-cal/stubbies-sausages-mayflower-vegan-gator-verde-spice-f6yry",
+        "category": [
+          "Food truck"
+        ],
+        "schedule": "12:00 PM – 9:00 PM"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 2,
+    "startIsDateOnly": 2,
+    "scheduleRecords": 8,
+    "note": "Six event cards omit the full date/year; two food-truck cards have printed full dates. No year guessed from current date.",
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "magnitude-pride-detail",
+    "format": "magnitude-detail",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:42.912Z",
+    "completedAt": "2026-10-17T12:35:43.873Z",
+    "requestedUrl": "https://www.fmbrewing.com/event-calendar/pride-party",
+    "url": "https://www.fmbrewing.com/event-calendar/pride-party",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"7f008587875a8f7933e7af7d6d9e5305--gzip\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "0"
+    },
+    "robots": {
+      "url": "https://www.fmbrewing.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 171632,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-17T00:00:00.000Z",
+      "max": "2026-10-17T00:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 1,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Pride Party",
+        "start": "2026-10-17",
+        "end": null,
+        "timezone": "America/New_York (inferred from venue)",
+        "location": "First Magnitude Brewing Co., Gainesville (publisher venue context)",
+        "url": "https://www.fmbrewing.com/event-calendar/pride-party",
+        "price": null,
+        "schedule": "6:00 PM - 10:00 PM"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 1,
+    "startIsDateOnly": 1,
+    "scheduleRecords": 1,
+    "eligibilityMentions": 1
+  },
+  {
+    "id": "magnitude-festival-detail",
+    "format": "magnitude-detail",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:43.913Z",
+    "completedAt": "2026-10-17T12:35:44.989Z",
+    "requestedUrl": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+    "url": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"6ddd48baf6fd65578f966adeff9ae7c2--gzip\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "129"
+    },
+    "robots": {
+      "url": "https://www.fmbrewing.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 597780,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-18T00:00:00.000Z",
+      "max": "2026-10-18T00:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 1,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Florida Forever Festival",
+        "start": "2026-10-18",
+        "end": null,
+        "timezone": "America/New_York (inferred from venue)",
+        "location": "First Magnitude Brewing Co., Gainesville (publisher venue context)",
+        "url": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+        "price": null,
+        "schedule": "1:00 PM - 5:00 PM"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 1,
+    "startIsDateOnly": 1,
+    "scheduleRecords": 1,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "looseys-trivia",
+    "format": "looseys-detail",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:45.075Z",
+    "completedAt": "2026-10-17T12:35:45.257Z",
+    "requestedUrl": "https://www.looseys.com/events/monday-trivia/",
+    "url": "https://www.looseys.com/events/monday-trivia/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": "max-age=3, must-revalidate, max-age=600",
+      "age": null
+    },
+    "robots": {
+      "url": "https://www.looseys.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": 10
+    },
+    "redirects": [],
+    "bytes": 119082,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-19T00:00:00.000Z",
+      "max": "2026-10-19T00:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 1,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Loosey’s Trivia Night",
+        "start": "2026-10-19",
+        "end": null,
+        "timezone": "America/New_York (inferred from venue)",
+        "location": "120 SW 1st Ave, Gainesville, FL 32601",
+        "url": "https://www.looseys.com/events/monday-trivia/",
+        "price": null,
+        "schedule": "7:30 pm"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 1,
+    "startIsDateOnly": 1,
+    "scheduleRecords": 1,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "looseys-karaoke",
+    "format": "looseys-detail",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:45.353Z",
+    "completedAt": "2026-10-17T12:35:55.347Z",
+    "requestedUrl": "https://www.looseys.com/events/karaoke-party/",
+    "url": "https://www.looseys.com/events/karaoke-party/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": "max-age=3, must-revalidate, max-age=600",
+      "age": null
+    },
+    "robots": {
+      "url": "https://www.looseys.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": 10
+    },
+    "redirects": [],
+    "bytes": 114664,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 0,
+      "organizer": 0,
+      "price": 1,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "organizer",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-17T00:00:00.000Z",
+      "max": "2026-10-17T00:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 1,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Karaoke Party",
+        "start": "2026-10-17",
+        "end": null,
+        "timezone": "America/New_York (inferred from venue)",
+        "location": "120 SW 1st Ave, Gainesville, FL 32601",
+        "url": "https://www.looseys.com/events/karaoke-party/",
+        "price": "Free (description; verify conditions)",
+        "schedule": "9:00 pm"
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 1,
+    "startIsDateOnly": 1,
+    "scheduleRecords": 1,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "swamp-head-json",
+    "format": "json",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:57.169Z",
+    "completedAt": "2026-10-17T12:35:58.130Z",
+    "requestedUrl": "https://swamphead.com/wp-json/tribe/events/v1/events?per_page=20&start_date=2026-10-17&end_date=2026-11-16",
+    "url": "https://swamphead.com/wp-json/tribe/events/v1/events?per_page=20&start_date=2026-10-17&end_date=2026-11-16",
+    "status": 200,
+    "contentType": "application/json; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://swamphead.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 44379,
+    "pagination": {
+      "meta": null,
+      "total": 34,
+      "next": "https://swamphead.com/wp-json/tribe/events/v1/events/?per_page=20&start_date=2026-10-17+00%3A00%3A00&end_date=2026-11-16+23%3A59%3A59&status=publish&page=2",
+      "page": null,
+      "totalPages": 2
+    },
+    "rowsBeforeCityFilter": 20,
+    "count": 20,
+    "fieldCoverage": {
+      "name": 20,
+      "description": 0,
+      "location": 0,
+      "start": 20,
+      "end": 20,
+      "organizer": 0,
+      "price": 0,
+      "category": 20,
+      "url": 20,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 20,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "location",
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-10-17T17:00:00.000Z",
+      "max": "2026-10-28T20:00:00.000Z",
+      "futureOrToday": 20,
+      "datesCompared": 20,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "EIM Thai",
+        "start": "2026-10-17T17:00:00Z",
+        "end": "2026-10-18T01:00:00Z",
+        "timezone": "America/New_York",
+        "url": "https://swamphead.com/event/eim-thai/",
+        "category": [
+          "Food Trucks"
+        ],
+        "price": ""
+      },
+      {
+        "name": "Stubbies Sausages",
+        "start": "2026-10-18T16:00:00Z",
+        "end": "2026-10-18T23:00:00Z",
+        "timezone": "America/New_York",
+        "url": "https://swamphead.com/event/stubbies-sausages/",
+        "category": [
+          "Food Trucks"
+        ],
+        "price": ""
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 20,
+    "startIsDateOnly": 0,
+    "scheduleRecords": 0,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "swamp-head-ical",
+    "format": "ical",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:58.142Z",
+    "completedAt": "2026-10-17T12:35:59.051Z",
+    "requestedUrl": "https://swamphead.com/events/?ical=1",
+    "url": "https://swamphead.com/events/?ical=1",
+    "status": 200,
+    "contentType": "text/calendar; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://swamphead.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 12344,
+    "rowsBeforeCityFilter": 27,
+    "count": 27,
+    "fieldCoverage": {
+      "name": 27,
+      "description": 0,
+      "location": 0,
+      "start": 27,
+      "end": 27,
+      "organizer": 0,
+      "price": 0,
+      "category": 27,
+      "url": 27,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 27,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "location",
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "EIM Thai",
+        "start": "2026-10-17T13:00:00",
+        "end": "2026-10-17T21:00:00",
+        "timezone": "America/New_York",
+        "location": null,
+        "url": "https://swamphead.com/event/eim-thai/",
+        "category": [
+          "Food Trucks"
+        ],
+        "price": null,
+        "recurrence": false,
+        "allDay": false
+      },
+      {
+        "name": "Stubbies Sausages",
+        "start": "2026-10-18T12:00:00",
+        "end": "2026-10-18T19:00:00",
+        "timezone": "America/New_York",
+        "location": null,
+        "url": "https://swamphead.com/event/stubbies-sausages/",
+        "category": [
+          "Food Trucks"
+        ],
+        "price": null,
+        "recurrence": false,
+        "allDay": false
+      }
+    ],
+    "dataKind": "scheduled-venue-activity",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 27,
+    "startIsDateOnly": 0,
+    "scheduleRecords": 0,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "bull-calendar-lead",
+    "format": "google-embed",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:59.072Z",
+    "completedAt": "2026-10-17T12:35:59.335Z",
+    "requestedUrl": "https://www.thebull-gnv.com/calendar",
+    "url": "https://www.thebull-gnv.com/calendar",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"8b448624b0ee89837d66a9b6fc8112cd\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "0"
+    },
+    "robots": {
+      "url": "https://www.thebull-gnv.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 92743,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 0,
+      "location": 1,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Publisher-embedded public Google Calendar",
+        "start": null,
+        "end": null,
+        "location": "Venue website context",
+        "url": "https://www.thebull-gnv.com/calendar",
+        "schedule": null
+      }
+    ],
+    "dataKind": "calendar-discovery-only",
+    "usefulEventRecordsParsed": false,
+    "explicitYearRecords": 0,
+    "startIsDateOnly": 0,
+    "scheduleRecords": 0,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "cypress-calendar-lead",
+    "format": "google-embed",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:35:59.401Z",
+    "completedAt": "2026-10-17T12:35:59.566Z",
+    "requestedUrl": "https://www.cypressandgrove.com/calendar",
+    "url": "https://www.cypressandgrove.com/calendar",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"e380aaae83e33551cee66b7d50f005f5--gzip\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "8555"
+    },
+    "robots": {
+      "url": "https://www.cypressandgrove.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 366044,
+    "rowsBeforeCityFilter": 1,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 0,
+      "location": 1,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "description",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Publisher-embedded public Google Calendar",
+        "start": null,
+        "end": null,
+        "location": "Venue website context",
+        "url": "https://www.cypressandgrove.com/calendar",
+        "schedule": null
+      }
+    ],
+    "dataKind": "calendar-discovery-only",
+    "usefulEventRecordsParsed": false,
+    "explicitYearRecords": 0,
+    "startIsDateOnly": 0,
+    "scheduleRecords": 0,
+    "eligibilityMentions": 0
+  },
+  {
+    "id": "salty-weekly",
+    "format": "salty-weekly",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:38:11.427Z",
+    "completedAt": "2026-10-17T12:38:12.992Z",
+    "requestedUrl": "https://saltydogsaloon.com/",
+    "url": "https://saltydogsaloon.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://saltydogsaloon.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 134428,
+    "rowsBeforeCityFilter": 7,
+    "count": 7,
+    "fieldCoverage": {
+      "name": 7,
+      "description": 7,
+      "location": 7,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 7,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "Sunday published special",
+        "start": null,
+        "end": null,
+        "location": "Salty Dog Saloon, Gainesville (publisher context)",
+        "url": "https://saltydogsaloon.com/",
+        "price": null,
+        "schedule": "Sunday; open to close"
+      },
+      {
+        "name": "Monday published special",
+        "start": null,
+        "end": null,
+        "location": "Salty Dog Saloon, Gainesville (publisher context)",
+        "url": "https://saltydogsaloon.com/",
+        "price": null,
+        "schedule": "Monday; 7pm-12am / 7pm – 1am"
+      }
+    ],
+    "dataKind": "recurring-offer-not-dated-confirmation",
+    "usefulEventRecordsParsed": true,
+    "explicitYearRecords": 0,
+    "startIsDateOnly": 0,
+    "scheduleRecords": 7,
+    "offerExamples": [
+      {
+        "day": "Sunday; open to close",
+        "offerFact": "HAPPY HOUR FROM OPEN TO CLOSE! Plus: $2 off Import & Craft Pitch",
+        "monetaryTokens": [
+          "$2",
+          "$3.25"
+        ],
+        "note": "Amounts can be discounts or item prices, not admission. Read the original conditions.",
+        "lastConfirmedForSpecificDate": null
+      },
+      {
+        "day": "Monday; 7pm-12am / 7pm – 1am",
+        "offerFact": "7pm-12am* $1.25 WINGS! (dine in only) 7pm – 1am* Wine Night 1/2 ",
+        "monetaryTokens": [
+          "$1.25",
+          "$6"
+        ],
+        "note": "Amounts can be discounts or item prices, not admission. Read the original conditions.",
+        "lastConfirmedForSpecificDate": null
+      }
+    ],
+    "eligibilityMentions": 0
+  }
+]

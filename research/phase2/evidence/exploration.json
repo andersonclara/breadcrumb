@@ -1,0 +1,742 @@
+[
+  {
+    "id": "wicse",
+    "startedAt": "2026-10-17T12:03:32.844Z",
+    "completedAt": "2026-10-17T12:03:32.951Z",
+    "requestedUrl": "https://ufwicse.com/events",
+    "url": "https://ufwicse.com/events",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://ufwicse.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 71891,
+    "title": "UF WiCSE",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [],
+    "scripts": [
+      "runtime.js",
+      "main.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "closures",
+    "startedAt": "2026-10-17T12:03:32.982Z",
+    "completedAt": "2026-10-17T12:03:33.124Z",
+    "requestedUrl": "https://campusclosures.ufl.edu/",
+    "url": "https://campusclosures.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://campusclosures.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 4558,
+    "title": "Campus Closures",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [],
+    "scripts": [
+      "runtime-es2015.03e6211a331740fd764b.js",
+      "runtime-es5.03e6211a331740fd764b.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "closures-list",
+    "startedAt": "2026-10-17T12:03:33.134Z",
+    "completedAt": "2026-10-17T12:03:34.128Z",
+    "requestedUrl": "https://campusclosures.ufl.edu/closures",
+    "url": "https://campusclosures.ufl.edu/closures",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://campusclosures.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "note": "HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 4558,
+    "title": "Campus Closures",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [],
+    "scripts": [
+      "runtime-es2015.03e6211a331740fd764b.js",
+      "runtime-es5.03e6211a331740fd764b.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "gator-market",
+    "startedAt": "2026-10-17T12:03:34.132Z",
+    "completedAt": "2026-10-17T12:03:36.105Z",
+    "requestedUrl": "https://union.ufl.edu/gatormarket/",
+    "url": "https://union.ufl.edu/gatormarket/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://union.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 235950,
+    "title": "Gator Market | union.ufl.edu",
+    "feeds": [
+      "https://union.ufl.edu/feed/",
+      "https://union.ufl.edu/comments/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Events",
+        "url": "https://union.ufl.edu/student-events/"
+      },
+      {
+        "text": "Event Services",
+        "url": "https://union.ufl.edu/event-services/"
+      },
+      {
+        "text": "Our Spaces",
+        "url": "https://union.ufl.edu/event-services/our-spaces/"
+      },
+      {
+        "text": "Dance Studios",
+        "url": "https://union.ufl.edu/event-services/dance-studios/"
+      },
+      {
+        "text": "Non-University Groups",
+        "url": "https://union.ufl.edu/event-services/non-university-groups/"
+      },
+      {
+        "text": "Rental Rates",
+        "url": "https://union.ufl.edu/event-services/rental-rates/"
+      },
+      {
+        "text": "Policies",
+        "url": "https://union.ufl.edu/event-services/policies/"
+      },
+      {
+        "text": "Events",
+        "url": "https://union.ufl.edu/student-events/"
+      },
+      {
+        "text": "Event Services",
+        "url": "https://union.ufl.edu/event-services/"
+      },
+      {
+        "text": "Our Spaces",
+        "url": "https://union.ufl.edu/event-services/our-spaces/"
+      },
+      {
+        "text": "Dance Studios",
+        "url": "https://union.ufl.edu/event-services/dance-studios/"
+      },
+      {
+        "text": "Non-University Groups",
+        "url": "https://union.ufl.edu/event-services/non-university-groups/"
+      },
+      {
+        "text": "Rental Rates",
+        "url": "https://union.ufl.edu/event-services/rental-rates/"
+      },
+      {
+        "text": "Policies",
+        "url": "https://union.ufl.edu/event-services/policies/"
+      },
+      {
+        "text": "UF Environmental Health and Safety Events Insurance and Risk Mana",
+        "url": "https://www.ehs.ufl.edu/departments/occupational-safety-risk/insuranceand-risk-management/events/"
+      }
+    ],
+    "scripts": [
+      "https://union.ufl.edu/wp-content/plugins/events/js/jquery-2.2.0.min.js?ver=1.0",
+      "//calendar.ufl.edu/livewhale/theme/core/scripts/lwcw.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "student-engagement",
+    "startedAt": "2026-10-17T12:03:36.210Z",
+    "completedAt": "2026-10-17T12:03:36.976Z",
+    "requestedUrl": "https://studentengagement.ufl.edu/",
+    "url": "https://studentengagement.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://studentengagement.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 124559,
+    "title": "Student Engagement",
+    "feeds": [
+      "https://studentengagement.ufl.edu/feed/",
+      "https://studentengagement.ufl.edu/comments/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Signature Events",
+        "url": "https://studentengagement.ufl.edu/signature-events/"
+      },
+      {
+        "text": "UF Alerts",
+        "url": "https://ufalert.ufl.edu/"
+      }
+    ],
+    "scripts": [
+      "https://studentengagement.ufl.edu/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.1",
+      "https://studentengagement.ufl.edu/wp-content/themes/ufl-main-uni/js/lib/bootstrap.bundle.min.js?ver=202607231759"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "careers",
+    "startedAt": "2026-10-17T12:03:37.009Z",
+    "completedAt": "2026-10-17T12:03:37.341Z",
+    "requestedUrl": "https://careerhub.ufl.edu/events/",
+    "url": "https://careerhub.ufl.edu/events/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://careerhub.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 222338,
+    "title": "Events – Career Connections Center University of Florida",
+    "feeds": [
+      "https://careerhub.ufl.edu/feed/",
+      "https://careerhub.ufl.edu/events/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Skip to content",
+        "url": "https://careerhub.ufl.edu/events/#content"
+      },
+      {
+        "text": "Skip to AI Search",
+        "url": "https://careerhub.ufl.edu/events/#launch-ai-search"
+      },
+      {
+        "text": "Skip to main nav",
+        "url": "https://careerhub.ufl.edu/events/#main-nav-skipper"
+      },
+      {
+        "text": "Skip filter options to posts",
+        "url": "https://careerhub.ufl.edu/events/#events-list"
+      },
+      {
+        "text": "All Events",
+        "url": "https://careerhub.ufl.edu/events/"
+      },
+      {
+        "text": "Clear",
+        "url": "https://careerhub.ufl.edu/events/"
+      },
+      {
+        "text": "Clear Filters",
+        "url": "https://careerhub.ufl.edu/events/"
+      },
+      {
+        "text": "November",
+        "url": "https://careerhub.ufl.edu/events/2026/11/"
+      },
+      {
+        "text": "Page 2",
+        "url": "https://careerhub.ufl.edu/events/page/2/"
+      },
+      {
+        "text": "Page 3",
+        "url": "https://careerhub.ufl.edu/events/page/3/"
+      },
+      {
+        "text": "Page 8",
+        "url": "https://careerhub.ufl.edu/events/page/8/"
+      },
+      {
+        "text": "Feb 02 Event: Spring 2026 Career Showcase Week Monday, February 2",
+        "url": "https://careerhub.ufl.edu/events/2026/02/02/spring-2026-career-showcase-week/"
+      },
+      {
+        "text": "Oct 19 Event: CPWc3overview_10-19_YScull Monday, October 19, 2026",
+        "url": "https://careerhub.ufl.edu/events/2026/10/19/cpwc3overview_10-19_yscull/"
+      },
+      {
+        "text": "Oct 19 Event: CPWresumecl_10-19_JPrescott Monday, October 19, 202",
+        "url": "https://careerhub.ufl.edu/events/2026/10/19/cpwresumecl_10-19_jprescott/"
+      },
+      {
+        "text": "Oct 19 Event: Drop-in to Prepare for Careers in Health, Sport, an",
+        "url": "https://careerhub.ufl.edu/events/2026/10/19/drop-in-to-prepare-for-careers-in-health-sport-and-tourism-fair/"
+      }
+    ],
+    "scripts": [
+      "https://cdn.uconnectlabs.com/wp-content/mu-plugins/uconnect/modules/events/js/uc-events-front.js?ver=17375631461",
+      "https://cdn.uconnectlabs.com/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.11",
+      "https://cdn.uconnectlabs.com/wp-content/lib/js/jquery-tooltipster/tooltipster.bundle.min.js?ver=16618255451"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "engineering",
+    "startedAt": "2026-10-17T12:03:37.406Z",
+    "completedAt": "2026-10-17T12:03:38.171Z",
+    "requestedUrl": "https://www.eng.ufl.edu/undergraduate/news-events/events/",
+    "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.eng.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 78625,
+    "title": "Archives: Events - Engineering Undergraduate Student Affairs",
+    "feeds": [
+      "https://www.eng.ufl.edu/undergraduate/feed/",
+      "https://www.eng.ufl.edu/undergraduate/comments/feed/",
+      "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Skip to main content",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/#content"
+      },
+      {
+        "text": "News & Events",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/"
+      },
+      {
+        "text": "News",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/news/"
+      },
+      {
+        "text": "Events Calendar",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/"
+      },
+      {
+        "text": "Submit an Event",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/submit-an-event/"
+      },
+      {
+        "text": "WiNGHacks Hackathon 2027",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/winghacks-hackathon-2027/"
+      },
+      {
+        "text": "Read more: WiNGHacks Hackathon 2027 »",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/winghacks-hackathon-2027/"
+      },
+      {
+        "text": "WiNGHacks 2027",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/winghacks-2027/"
+      },
+      {
+        "text": "Read more: WiNGHacks 2027 »",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/winghacks-2027/"
+      },
+      {
+        "text": "How to Get a Summer Academic Research Internship",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/how-to-get-a-summer-academic-research-internship/"
+      },
+      {
+        "text": "Read more: How to Get a Summer Academic Research Internship »",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/how-to-get-a-summer-academic-research-internship/"
+      },
+      {
+        "text": "HWCOE How to Apply for the University Scholars Program",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/hwcoe-how-to-apply-for-the-university-scholars-program/"
+      },
+      {
+        "text": "Read more: HWCOE How to Apply for the University Scholars Program",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/hwcoe-how-to-apply-for-the-university-scholars-program/"
+      },
+      {
+        "text": "HWCOE First Gen Celebration Event",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/hwcoe-first-gen-celebration-event/"
+      },
+      {
+        "text": "Read more: HWCOE First Gen Celebration Event »",
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/hwcoe-first-gen-celebration-event/"
+      }
+    ],
+    "scripts": [
+      "https://www.eng.ufl.edu/undergraduate/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.1",
+      "https://www.eng.ufl.edu/undergraduate/wp-content/themes/ufl-main-uni/js/lib/bootstrap.bundle.min.js?ver=202607301509"
+    ],
+    "jsonLdTypes": [
+      "WebSite",
+      "SearchAction",
+      "EntryPoint",
+      "Organization",
+      "CollectionPage",
+      "BreadcrumbList",
+      "ListItem"
+    ]
+  },
+  {
+    "id": "robotics",
+    "startedAt": "2026-10-17T12:03:38.191Z",
+    "completedAt": "2026-10-17T12:03:38.872Z",
+    "requestedUrl": "https://mae.ufl.edu/students/organizations/gator-robotics/",
+    "url": "https://mae.ufl.edu/students/organizations/gator-robotics/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://mae.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 136657,
+    "title": "Gator Robotics - Department of Mechanical & Aerospace Engineering",
+    "feeds": [
+      "https://mae.ufl.edu/feed/",
+      "https://mae.ufl.edu/comments/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Course Schedule Spring 2025",
+        "url": "https://mae.ufl.edu/wp-content/uploads/sites/4/2025/10/Spring-2025-MAE-Schedule-Final-Draft-PV.pdf"
+      },
+      {
+        "text": "Course Schedule Summer 2025",
+        "url": "https://mae.ufl.edu/wp-content/uploads/sites/4/2025/08/Summer-2025-Schedule_02192025.pdf"
+      },
+      {
+        "text": "Course Schedule Fall 2025",
+        "url": "https://mae.ufl.edu/wp-content/uploads/sites/4/2025/10/Fall-2025-MAE-Schedule-Final-PV.pdf"
+      },
+      {
+        "text": "Course Schedules",
+        "url": "https://mae.ufl.edu/students/course-schedules/"
+      },
+      {
+        "text": "Course Schedules",
+        "url": "https://mae.ufl.edu/students/course-schedules/"
+      },
+      {
+        "text": "Course Schedules",
+        "url": "https://mae.ufl.edu/students/course-schedules/"
+      }
+    ],
+    "scripts": [
+      "https://mae.ufl.edu/wp-includes/js/dist/vendor/react-jsx-runtime.min.js?ver=18.3.1",
+      "https://mae.ufl.edu/wp-content/themes/ufl-main-uni/js/lib/bootstrap.bundle.min.js?ver=202607301504"
+    ],
+    "jsonLdTypes": [
+      "WebSite",
+      "SearchAction",
+      "EntryPoint",
+      "Organization",
+      "ImageObject",
+      "WebPage",
+      "BreadcrumbList",
+      "ListItem",
+      "ReadAction"
+    ]
+  },
+  {
+    "id": "taps",
+    "startedAt": "2026-10-17T12:03:38.914Z",
+    "completedAt": "2026-10-17T12:03:41.866Z",
+    "requestedUrl": "https://taps.ufl.edu/",
+    "url": "https://taps.ufl.edu/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://taps.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 81666,
+    "title": "TAPS – UF Transportation and Parking Services",
+    "feeds": [
+      "https://taps.ufl.edu/feed/",
+      "https://taps.ufl.edu/comments/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Calendar",
+        "url": "https://calendar.ufl.edu/"
+      },
+      {
+        "text": "Event Parking Reservations",
+        "url": "https://taps.ufl.edu/customer-resources/event-parking-reservations/"
+      },
+      {
+        "text": "UF Alerts",
+        "url": "https://ufalert.ufl.edu/"
+      }
+    ],
+    "scripts": [
+      "https://taps.ufl.edu/wp-content/themes/ufl-main-uni-theme/js/lib/bootstrap.bundle.min.js?ver=202507012024"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "swe-events",
+    "startedAt": "2026-10-17T12:03:41.882Z",
+    "completedAt": "2026-10-17T12:03:43.481Z",
+    "requestedUrl": "https://uf.swe.org/",
+    "url": "https://uf.swe.org/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://uf.swe.org/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 160292,
+    "title": "Home - University of FloridaScroll to topScroll to top",
+    "feeds": [
+      "https://uf.swe.org/feed/",
+      "https://uf.swe.org/comments/feed/"
+    ],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Calendar",
+        "url": "https://calendar.google.com/calendar/u/0?cid=c3dlLnVmbEBnbWFpbC5jb20"
+      }
+    ],
+    "scripts": [
+      "https://uf.swe.org/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.1",
+      "https://uf.swe.org/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=4.1.1"
+    ],
+    "jsonLdTypes": [
+      "Person",
+      "Organization",
+      "ImageObject",
+      "WebSite",
+      "SearchAction",
+      "WebPage",
+      "Article"
+    ]
+  },
+  {
+    "id": "glory-days",
+    "startedAt": "2026-10-17T12:03:43.506Z",
+    "completedAt": "2026-10-17T12:03:43.896Z",
+    "requestedUrl": "https://glorydayspresents.com/",
+    "url": "https://glorydayspresents.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://glorydayspresents.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 165131,
+    "title": "Glory Days Presents!",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "View as Calendar",
+        "url": "https://glorydayspresents.com/?event_view=calendar"
+      },
+      {
+        "text": "Get The Gainesville Fall 2026 Season Pass! Unlimited Entry To All",
+        "url": "https://wl.eventim.us/event/glory-days-presents-season-pass-gainesville-fall-2026/699871?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/the-shimmy-shake-revue-almost-halloween-burlesque-show/702652?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/SHREK-RAVE/696235?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/broadway-rave-masquerave-edition/701212?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/penny-and-sparrow-caleb-elliott/701923?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/cardinal-bloom-the-band-solstice-jackson-alter/696841?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/penny-and-sparrow-caleb-elliott/701903?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/The-Rocky-Horror-Picture-Show-LIVE-on-Stage/703314?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://www.ticketweb.com/event/ian-mcconnell-special-guests-wills-pub-tickets/14982053?pl=willspub"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/crimewave-a-goth-post-punk-and-darkwave-party/701143?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/ian-mcconnell-cherokee-social-foxlair/694753?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/dance-4-u-slayyyter-x-charli-xcx-night/705983?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/gimme-gimme-disco-halloween-edition/701942?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/The-Rocky-Horror-Picture-Show-LIVE-on-Stage/703315?afflky=GloryDaysPresents"
+      }
+    ],
+    "scripts": [],
+    "jsonLdTypes": [
+      "WebSite",
+      "Organization",
+      "ImageObject",
+      "WebPage",
+      "WebPageElement",
+      "ReadAction"
+    ]
+  },
+  {
+    "id": "heartwood",
+    "startedAt": "2026-10-17T12:03:43.925Z",
+    "completedAt": "2026-10-17T12:03:46.531Z",
+    "requestedUrl": "https://www.heartwoodsoundstage.com/shows",
+    "url": "https://www.heartwoodsoundstage.com/shows",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.heartwoodsoundstage.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 184601,
+    "title": "Shows | Heartwood Soundstage",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Terms of Service",
+        "url": "https://www.heartwoodsoundstage.com/terms-of-service"
+      }
+    ],
+    "scripts": [
+      "https://app.opendate.io/packs/od_tag.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "fest",
+    "startedAt": "2026-10-17T12:03:46.563Z",
+    "completedAt": "2026-10-17T12:03:46.844Z",
+    "requestedUrl": "https://thefestfl.com/schedule/",
+    "url": "https://thefestfl.com/schedule/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://thefestfl.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 333354,
+    "title": "Schedule - THE FEST 24 - October 23-25, 2026 - Gainesville, FL",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [
+      {
+        "text": "Buy Your FEST 24 Pass!",
+        "url": "https://wl.eventim.us/event/The-FEST-24/685111?afflky=TheFest"
+      }
+    ],
+    "scripts": [
+      "/webpack-runtime-093157e653bb7b95782e.js"
+    ],
+    "jsonLdTypes": []
+  },
+  {
+    "id": "city-library",
+    "startedAt": "2026-10-17T12:03:46.941Z",
+    "completedAt": "2026-10-17T12:03:47.173Z",
+    "requestedUrl": "https://www.aclib.us/events",
+    "url": "https://www.aclib.us/events",
+    "status": 403,
+    "contentType": "text/html; charset=UTF-8",
+    "robots": {
+      "url": "https://www.aclib.us/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "error": "HTTP_403",
+    "retryAfter": null,
+    "bytes": 0
+  },
+  {
+    "id": "start-gg",
+    "startedAt": "2026-10-17T12:03:47.176Z",
+    "completedAt": "2026-10-17T12:03:48.600Z",
+    "requestedUrl": "https://www.start.gg/tournament/gatorlan-fall-2026/details",
+    "url": "https://www.start.gg/tournament/gatorlan-fall-2026/details",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.start.gg/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 421703,
+    "title": "GatorLAN Fall 2026 | DetailsLoading interface...Loading interface...",
+    "feeds": [],
+    "publicEmbeds": [],
+    "relevantLinks": [],
+    "scripts": [],
+    "jsonLdTypes": []
+  }
+]

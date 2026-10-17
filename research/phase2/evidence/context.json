@@ -1,0 +1,108 @@
+[
+  {
+    "id": "nws-point",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:19:19.655Z",
+    "url": "https://api.weather.gov/points/29.6465,-82.3478",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://api.weather.gov/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "nws-active-alerts",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:19:19.848Z",
+    "url": "https://api.weather.gov/alerts/active?point=29.6465,-82.3478",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://api.weather.gov/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "uf-calendar-server-search",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:19:19.875Z",
+    "completedAt": "2026-10-17T12:19:20.648Z",
+    "requestedUrl": "https://calendar.ufl.edu/live/json/events/search/gaming/start_date/2026-10-17/end_date/2026-11-16/paginate/5?page=1",
+    "url": "https://calendar.ufl.edu/live/json/events/search/gaming/start_date/2026-10-17/end_date/2026-11-16/paginate/5?page=1",
+    "status": 200,
+    "contentType": "application/json; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": "Sat, 17 Oct 2026 12:19:18 GMT",
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://calendar.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 3570,
+    "count": 1,
+    "fieldCoverage": {
+      "name": 1,
+      "description": 1,
+      "location": 1,
+      "start": 1,
+      "end": 0,
+      "organizer": 1,
+      "price": 0,
+      "category": 1,
+      "url": 1,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 1,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "end",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": {
+      "min": "2026-11-07T05:00:00.000Z",
+      "max": "2026-11-07T05:00:00.000Z",
+      "futureOrToday": 1,
+      "datesCompared": 1,
+      "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+    },
+    "samples": [
+      {
+        "name": "Signature Event - GatorLAN",
+        "start": "2026-11-07T00:00:00-05:00",
+        "end": null,
+        "timezone": "America/New_York",
+        "location": "Reitz Union",
+        "url": "https://calendar.ufl.edu/event/58332-signature-event-gatorlan",
+        "category": [
+          "Student Engagement"
+        ],
+        "price": null
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "totalPages": 1,
+      "totalResults": 1
+    },
+    "limitation": "Publisher search semantics are not validated interest classification; compare with local multi-source matching."
+  }
+]

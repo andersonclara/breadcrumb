@@ -1,0 +1,1012 @@
+[
+  {
+    "id": "salty-dog",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:45.259Z",
+    "completedAt": "2026-10-17T12:30:46.804Z",
+    "requestedUrl": "https://saltydogsaloon.com/",
+    "url": "https://saltydogsaloon.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://saltydogsaloon.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 134428,
+    "title": "Salty Dog Saloon – Gainesville Fl",
+    "feeds": [
+      {
+        "text": "",
+        "url": "https://saltydogsaloon.com/feed/"
+      },
+      {
+        "text": "",
+        "url": "https://saltydogsaloon.com/comments/feed/"
+      }
+    ],
+    "eventLinks": [
+      {
+        "text": "Specials",
+        "url": "https://saltydogsaloon.com/#Specials"
+      }
+    ],
+    "socialLinks": [
+      "https://www.instagram.com/saltydogsaloongnv/?hl=en"
+    ],
+    "embeds": [],
+    "imageLeads": [
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-22.png"
+      },
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-21.png"
+      },
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-19.png"
+      },
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-0.png"
+      },
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-24.png"
+      },
+      {
+        "alt": "",
+        "url": "https://saltydogsaloon.com/wp-content/uploads/2026/02/salty-dog-saloon-10.png"
+      }
+    ],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "swamp",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:46.958Z",
+    "completedAt": "2026-10-17T12:30:47.191Z",
+    "requestedUrl": "https://swamprestaurant.com/",
+    "url": "https://swamprestaurant.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": "no-cache, private",
+      "age": null
+    },
+    "robots": {
+      "url": "https://swamprestaurant.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 75572,
+    "title": "The Swamp Restaurant in Gainesville | GNV's Best Bar & Grill",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Private Parties",
+        "url": "https://swamprestaurant.com/events"
+      }
+    ],
+    "socialLinks": [
+      "https://www.facebook.com/theswamprestaurant",
+      "https://www.instagram.com/swamprestaurant/"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "jjs",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:47.238Z",
+    "url": "https://www.jjstaverngnv.com/",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://www.jjstaverngnv.com/robots.txt",
+      "status": null,
+      "allowed": false,
+      "note": "Robots fetch failed: ENOTFOUND",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "wooly",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:47.259Z",
+    "completedAt": "2026-10-17T12:30:47.450Z",
+    "requestedUrl": "https://www.thetopsecretevents.com/the-wooly",
+    "url": "https://www.thetopsecretevents.com/the-wooly",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"7261218be2383e5672b91fa54fb544c6--gzip\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "33139"
+    },
+    "robots": {
+      "url": "https://www.thetopsecretevents.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 284286,
+    "title": "The Wooly — Top Secret Events",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "0",
+        "url": "https://www.thetopsecretevents.com/cart"
+      },
+      {
+        "text": "Skip to Content",
+        "url": "https://www.thetopsecretevents.com/the-wooly#page"
+      },
+      {
+        "text": "Top Secret Events",
+        "url": "https://www.thetopsecretevents.com/"
+      },
+      {
+        "text": "The Depot",
+        "url": "https://www.thetopsecretevents.com/the-depot"
+      },
+      {
+        "text": "Rental Information",
+        "url": "https://www.thetopsecretevents.com/depot-rentals"
+      },
+      {
+        "text": "Photo Gallery",
+        "url": "https://www.thetopsecretevents.com/photo-gallery"
+      },
+      {
+        "text": "Reviews",
+        "url": "https://www.thetopsecretevents.com/depot-reviews"
+      },
+      {
+        "text": "The Wooly",
+        "url": "https://www.thetopsecretevents.com/the-wooly"
+      },
+      {
+        "text": "Photo Gallery",
+        "url": "https://www.thetopsecretevents.com/wooly-photo-gallery"
+      },
+      {
+        "text": "Reviews",
+        "url": "https://www.thetopsecretevents.com/wooly-reviews"
+      },
+      {
+        "text": "Boxcar Bar and Patio",
+        "url": "https://www.thetopsecretevents.com/boxcar"
+      },
+      {
+        "text": "Photo Gallery",
+        "url": "https://www.thetopsecretevents.com/photo-gallery-1"
+      }
+    ],
+    "socialLinks": [
+      "https://www.facebook.com/thetopsecretevents/"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "bull",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:47.575Z",
+    "completedAt": "2026-10-17T12:30:47.768Z",
+    "requestedUrl": "https://www.thebull-gnv.com/",
+    "url": "https://www.thebull-gnv.com/",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"75947574a37948e51d129abbf33a3543\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "4259"
+    },
+    "robots": {
+      "url": "https://www.thebull-gnv.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 152292,
+    "title": "The Bull",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Calendar",
+        "url": "https://www.thebull-gnv.com/calendar"
+      },
+      {
+        "text": "",
+        "url": "https://www.thebull-gnv.com/regular-events/blog-post-title-one-gfmrf"
+      },
+      {
+        "text": "",
+        "url": "https://www.thebull-gnv.com/regular-events/blog-post-title-two-t4a47"
+      },
+      {
+        "text": "",
+        "url": "https://www.thebull-gnv.com/regular-events/blog-post-title-three-dzzs7"
+      },
+      {
+        "text": "",
+        "url": "https://www.thebull-gnv.com/regular-events/blog-post-title-four-5fs2r"
+      }
+    ],
+    "socialLinks": [],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "looseys",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:47.853Z",
+    "completedAt": "2026-10-17T12:30:48.779Z",
+    "requestedUrl": "https://www.looseys.com/",
+    "url": "https://www.looseys.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": "max-age=600",
+      "age": null
+    },
+    "robots": {
+      "url": "https://www.looseys.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": 10
+    },
+    "redirects": [],
+    "bytes": 118250,
+    "title": "Loosey's Downtown – Beer | Burgers | Live Music",
+    "feeds": [
+      {
+        "text": "",
+        "url": "https://www.looseys.com/feed/"
+      },
+      {
+        "text": "",
+        "url": "https://www.looseys.com/comments/feed/"
+      }
+    ],
+    "eventLinks": [
+      {
+        "text": "Events",
+        "url": "https://www.looseys.com/events/"
+      },
+      {
+        "text": "Music Events",
+        "url": "https://www.looseys.com/mec-category/music/"
+      },
+      {
+        "text": "Event Booking",
+        "url": "https://www.looseys.com/booking/"
+      },
+      {
+        "text": "Monday Night Trivia",
+        "url": "https://www.looseys.com/events/monday-trivia/"
+      },
+      {
+        "text": "Tuesday Open Mic Night",
+        "url": "https://www.looseys.com/events/open-mic-night-almost-every-tuesday/"
+      },
+      {
+        "text": "Thursday Indie Demolition Night",
+        "url": "https://www.looseys.com/events/indie-demolition-night/"
+      },
+      {
+        "text": "Saturday Karaoke Party",
+        "url": "https://www.looseys.com/events/karaoke-party/"
+      }
+    ],
+    "socialLinks": [
+      "https://www.facebook.com/looseyspub",
+      "https://www.instagram.com/looseyspub/",
+      "https://linktr.ee/LooseysPub"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "first-magnitude",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:48.886Z",
+    "completedAt": "2026-10-17T12:30:49.177Z",
+    "requestedUrl": "https://www.fmbrewing.com/",
+    "url": "https://www.fmbrewing.com/",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"05b32f6b26ef8c39152e087712ed1ec3\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "82648"
+    },
+    "robots": {
+      "url": "https://www.fmbrewing.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 504670,
+    "title": "First Magnitude Brewing Co. | Experience Great Beer - Visit Now",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Brewery Events",
+        "url": "https://www.fmbrewing.com/events"
+      },
+      {
+        "text": "Host an Event",
+        "url": "https://www.fmbrewing.com/host-an-event"
+      },
+      {
+        "text": "Folder: EVENTS",
+        "url": "https://www.fmbrewing.com/brewery-events"
+      },
+      {
+        "text": "Oct 17",
+        "url": "https://www.fmbrewing.com/event-calendar/uf-vs-texas-longhorns"
+      },
+      {
+        "text": "Oct 17",
+        "url": "https://www.fmbrewing.com/event-calendar/pride-party"
+      },
+      {
+        "text": "Oct 18",
+        "url": "https://www.fmbrewing.com/event-calendar/florida-forever-festival"
+      },
+      {
+        "text": "Oct 23",
+        "url": "https://www.fmbrewing.com/event-calendar/fest-registration-free-show-flea-market"
+      },
+      {
+        "text": "Oct 24",
+        "url": "https://www.fmbrewing.com/event-calendar/vote-o-ween"
+      },
+      {
+        "text": "Oct 30",
+        "url": "https://www.fmbrewing.com/event-calendar/halloween-ball"
+      },
+      {
+        "text": "BOOK AN EVENT",
+        "url": "https://www.fmbrewing.com/reservation-form"
+      }
+    ],
+    "socialLinks": [
+      "https://www.instagram.com/fmbrewing/",
+      "https://www.facebook.com/FirstMagnitudeBrewing"
+    ],
+    "embeds": [],
+    "imageLeads": [
+      {
+        "alt": "Florida Forever Festival",
+        "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/1792089870742-C9VTVY30SZEOGUM5UTO1/FNPS_FFF+Flyer.png"
+      },
+      {
+        "alt": "FEST Registration + Free Show + Flea Market",
+        "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/1792091290716-4SUQFJRLARUM79J3NN4L/fest24_first_magnitude_flyer-01-FINAL+copy.png"
+      },
+      {
+        "alt": "Get witchy with us on Tuesday, October 13 as we celebrate the return of Black Witch Rye Ale and watch a witchy movie on the Giant Screen at 7 PM. 🧙&zwj;♀️ Our trivia hosts are on vacation (we hear broomsticks fly cheaper than planes), so the movie t",
+        "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/1791847951646-X70IT4ZBBNTODFSC2DD5/image-asset.jpeg"
+      },
+      {
+        "alt": "Orange and blue outfit: check. Cold beer: check. Alarm set for an early start: you&rsquo;re welcome. Happy Homecoming weekend, Gators! 🐊\n\nWe&rsquo;re open early at 11 AM on Saturday, with the Gators hosting South Carolina at 12:45 PM. Headed to the ",
+        "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/1791587231977-LPBECW8DG3KJM3KNC7J3/image-asset.jpeg"
+      }
+    ],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "cypress-grove",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:49.440Z",
+    "completedAt": "2026-10-17T12:30:49.645Z",
+    "requestedUrl": "https://www.cypressandgrove.com/calendar",
+    "url": "https://www.cypressandgrove.com/calendar",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "cache": {
+      "etag": "W/\"e380aaae83e33551cee66b7d50f005f5--gzip\"",
+      "lastModified": null,
+      "cacheControl": null,
+      "age": "8245"
+    },
+    "robots": {
+      "url": "https://www.cypressandgrove.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 366044,
+    "title": "Calendar | Discover Events Today - Join the Fun — Cypress & Grove Brewing Co.",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Skip to Content",
+        "url": "https://www.cypressandgrove.com/calendar#page"
+      },
+      {
+        "text": "Calendar",
+        "url": "https://www.cypressandgrove.com/calendar"
+      },
+      {
+        "text": "Events",
+        "url": "https://www.cypressandgrove.com/events"
+      }
+    ],
+    "socialLinks": [
+      "https://www.instagram.com/cypressandgrovebrewing/",
+      "https://www.facebook.com/cypressandgrovebrewing"
+    ],
+    "embeds": [
+      "https://calendar.google.com/calendar/embed?height=1000&wkst=1&bgcolor=%23ffffff&ctz=America%2FNew_York&mode=AGENDA&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=ZXZlbnRzYXRjYW5kZ0BnbWFpbC5jb20&color=%23039BE5"
+    ],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "blackadder",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:49.756Z",
+    "completedAt": "2026-10-17T12:30:49.948Z",
+    "requestedUrl": "https://www.blackadderbrewing.com/",
+    "url": "https://www.blackadderbrewing.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": "W/\"bc3c7d94226366ca99873819a179adf2\"",
+      "lastModified": null,
+      "cacheControl": "public,max-age=0,must-revalidate",
+      "age": "174599"
+    },
+    "robots": {
+      "url": "https://www.blackadderbrewing.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 1131868,
+    "title": "Home | Blackadder Brewing",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Food Trucks & Events",
+        "url": "https://www.blackadderbrewing.com/events"
+      }
+    ],
+    "socialLinks": [
+      "https://www.instagram.com/blackadderbrewing/",
+      "https://www.facebook.com/blackadderbrewing"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "swamp-head",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:50.306Z",
+    "completedAt": "2026-10-17T12:30:50.525Z",
+    "requestedUrl": "https://swamphead.com/",
+    "url": "https://swamphead.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": "Sat, 17 Oct 2026 12:29:45 GMT",
+      "cacheControl": "public, max-age=0, s-maxage=3600",
+      "age": "63"
+    },
+    "robots": {
+      "url": "https://swamphead.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 581773,
+    "title": "Swamp Head Brewery Gainesville, FL | Local Craft Beer",
+    "feeds": [
+      {
+        "text": "",
+        "url": "https://swamphead.com/feed/"
+      },
+      {
+        "text": "",
+        "url": "https://swamphead.com/comments/feed/"
+      },
+      {
+        "text": "",
+        "url": "https://swamphead.com/events/?ical=1"
+      }
+    ],
+    "eventLinks": [
+      {
+        "text": "",
+        "url": "https://swamphead.com/events/?ical=1"
+      },
+      {
+        "text": "",
+        "url": "https://swamphead.com/wp-json/tribe/events/v1/"
+      },
+      {
+        "text": "Events",
+        "url": "https://swamphead.com/tasting-room/#events"
+      }
+    ],
+    "socialLinks": [
+      "https://www.instagram.com/swamphead/",
+      "https://www.facebook.com/SwampHead"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "glory-days",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:50.754Z",
+    "completedAt": "2026-10-17T12:30:51.414Z",
+    "requestedUrl": "https://glorydayspresents.com/",
+    "url": "https://glorydayspresents.com/",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "cache": {
+      "etag": null,
+      "lastModified": null,
+      "cacheControl": null,
+      "age": null
+    },
+    "robots": {
+      "url": "https://glorydayspresents.com/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 165131,
+    "title": "Glory Days Presents!",
+    "feeds": [],
+    "eventLinks": [
+      {
+        "text": "Events",
+        "url": "https://glorydayspresents.com/"
+      },
+      {
+        "text": "Ticket Info",
+        "url": "https://glorydayspresents.com/ticket-information/"
+      },
+      {
+        "text": "View as Calendar",
+        "url": "https://glorydayspresents.com/?event_view=calendar"
+      },
+      {
+        "text": "Get The Gainesville Fall 2026 Season Pass! Unlimited Entry T",
+        "url": "https://wl.eventim.us/event/glory-days-presents-season-pass-gainesville-fall-2026/699871?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/the-shimmy-shake-revue-almost-halloween-burlesque-show/702652?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/SHREK-RAVE/696235?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/broadway-rave-masquerave-edition/701212?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/penny-and-sparrow-caleb-elliott/701923?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/cardinal-bloom-the-band-solstice-jackson-alter/696841?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/penny-and-sparrow-caleb-elliott/701903?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://wl.seetickets.us/event/The-Rocky-Horror-Picture-Show-LIVE-on-Stage/703314?afflky=GloryDaysPresents"
+      },
+      {
+        "text": "Buy Tickets",
+        "url": "https://www.ticketweb.com/event/ian-mcconnell-special-guests-wills-pub-tickets/14982053?pl=willspub"
+      }
+    ],
+    "socialLinks": [
+      "https://facebook.com/glorydayspresents",
+      "https://instagram.com/glorydaysgnv"
+    ],
+    "embeds": [],
+    "imageLeads": [],
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "structuredEventsParsed": false
+  },
+  {
+    "id": "top-tier",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:51.542Z",
+    "url": "https://toptiermpe.com/",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://toptiermpe.com/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "g2-links",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:30:51.983Z",
+    "url": "https://linktr.ee/G2_Ent",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://linktr.ee/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  }
+]

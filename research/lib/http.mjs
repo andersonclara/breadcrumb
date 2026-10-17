@@ -6,6 +6,17 @@ const lastRequest = new Map();
 const stoppedOrigins = new Set();
 const headers = { 'User-Agent': `${AGENT}/0.1 (read-only campus-source feasibility research)`, Accept: '*/*' };
 
+// Pure policy interpretation; exported for offline regression checks.
+export function interpretPolicyBody(url, body) {
+  const html = /^\s*</.test(body);
+  if (html && /just a moment|verify (?:you are|that you are) human|access denied|cf-chl-|captcha challenge/i.test(body)) {
+    return { url, status: 200, allowed: false, note: 'Challenge/denial HTML at robots URL; stop without solving or bypassing.' };
+  }
+  // RFC 9309 sections 2.2.1 and 2.3.1.5: honor every parseable rule.
+  return { url, status: 200, parser: robotsParser(url, body), allowed: true,
+    note: html ? 'HTML fallback at robots URL; parseable directives still honored. No directives is not a reuse license. See RFC 9309.' : undefined };
+}
+
 export function safeUrl(input) {
   const url = new URL(input);
   for (const key of [...url.searchParams.keys()]) {
@@ -14,7 +25,7 @@ export function safeUrl(input) {
   return url.href;
 }
 
-async function boundedBody(response) {
+async function boundedBody(response, binary = false) {
   const chunks = [];
   let size = 0;
   if (!response.body) return '';
@@ -23,7 +34,8 @@ async function boundedBody(response) {
     if (size > 6_000_000) throw new Error('BODY_LIMIT');
     chunks.push(chunk);
   }
-  return Buffer.concat(chunks).toString('utf8');
+  const buffer = Buffer.concat(chunks);
+  return binary ? buffer : buffer.toString('utf8');
 }
 
 async function policy(origin) {
@@ -36,8 +48,7 @@ async function policy(origin) {
       if (response.status === 404 || response.status === 410) return { url, status: response.status, allowed: true, note: 'No robots file; not a reuse license.' };
       if (response.status !== 200) return { url, status: response.status, allowed: false, note: 'Robots policy unavailable or redirected; conservative stop.' };
       const body = await boundedBody(response);
-      if (/^\s*</.test(body)) return { url, status: 200, allowed: false, note: 'Robots URL returned HTML; conservative stop.' };
-      return { url, status: 200, parser: robotsParser(url, body), allowed: true };
+      return interpretPolicyBody(url, body);
     } catch (error) {
       return { url, status: null, allowed: false, note: `Robots fetch failed: ${error.cause?.code ?? error.name}` };
     }
@@ -46,7 +57,7 @@ async function policy(origin) {
   return pending;
 }
 
-export async function get(input, { authenticated = false, extraHeaders = {} } = {}) {
+export async function get(input, { authenticated = false, extraHeaders = {}, binary = false } = {}) {
   const startedAt = new Date().toISOString();
   let current = input;
   const redirects = [];
@@ -59,7 +70,7 @@ export async function get(input, { authenticated = false, extraHeaders = {} } = 
     const robots = { url: rules.url, status: rules.status, allowed, note: rules.note, crawlDelay: rules.parser?.getCrawlDelay(AGENT) ?? null };
     if (!allowed) return { startedAt, url: safeUrl(current), status: null, error: 'ROBOTS_STOP', robots, redirects };
     try {
-      const delay = Math.max(1000, (robots.crawlDelay ?? 0) * 1000);
+      const delay = Math.max(1100, (robots.crawlDelay ?? 0) * 1000);
       const remaining = delay - (Date.now() - (lastRequest.get(url.origin) ?? 0));
       if (remaining > 0) await new Promise(resolve => setTimeout(resolve, remaining));
       lastRequest.set(url.origin, Date.now());
@@ -74,13 +85,13 @@ export async function get(input, { authenticated = false, extraHeaders = {} } = 
         await response.body?.cancel();
         continue;
       }
-      const result = { startedAt, completedAt: new Date().toISOString(), requestedUrl: safeUrl(input), url: safeUrl(current), status: response.status, contentType: response.headers.get('content-type'), robots, redirects };
+      const result = { startedAt, completedAt: new Date().toISOString(), requestedUrl: safeUrl(input), url: safeUrl(current), status: response.status, contentType: response.headers.get('content-type'), cache: { etag: response.headers.get('etag'), lastModified: response.headers.get('last-modified'), cacheControl: response.headers.get('cache-control'), age: response.headers.get('age') }, robots, redirects };
       if (!response.ok) {
         if ([401, 403, 429].includes(response.status)) stoppedOrigins.add(url.origin);
         await response.body?.cancel();
         return { ...result, error: `HTTP_${response.status}`, retryAfter: response.headers.get('retry-after') };
       }
-      return { ...result, body: await boundedBody(response) };
+      return { ...result, body: await boundedBody(response, binary) };
     } catch (error) {
       return { startedAt, completedAt: new Date().toISOString(), requestedUrl: safeUrl(input), url: safeUrl(current), status: null, robots, redirects, error: error.cause?.code ?? error.name };
     }
