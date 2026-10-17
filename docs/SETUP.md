@@ -27,6 +27,19 @@ npx supabase@latest db reset
 
 These commands use `supabase/config.toml` and apply the migration. Copy local API details from CLI output to `.env.local`. Local emails appear at `http://localhost:54324`. `db reset` destroys the local database; do not run it against a remote project. Hosted cron extensions are optional and not part of the core migration.
 
+## 1A BreadPass (Auth0) web sign-in
+
+BreadPass replaces the web magic-link form with Auth0's passwordless email code. After Auth0 verifies a `@ufl.edu` address, `/breadpass` creates or reuses the matching Supabase user with the service key and opens a normal Supabase session, so RLS, RPCs, and Realtime keep using `auth.uid()`. Auth0 sends the codes, so web sign-in does not need Supabase SMTP. The mobile app still uses Supabase email codes for now.
+
+1. Create a tenant at https://manage.auth0.com, then Applications → Create Application → **Regular Web Application**.
+2. In its Settings, set Allowed Callback URLs to `http://localhost:3000/auth/callback`, and Allowed Logout URLs and Allowed Web Origins to `http://localhost:3000`. Add the production equivalents (for example `https://leaveacrumb.us/auth/callback`) when deployed.
+3. Authentication → Passwordless → **Email**: enable it, choose the one-time **code** option, and enable it for this application under its Applications tab. The app requests this connection by its default name, `email`.
+4. Optional but recommended: add a post-login Action that denies emails not ending in `@ufl.edu`. The app already rejects them server-side; the Action stops them earlier.
+5. Copy Domain, Client ID, and Client Secret into `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET`. Generate `AUTH0_SECRET` with `openssl rand -hex 32` and set `APP_BASE_URL` to the same value as `NEXT_PUBLIC_SITE_URL`. `SUPABASE_SERVICE_ROLE_KEY` must also be set.
+6. Restart `npm run dev`, open `/login`, choose **Claim your BreadPass**, and sign in with a UF inbox. A first sign-in lands on `/avatar`. Repeat in a second browser with another UF address, and confirm a non-UF address returns to `/login` with an error.
+
+Leaving any `AUTH0_*` value blank turns BreadPass off and restores the Supabase email-link form.
+
 ## 2 Optional Mapbox account
 
 The current game-like map uses a cached OpenStreetMap dataset and does not need a Mapbox token or Google Maps key. An already configured public Mapbox token can remain in `.env.local` for possible future conventional map views; it is not used by the pixel renderer. See [the pixel-world guide](PIXEL_WORLD.md) for data attribution and location-sharing behavior.
