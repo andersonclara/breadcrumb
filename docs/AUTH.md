@@ -6,6 +6,18 @@ The initial username is the GatorLink part of the UF email. Users can change it 
 
 Avatar customization uses previous/next arrows for each option, with wrapping and row swipe gestures on web and mobile. The same editor is available after onboarding.
 
+## Auth0 accounts (no email)
+
+When `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` are set, Auth0 owns Breadcrumb passwords and no email is sent:
+
+- **Create Account** (web and mobile) asks for a @ufl.edu email, a username, and a password. The server creates the Auth0 user (`/dbconnections/signup`), signs in with Auth0's password-realm grant, opens the matching Supabase session (`src/lib/auth/bridge.ts`), and saves the username with `complete_account`. Profile setup then shows the username and avatar only.
+- **Log in** accepts the email or the Breadcrumb username. Usernames resolve to the email on the server, and Auth0 checks the password. Mobile logs in through `/api/auth/password` and signs up through `/api/auth/signup`.
+- Supabase still provides sessions, RLS, RPCs, and Realtime. Each Supabase user gets a random, unused password so `complete_account` works, and stores its Auth0 ID in `app_metadata.auth0_sub`.
+
+**Known limitations (hackathon):** nobody proves they own the @ufl.edu address they type, so one person can create many accounts, use someone else's address, or stack confirmations. Fix later with email verification from a verified sender domain, or UF Microsoft sign-in. Password change and reset are not built yet, because Auth0 resets need email.
+
+Leave the `AUTH0_*` values blank to keep the Supabase email sign-up described above.
+
 ## Required setup
 
 Apply pending migrations in order through 20261017000600_username_accounts.sql. Migration 006 assigns default usernames, adds the account completion flag, enforces username uniqueness, and provides a server-only username lookup. Hosted migrations have not been applied in this coding session.
