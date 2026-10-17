@@ -2,6 +2,11 @@
 
 # dependencies
 /node_modules
+**/node_modules/
+**/.expo/
+**/dist/
+apps/mobile/android/
+apps/mobile/ios/
 /.pnp
 .pnp.*
 .yarn/*
@@ -40,3 +45,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+expo-env.d.ts
