@@ -7,13 +7,14 @@ vi.mock('@supabase/supabase-js',()=>({createClient:()=>({auth:{signInWithPasswor
 vi.mock('../src/lib/supabase/admin',()=>({createAdminClient:()=>({rpc:mocks.lookup,auth:{admin:{createUser:mocks.createUser,generateLink:mocks.generateLink,updateUserById:mocks.updateUser}}})}));
 import {createAuth0Account,passwordLogin} from '../src/lib/auth/password';
 import {trustedClientIp} from '../src/lib/auth/auth0';
+import {createLoafChallenge} from '../src/lib/auth/loaf';
 const client={auth:{verifyOtp:mocks.verifyOtp,signInWithPassword:mocks.signin,signOut:vi.fn()},rpc:mocks.complete,from:()=>({select:()=>({eq:()=>({single:mocks.profile})})})} as unknown as SupabaseClient;
 const json=(status:number,body:unknown)=>Promise.resolve(new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}}));
 const calls=()=>mocks.fetch.mock.calls.map(([url])=>new URL(String(url)).pathname);
 const signup={email:'Albert@UFL.edu',username:'Cool_Albert',password:'bread-loaf-42',confirm:'bread-loaf-42'};
 beforeEach(()=>{
  vi.resetAllMocks();
- vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY','server-test-key');vi.stubEnv('AUTH0_DOMAIN','breadcrumb.test.auth0.com');vi.stubEnv('AUTH0_CLIENT_ID','client');vi.stubEnv('AUTH0_CLIENT_SECRET','secret');
+ vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY','server-test-key');vi.stubEnv('LOAF_SECRET','');vi.stubEnv('AUTH0_DOMAIN','breadcrumb.test.auth0.com');vi.stubEnv('AUTH0_CLIENT_ID','client');vi.stubEnv('AUTH0_CLIENT_SECRET','secret');
  vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL','https://example.supabase.co');vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY','public-test-key');
  vi.stubGlobal('fetch',mocks.fetch);
  mocks.probeSignIn.mockResolvedValue({data:{session:null},error:{code:'invalid_credentials'}});
@@ -110,5 +111,24 @@ describe('Auth0 username/password accounts',()=>{
   const headers=new Headers({'x-forwarded-for':'203.0.113.9, 10.0.0.1'});
   expect(trustedClientIp(headers,{})).toBeNull();
   expect(trustedClientIp(headers,{VERCEL:'1'})).toBe('203.0.113.9');
+ });
+});
+describe('BreadPass loaf slice at sign-up',()=>{
+ const sliceFor=(challenge:string)=>{const cut=Number(challenge.split('.')[1])/100;return Array.from({length:30},(_,i)=>{const f=i/29;return {x:cut+Math.sin(i*1.7)*0.02,y:-0.05+1.1*f,t:Math.round(900*f*f*(3-2*f))+i};});};
+ it('requires a valid slice before calling Auth0 when LOAF_SECRET is set',async()=>{
+  vi.stubEnv('LOAF_SECRET','test-loaf-secret');
+  expect((await createAuth0Account(client,signup)).error).toContain('Slice the loaf');
+  expect(mocks.fetch).not.toHaveBeenCalled();
+ });
+ it('sends the minted slice token to Auth0 for the Action to verify',async()=>{
+  vi.stubEnv('LOAF_SECRET','test-loaf-secret');
+  const {challenge}=createLoafChallenge('test-loaf-secret');
+  expect((await createAuth0Account(client,{...signup,loafChallenge:challenge,loafTrace:sliceFor(challenge)})).next).toBe('/profile?setup=1');
+  const body=JSON.parse(mocks.fetch.mock.calls[0][1].body);
+  expect(body.user_metadata.loaf_slice).toMatch(/^\d+\.[\w-]+$/);
+ });
+ it('explains an Auth0 Action denial as the slice check',async()=>{
+  mocks.fetch.mockImplementation(()=>json(400,{code:'no_loaf',description:"Slice the loaf to prove you're human."}));
+  expect((await createAuth0Account(client,signup)).error).toContain('Slice the loaf');
  });
 });

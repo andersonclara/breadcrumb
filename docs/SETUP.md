@@ -34,17 +34,13 @@ Auth0 holds Breadcrumb passwords; the pixel login form talks to Auth0 from the s
 1. In Auth0, create a **Regular Web Application** (or reuse one). Copy its Domain, Client ID, and Client Secret into `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` in `.env.local`. `SUPABASE_SERVICE_ROLE_KEY` is also required.
 2. Open Application → Settings → Advanced → **Grant Types**, enable **Password**, and save. On the same Settings page, turn on **Trust Token Endpoint IP Header**, so brute-force protection uses each student's IP.
 3. Open Application → **Connections** and enable **Username-Password-Authentication**. Nothing else is needed.
-4. Open Authentication → Database → Username-Password-Authentication. Leave **Disable Sign Ups** off and **Requires Username** off; usernames live in Breadcrumb. Choose a password policy of Fair or Good.
+4. Open Authentication → Database → Username-Password-Authentication. Leave **Disable Sign Ups** off and **Requires Username** off; usernames live in Breadcrumb. Set the password policy to a minimum length of 8 with no other character rules, matching the app's 8–128 character check.
 5. Open Branding → Email Templates → **Verification Email** and turn it off, so Auth0 does not send mail that UF filters.
-6. Open Actions → Library → Build Custom → **Pre User Registration**, then deploy this Action and add it to the Pre User Registration flow:
+6. Generate the BreadPass slice secret with `openssl rand -hex 32` and put it in `LOAF_SECRET` in `.env.local` (and Vercel).
+7. Open Actions → Library → Build Custom → **Pre User Registration** (Node 22 runtime). Paste the contents of [`auth0/actions/pre-user-registration.cjs`](../auth0/actions/pre-user-registration.cjs). Under the Action's **Secrets**, add `LOAF_SECRET` with the **same value**. Deploy it and add it to the Pre User Registration flow. The Action allows only @ufl.edu addresses and rejects any sign-up without a valid loaf-slice token, including direct calls to Auth0's public signup endpoint.
+8. Restart `npm run dev`. On `/login`, Create Account should show email, username, password, confirm, and the loaf to slice.
 
-   ```js
-   exports.onExecutePreUserRegistration = async (event, api) => {
-     if (!/@ufl\.edu$/i.test(event.user.email ?? '')) api.access.deny('not_uf', 'Use your @ufl.edu email.');
-   };
-   ```
-
-7. Restart `npm run dev`. On `/login`, Create Account should show email, username, password, and confirm fields.
+Leave `LOAF_SECRET` blank to turn the slice off. In that case, also use an Action without the slice check, or every sign-up will be denied.
 
 ## 2 Optional Mapbox account
 

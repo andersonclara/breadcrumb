@@ -32,12 +32,15 @@ async function call(path:string,init:{body:unknown;headers?:Record<string,string
 // Plain strings: the dev log file drops logged objects. Never include passwords or emails.
 const log=(step:string,status:number,data:Auth0Error)=>console.error(`Auth0 ${step} failed: HTTP ${status} ${data.code??data.error??data.name??'unknown'}`);
 
-export async function auth0Signup(email:string,password:string):Promise<{error?:string}>{
+export const SLICE_MESSAGE='Slice the loaf to prove you’re human.';
+export async function auth0Signup(email:string,password:string,sliceToken?:string|null):Promise<{error?:string}>{
  const config=auth0Config();if(!config)return {error:generic};
- const {ok,status,data}=await call('/dbconnections/signup',{body:{client_id:config.clientId,email,password,connection:config.connection}});
+ // The Pre User Registration Action re-verifies loaf_slice (auth0/actions/pre-user-registration.cjs).
+ const {ok,status,data}=await call('/dbconnections/signup',{body:{client_id:config.clientId,email,password,connection:config.connection,...(sliceToken?{user_metadata:{loaf_slice:sliceToken}}:{})}});
  if(ok)return {};
  log('signup',status,data);
  const code=data.code??data.name??'',text=`${data.description??data.message??''}`;
+ if(code==='no_loaf'||/slice the loaf/i.test(text))return {error:SLICE_MESSAGE};
  if(code==='invalid_signup'||code==='user_exists'||/already exists/i.test(text))return {error:'An account with this UF email already exists. Log in instead.'};
  if(code==='invalid_password'||code==='PasswordStrengthError'||code==='PasswordDictionaryError'||code==='PasswordNoUserInfoError')return {error:passwordPolicyMessage(data.description)};
  if(code==='extensibility_error'||code==='not_uf')return {error:'Use your @ufl.edu email.'};

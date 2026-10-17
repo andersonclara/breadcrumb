@@ -20,7 +20,9 @@ export async function signInPassword(_previous:LoginState,formData:FormData):Pro
 export async function createUfAccount(previous:LoginState,formData:FormData):Promise<LoginState>{
  if(!getSupabaseConfig()||!auth0Config())return sendMagicLink(previous,formData);
  let result;
- try{result=await createAuth0Account(await createClient(),{email:formData.get('email'),username:formData.get('username'),password:formData.get('password'),confirm:formData.get('confirm')},await clientIp());}catch{return {message:'Could not create your account. Please try again.',sent:false};}
+ const rawTrace=formData.get('loafTrace');let loafTrace:unknown=null;
+ if(typeof rawTrace==='string'&&rawTrace.length<=20000){try{loafTrace=JSON.parse(rawTrace);}catch{}}
+ try{result=await createAuth0Account(await createClient(),{email:formData.get('email'),username:formData.get('username'),password:formData.get('password'),confirm:formData.get('confirm'),loafChallenge:formData.get('loafChallenge'),loafTrace},await clientIp());}catch{return {message:'Could not create your account. Please try again.',sent:false};}
  if(result.error)return {message:result.error,sent:false};
  redirect(result.next!);
 }

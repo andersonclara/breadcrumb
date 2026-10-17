@@ -41,3 +41,4 @@ export * from './building-events';
 export * from './toast-status';
 export * from './post-recipe';
 export * from './post-location';
+export * from './loaf';
