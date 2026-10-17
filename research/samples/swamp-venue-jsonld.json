@@ -1,0 +1,52 @@
+{
+  "id": "swamp-venue-jsonld",
+  "format": "swamp-venue",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:44.460Z",
+  "completedAt": "2026-10-17T03:35:44.670Z",
+  "requestedUrl": "https://www.swamprestaurant.com/",
+  "url": "https://www.swamprestaurant.com/",
+  "status": 200,
+  "contentType": "text/html; charset=UTF-8",
+  "robots": {
+    "url": "https://www.swamprestaurant.com/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 75632,
+  "count": 1,
+  "fieldCoverage": {
+    "name": 1,
+    "description": 0,
+    "location": 1,
+    "start": 0,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 1,
+    "latitude": 1,
+    "longitude": 1
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "description",
+    "start",
+    "end",
+    "organizer",
+    "price",
+    "category"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "The Swamp Restaurant",
+      "location": "1104 SW 2nd Avenue, Gainesville",
+      "url": "https://swamprestaurant.com/"
+    }
+  ],
+  "usefulRecordsParsed": true
+}

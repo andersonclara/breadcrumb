@@ -1,0 +1,48 @@
+{
+  "method": "Assistant visual inspection of three actual downloaded publisher-linked images through view_image; not an automated vision-model API experiment.",
+  "reviewDate": "2026-10-17",
+  "records": [
+    {
+      "id": "pride",
+      "sha256": "5d18530fdbe9d5f4844428aac811696975ef5352a410c6d7f89067d2c4f11276",
+      "title": "Pride Party",
+      "printedMonthDay": "October 17",
+      "printedTime": "6-10 PM",
+      "printedYear": null,
+      "ageCondition": "18+ only",
+      "monetaryAmount": "$10 minimum",
+      "monetaryMeaning": "Donation for discounted-drink wristband; not established as admission price.",
+      "webpageDate": "2026-10-17",
+      "sourceUrl": "https://www.fmbrewing.com/event-calendar/pride-party",
+      "observedErrors": ["Original full-image OCR did not yield a date/time phrase.", "Contrast variant recovered October 17.", "Manual schedule crop produced incorrect 16-10 PM.", "Donation amount was not recovered by the tested OCR/extractor variants."]
+    },
+    {
+      "id": "festival",
+      "sha256": "9affb495f022967c5ab17c50ba9833f696ec92b4d649b5fa2f6e6446271e1181",
+      "title": "Florida Forever Festival",
+      "printedMonthDay": "October 18th",
+      "printedTime": "1-5pm",
+      "printedYear": null,
+      "ageCondition": null,
+      "monetaryAmount": null,
+      "webpageDate": "2026-10-18",
+      "sourceUrl": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+      "observedErrors": ["Year is absent on the flyer; recover it only from separate publisher evidence."]
+    },
+    {
+      "id": "karaoke",
+      "sha256": "1c626a67d7b9bea4338bf43ba97b9a0b2172e70d9e002e121625ee4ea3694e19",
+      "title": "Karaoke Night",
+      "printedMonthDay": null,
+      "printedTime": "9PM",
+      "printedYear": null,
+      "ageCondition": null,
+      "monetaryAmount": "Free",
+      "monetaryMeaning": "Flyer says free; publisher event description corroborates it, without establishing all entry conditions.",
+      "webpageDate": "2026-10-17",
+      "sourceUrl": "https://www.looseys.com/events/karaoke-party/",
+      "observedErrors": ["Original/contrast OCR found karaoke and free but the extractor did not recover 9PM.", "Threshold variant lost the free signal.", "The image has a 2023 Last-Modified header while its event page presents a 2026 occurrence; image age does not date the event."]
+    }
+  ],
+  "limitations": ["Three selected images, not a representative benchmark.", "No invented years or entry prices.", "No complete transcripts, photographs or contact information retained in Git."]
+}

@@ -1,0 +1,522 @@
+[
+  {
+    "id": "wicse-public-ical",
+    "format": "ical",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:04.014Z",
+    "url": "https://calendar.google.com/calendar/ical/291pbpr99guo0kl6md2g0nghk8%40group.calendar.google.com/public/basic.ics",
+    "status": null,
+    "error": "ROBOTS_STOP",
+    "robots": {
+      "url": "https://calendar.google.com/robots.txt",
+      "status": 200,
+      "allowed": false,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 0
+  },
+  {
+    "id": "closure-polygon-metadata",
+    "format": "arcgis-metadata",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:04.127Z",
+    "completedAt": "2026-10-17T12:08:04.295Z",
+    "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0?f=pjson",
+    "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0?f=pjson",
+    "status": 200,
+    "contentType": "text/plain; charset=UTF-8",
+    "robots": {
+      "url": "https://gis.ufl.edu/robots.txt",
+      "status": 404,
+      "allowed": true,
+      "note": "No robots file; not a reuse license.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 13503,
+    "name": "Closure Polygon",
+    "geometryType": "esriGeometryPolygon",
+    "capabilities": "Query",
+    "maxRecordCount": 1000,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "globalid",
+        "type": "esriFieldTypeGlobalID",
+        "alias": "globalid"
+      },
+      {
+        "name": "SHAPE__Length",
+        "type": "esriFieldTypeDouble",
+        "alias": "SHAPE__Length"
+      },
+      {
+        "name": "SHAPE__Area",
+        "type": "esriFieldTypeDouble",
+        "alias": "SHAPE__Area"
+      },
+      {
+        "name": "created_user",
+        "type": "esriFieldTypeString",
+        "alias": "created_user"
+      },
+      {
+        "name": "created_date",
+        "type": "esriFieldTypeDate",
+        "alias": "created_date"
+      },
+      {
+        "name": "last_edited_user",
+        "type": "esriFieldTypeString",
+        "alias": "last_edited_user"
+      },
+      {
+        "name": "last_edited_date",
+        "type": "esriFieldTypeDate",
+        "alias": "last_edited_date"
+      },
+      {
+        "name": "close_id",
+        "type": "esriFieldTypeString",
+        "alias": "Closure ID"
+      },
+      {
+        "name": "close_type",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Type"
+      },
+      {
+        "name": "close_stat",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Status"
+      },
+      {
+        "name": "close_request",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Request"
+      },
+      {
+        "name": "close_start",
+        "type": "esriFieldTypeDate",
+        "alias": "Closure Start Date"
+      },
+      {
+        "name": "close_end",
+        "type": "esriFieldTypeDate",
+        "alias": "Closure End Date"
+      },
+      {
+        "name": "close_note",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Notes"
+      }
+    ],
+    "copyrightText": "",
+    "paginationSupported": true
+  },
+  {
+    "id": "closure-detour-metadata",
+    "format": "arcgis-metadata",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:04.301Z",
+    "completedAt": "2026-10-17T12:08:05.207Z",
+    "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0?f=pjson",
+    "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0?f=pjson",
+    "status": 200,
+    "contentType": "text/plain; charset=UTF-8",
+    "robots": {
+      "url": "https://gis.ufl.edu/robots.txt",
+      "status": 404,
+      "allowed": true,
+      "note": "No robots file; not a reuse license.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 11597,
+    "name": "Line layer",
+    "geometryType": "esriGeometryPolyline",
+    "capabilities": "Query",
+    "maxRecordCount": 1000,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "globalid",
+        "type": "esriFieldTypeGlobalID",
+        "alias": "globalid"
+      },
+      {
+        "name": "close_id",
+        "type": "esriFieldTypeString",
+        "alias": "Closure ID"
+      },
+      {
+        "name": "close_type",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Type"
+      },
+      {
+        "name": "close_stat",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Status"
+      },
+      {
+        "name": "close_start",
+        "type": "esriFieldTypeDate",
+        "alias": "Closure Start"
+      },
+      {
+        "name": "close_end",
+        "type": "esriFieldTypeDate",
+        "alias": "Closure End Date"
+      },
+      {
+        "name": "close_note",
+        "type": "esriFieldTypeString",
+        "alias": "Closure Notes"
+      },
+      {
+        "name": "adaaccess",
+        "type": "esriFieldTypeString",
+        "alias": "ADA Accessible"
+      },
+      {
+        "name": "SHAPE__Length",
+        "type": "esriFieldTypeDouble",
+        "alias": "SHAPE__Length"
+      }
+    ],
+    "copyrightText": "",
+    "paginationSupported": true
+  },
+  {
+    "id": "careers-rss",
+    "format": "rss",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:05.209Z",
+    "completedAt": "2026-10-17T12:08:05.694Z",
+    "requestedUrl": "https://careerhub.ufl.edu/events/feed/",
+    "url": "https://careerhub.ufl.edu/events/feed/",
+    "status": 200,
+    "contentType": "application/rss+xml; charset=UTF-8",
+    "robots": {
+      "url": "https://careerhub.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 10163,
+    "count": 10,
+    "fieldCoverage": {
+      "name": 10,
+      "description": 8,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 10,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 10,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "First-Gen Career Ready in 15",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://careerhub.ufl.edu/events/2026/11/04/first-gen-career-ready-in-15/",
+        "category": [],
+        "publishedAt": "Fri, 16 Oct 2026 20:08:10 +0000"
+      },
+      {
+        "name": "CPWc3overview_10-19_YScull",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://careerhub.ufl.edu/events/2026/10/19/cpwc3overview_10-19_yscull/",
+        "category": [],
+        "publishedAt": "Fri, 16 Oct 2026 20:08:10 +0000"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "recordFieldNames": [
+      "title",
+      "link",
+      "dc:creator",
+      "pubDate",
+      "guid",
+      "description",
+      "content:encoded",
+      "post-id"
+    ],
+    "publicationDates": [
+      "Fri, 16 Oct 2026 20:08:10 +0000",
+      "Fri, 16 Oct 2026 20:08:10 +0000"
+    ]
+  },
+  {
+    "id": "engineering-rss",
+    "format": "rss",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:05.708Z",
+    "completedAt": "2026-10-17T12:08:06.411Z",
+    "requestedUrl": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/feed/",
+    "url": "https://www.eng.ufl.edu/undergraduate/news-events/events-calendar/feed/",
+    "status": 200,
+    "contentType": "application/rss+xml; charset=UTF-8",
+    "robots": {
+      "url": "https://www.eng.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 4208,
+    "count": 7,
+    "fieldCoverage": {
+      "name": 7,
+      "description": 7,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 7,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 7,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "UF in Ireland: Internship and Global Culture Info Session",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/uf-in-ireland-internship-and-global-culture-info-session/",
+        "category": [],
+        "publishedAt": "Wed, 21 Oct 2026 20:00:00 +0000"
+      },
+      {
+        "name": "Halloween Trivia Night with Phi Sigma Rho",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://www.eng.ufl.edu/undergraduate/news-events/events/halloween-trivia-night-with-phi-sigma-rho/",
+        "category": [],
+        "publishedAt": "Wed, 28 Oct 2026 23:00:00 +0000"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "recordFieldNames": [
+      "title",
+      "link",
+      "guid",
+      "pubDate",
+      "description"
+    ],
+    "publicationDates": [
+      "Wed, 21 Oct 2026 20:00:00 +0000",
+      "Wed, 28 Oct 2026 23:00:00 +0000"
+    ]
+  },
+  {
+    "id": "taps-rss",
+    "format": "rss",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:06.415Z",
+    "completedAt": "2026-10-17T12:08:06.850Z",
+    "requestedUrl": "https://taps.ufl.edu/feed/",
+    "url": "https://taps.ufl.edu/feed/",
+    "status": 200,
+    "contentType": "application/rss+xml; charset=UTF-8",
+    "robots": {
+      "url": "https://taps.ufl.edu/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 43107,
+    "count": 10,
+    "fieldCoverage": {
+      "name": 10,
+      "description": 10,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 10,
+      "url": 10,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 10,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [
+      {
+        "name": "October 9: Football Game &#038; Homecoming Parking Impacts",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://taps.ufl.edu/2026/10/06/october-9-football-game-homecoming-parking-impacts/",
+        "category": [
+          "Parking Impact"
+        ],
+        "publishedAt": "Tue, 06 Oct 2026 19:41:30 +0000"
+      },
+      {
+        "name": "September 25: Game Day Parking Impacts",
+        "start": null,
+        "end": null,
+        "location": null,
+        "url": "https://taps.ufl.edu/2026/09/24/september-25-game-day-parking-impacts/",
+        "category": [
+          "Parking Impact"
+        ],
+        "publishedAt": "Thu, 24 Sep 2026 15:26:41 +0000"
+      }
+    ],
+    "usefulRecordsParsed": true,
+    "recordFieldNames": [
+      "title",
+      "link",
+      "dc:creator",
+      "pubDate",
+      "category",
+      "guid",
+      "description",
+      "content:encoded"
+    ],
+    "publicationDates": [
+      "Tue, 06 Oct 2026 19:41:30 +0000",
+      "Thu, 24 Sep 2026 15:26:41 +0000"
+    ]
+  },
+  {
+    "id": "gatorlan-jsonld",
+    "format": "jsonld",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:08:06.864Z",
+    "completedAt": "2026-10-17T12:08:07.303Z",
+    "requestedUrl": "https://www.start.gg/tournament/gatorlan-fall-2026/details",
+    "url": "https://www.start.gg/tournament/gatorlan-fall-2026/details",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "robots": {
+      "url": "https://www.start.gg/robots.txt",
+      "status": 200,
+      "allowed": true,
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 421703,
+    "count": 0,
+    "fieldCoverage": {
+      "name": 0,
+      "description": 0,
+      "location": 0,
+      "start": 0,
+      "end": 0,
+      "organizer": 0,
+      "price": 0,
+      "category": 0,
+      "url": 0,
+      "latitude": 0,
+      "longitude": 0
+    },
+    "uniqueUrls": 0,
+    "sameStartAndEnd": 0,
+    "recurringRecords": 0,
+    "missingFromEveryRecord": [
+      "name",
+      "description",
+      "location",
+      "start",
+      "end",
+      "organizer",
+      "price",
+      "category",
+      "url",
+      "latitude",
+      "longitude"
+    ],
+    "dateRange": null,
+    "samples": [],
+    "usefulRecordsParsed": false
+  },
+  {
+    "id": "hq-gainesville",
+    "format": "hq-json",
+    "authentication": "none",
+    "startedAt": "2026-10-17T12:11:42.624Z",
+    "completedAt": "2026-10-17T12:11:44.559Z",
+    "requestedUrl": "https://api.joinhq.app/v1/public/shows?when=upcoming&city=Gainesville&country=United+States&limit=3",
+    "url": "https://api.joinhq.app/v1/public/shows?when=upcoming&city=Gainesville&country=United+States&limit=3",
+    "status": 200,
+    "contentType": "application/json",
+    "robots": {
+      "url": "https://api.joinhq.app/robots.txt",
+      "status": 404,
+      "allowed": true,
+      "note": "No robots file; not a reuse license.",
+      "crawlDelay": null
+    },
+    "redirects": [],
+    "bytes": 72,
+    "count": 0,
+    "hasNext": false,
+    "samples": [],
+    "usefulRecordsParsed": false
+  }
+]

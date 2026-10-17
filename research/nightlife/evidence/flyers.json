@@ -1,0 +1,470 @@
+[
+  {
+    "id": "pride",
+    "pageRequest": {
+      "startedAt": "2026-10-17T12:33:34.275Z",
+      "completedAt": "2026-10-17T12:33:34.594Z",
+      "requestedUrl": "https://www.fmbrewing.com/event-calendar/pride-party",
+      "url": "https://www.fmbrewing.com/event-calendar/pride-party",
+      "status": 200,
+      "contentType": "text/html;charset=utf-8",
+      "cache": {
+        "etag": "W/\"7f008587875a8f7933e7af7d6d9e5305\"",
+        "lastModified": null,
+        "cacheControl": null,
+        "age": "0"
+      },
+      "robots": {
+        "url": "https://www.fmbrewing.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 171632
+    },
+    "imageRequest": {
+      "startedAt": "2026-10-17T12:33:34.692Z",
+      "completedAt": "2026-10-17T12:33:34.870Z",
+      "requestedUrl": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/4c6d074a-a969-437d-b0f2-d72bd2b6c66a/PRIDE-PARTY_4_5.png",
+      "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/4c6d074a-a969-437d-b0f2-d72bd2b6c66a/PRIDE-PARTY_4_5.png",
+      "status": 200,
+      "contentType": "image/png",
+      "cache": {
+        "etag": "CNyp2PbhvJcDEAE=",
+        "lastModified": null,
+        "cacheControl": "max-age=31456500, s-maxage=31536000",
+        "age": null
+      },
+      "robots": {
+        "url": "https://images.squarespace-cdn.com/robots.txt",
+        "status": 404,
+        "allowed": true,
+        "note": "No robots file; not a reuse license.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 2349240
+    },
+    "sha256": "5d18530fdbe9d5f4844428aac811696975ef5352a410c6d7f89067d2c4f11276",
+    "testedAt": "2026-10-17T12:36:58.833Z",
+    "variants": {
+      "original": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1387,
+        "width": 2500,
+        "height": 3125,
+        "lineCount": 22,
+        "wordCount": 55,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [
+          "18+"
+        ],
+        "signals": {
+          "pride": true,
+          "party": true,
+          "festival": false,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "contrast": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1609,
+        "width": 3200,
+        "height": 4000,
+        "lineCount": 24,
+        "wordCount": 63,
+        "datePhrases": [
+          "OCTOBER 17"
+        ],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [
+          "18+"
+        ],
+        "signals": {
+          "pride": true,
+          "party": true,
+          "festival": false,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "threshold": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1465,
+        "width": 3200,
+        "height": 4000,
+        "lineCount": 12,
+        "wordCount": 28,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [
+          "18+"
+        ],
+        "signals": {
+          "pride": true,
+          "party": true,
+          "festival": false,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "manual_schedule_crop": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 930,
+        "width": 3250,
+        "height": 500,
+        "lineCount": 1,
+        "wordCount": 6,
+        "datePhrases": [
+          "OCTOBER 17"
+        ],
+        "timePhrases": [
+          "10 PM"
+        ],
+        "timeRanges": [
+          "16-10 PM"
+        ],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": false,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": false,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "manual_offer_crop": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1008,
+        "width": 1450,
+        "height": 1250,
+        "lineCount": 9,
+        "wordCount": 24,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": true,
+          "party": false,
+          "festival": false,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": false,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      }
+    },
+    "opencv": "4.13.0",
+    "scale": 1.28
+  },
+  {
+    "id": "festival",
+    "pageRequest": {
+      "startedAt": "2026-10-17T12:33:35.053Z",
+      "completedAt": "2026-10-17T12:33:35.611Z",
+      "requestedUrl": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+      "url": "https://www.fmbrewing.com/event-calendar/florida-forever-festival",
+      "status": 200,
+      "contentType": "text/html;charset=utf-8",
+      "cache": {
+        "etag": "W/\"6ddd48baf6fd65578f966adeff9ae7c2--gzip\"",
+        "lastModified": null,
+        "cacheControl": null,
+        "age": "0"
+      },
+      "robots": {
+        "url": "https://www.fmbrewing.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 597780
+    },
+    "imageRequest": {
+      "startedAt": "2026-10-17T12:33:35.692Z",
+      "completedAt": "2026-10-17T12:33:35.958Z",
+      "requestedUrl": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/d5d05fd1-8940-4278-9a2d-3a83939c64ea/FNPS_FFF+Flyer.png",
+      "url": "https://images.squarespace-cdn.com/content/v1/69c5d9f8c17f150b8f1817f8/d5d05fd1-8940-4278-9a2d-3a83939c64ea/FNPS_FFF+Flyer.png",
+      "status": 200,
+      "contentType": "image/png",
+      "cache": {
+        "etag": "CMmsptXWvJcDEAE=",
+        "lastModified": null,
+        "cacheControl": "max-age=31456429, s-maxage=31536000",
+        "age": null
+      },
+      "robots": {
+        "url": "https://images.squarespace-cdn.com/robots.txt",
+        "status": 404,
+        "allowed": true,
+        "note": "No robots file; not a reuse license.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 899481
+    },
+    "sha256": "9affb495f022967c5ab17c50ba9833f696ec92b4d649b5fa2f6e6446271e1181",
+    "testedAt": "2026-10-17T12:37:06.141Z",
+    "variants": {
+      "original": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 978,
+        "width": 1080,
+        "height": 1350,
+        "lineCount": 12,
+        "wordCount": 36,
+        "datePhrases": [
+          "October 18th"
+        ],
+        "timePhrases": [
+          "5pm"
+        ],
+        "timeRanges": [
+          "1-5pm"
+        ],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": true,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "contrast": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1311,
+        "width": 2160,
+        "height": 2700,
+        "lineCount": 11,
+        "wordCount": 33,
+        "datePhrases": [
+          "October 18th"
+        ],
+        "timePhrases": [
+          "5pm"
+        ],
+        "timeRanges": [
+          "1-5pm"
+        ],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": true,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "threshold": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1160,
+        "width": 2160,
+        "height": 2700,
+        "lineCount": 10,
+        "wordCount": 33,
+        "datePhrases": [
+          "October 18th"
+        ],
+        "timePhrases": [
+          "5pm"
+        ],
+        "timeRanges": [
+          "1-5pm"
+        ],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": true,
+          "karaoke": false,
+          "free": false,
+          "first magnitude": true,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      }
+    },
+    "opencv": "4.13.0",
+    "scale": 2
+  },
+  {
+    "id": "karaoke",
+    "pageRequest": {
+      "startedAt": "2026-10-17T12:33:36.046Z",
+      "completedAt": "2026-10-17T12:33:36.259Z",
+      "requestedUrl": "https://www.looseys.com/events/karaoke-party/",
+      "url": "https://www.looseys.com/events/karaoke-party/",
+      "status": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "cache": {
+        "etag": null,
+        "lastModified": null,
+        "cacheControl": "max-age=3, must-revalidate, max-age=600",
+        "age": null
+      },
+      "robots": {
+        "url": "https://www.looseys.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": 10
+      },
+      "redirects": [],
+      "bytes": 114664
+    },
+    "imageRequest": {
+      "startedAt": "2026-10-17T12:33:36.325Z",
+      "completedAt": "2026-10-17T12:33:46.356Z",
+      "requestedUrl": "https://www.looseys.com/wp-content/uploads/2023/07/Karaoke.jpg",
+      "url": "https://www.looseys.com/wp-content/uploads/2023/07/Karaoke.jpg",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "cache": {
+        "etag": "\"299c6-603c4f17c178b\"",
+        "lastModified": "Fri, 25 Aug 2023 20:11:00 GMT",
+        "cacheControl": "max-age=2592000",
+        "age": null
+      },
+      "robots": {
+        "url": "https://www.looseys.com/robots.txt",
+        "status": 200,
+        "allowed": true,
+        "crawlDelay": 10
+      },
+      "redirects": [],
+      "bytes": 170438
+    },
+    "sha256": "1c626a67d7b9bea4338bf43ba97b9a0b2172e70d9e002e121625ee4ea3694e19",
+    "testedAt": "2026-10-17T12:37:10.275Z",
+    "variants": {
+      "original": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 923,
+        "width": 1080,
+        "height": 941,
+        "lineCount": 4,
+        "wordCount": 8,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": false,
+          "karaoke": true,
+          "free": true,
+          "first magnitude": false,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "contrast": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1114,
+        "width": 2160,
+        "height": 1882,
+        "lineCount": 5,
+        "wordCount": 7,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": false,
+          "karaoke": true,
+          "free": true,
+          "first magnitude": false,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      },
+      "threshold": {
+        "engine": "Windows.Media.Ocr",
+        "language": "en-US",
+        "elapsedMs": 1065,
+        "width": 2160,
+        "height": 1882,
+        "lineCount": 1,
+        "wordCount": 2,
+        "datePhrases": [],
+        "timePhrases": [],
+        "timeRanges": [],
+        "prices": [],
+        "agePhrases": [],
+        "signals": {
+          "pride": false,
+          "party": false,
+          "festival": false,
+          "karaoke": true,
+          "free": false,
+          "first magnitude": false,
+          "loosey": false
+        },
+        "yearDetected": false,
+        "fullTextRetained": false
+      }
+    },
+    "opencv": "4.13.0",
+    "scale": 2
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "testedAt": "2026-10-17T12:14:49.914Z",
+    "url": "https://ufwicse.com/robots.txt",
+    "finalUrl": "https://ufwicse.com/robots.txt",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "html": true,
+    "title": "UF WiCSE",
+    "challengeIndicators": false,
+    "directives": [],
+    "hash": "f895e503e48e67b3a663212d15f3ab9405f145b0a332d4f0de9df47d5f7b7295"
+  },
+  {
+    "testedAt": "2026-10-17T12:14:50.019Z",
+    "url": "https://campusclosures.ufl.edu/robots.txt",
+    "finalUrl": "https://campusclosures.ufl.edu/robots.txt",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "html": true,
+    "title": "Campus Closures",
+    "challengeIndicators": false,
+    "directives": [],
+    "hash": "10ed0f7cd6806216d3a95bdf4a5f6e5fec9655596fa7267939e8dc5d3c3296a6"
+  },
+  {
+    "testedAt": "2026-10-17T12:14:50.325Z",
+    "url": "https://highdivegainesville.com/robots.txt",
+    "finalUrl": "https://glorydayspresents.com/?source=high-dive",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "html": true,
+    "title": "Glory Days Presents!",
+    "challengeIndicators": false,
+    "directives": [],
+    "hash": "7e76bc2a8c3d4efc369bf5cea0163b144364bea26fcbb45476762c8f3884d79b"
+  }
+]

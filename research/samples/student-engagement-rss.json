@@ -1,0 +1,51 @@
+{
+  "id": "student-engagement-rss",
+  "format": "rss",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:25.553Z",
+  "completedAt": "2026-10-17T03:35:27.899Z",
+  "requestedUrl": "https://studentengagement.ufl.edu/feed/",
+  "url": "https://studentengagement.ufl.edu/feed/",
+  "status": 200,
+  "contentType": "application/rss+xml; charset=UTF-8",
+  "robots": {
+    "url": "https://studentengagement.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 1090,
+  "count": 0,
+  "fieldCoverage": {
+    "name": 0,
+    "description": 0,
+    "location": 0,
+    "start": 0,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 0,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "name",
+    "description",
+    "location",
+    "start",
+    "end",
+    "organizer",
+    "price",
+    "category",
+    "url",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [],
+  "usefulRecordsParsed": false
+}

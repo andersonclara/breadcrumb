@@ -1,0 +1,68 @@
+{
+  "id": "uf-libraries-rss",
+  "format": "rss",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:44.702Z",
+  "completedAt": "2026-10-17T03:35:44.952Z",
+  "requestedUrl": "https://libcal.uflib.ufl.edu/rss.php?iid=6&m=month&cid=22582",
+  "url": "https://libcal.uflib.ufl.edu/rss.php?iid=6&m=month&cid=22582",
+  "status": 200,
+  "contentType": "application/rss+xml; charset=utf-8",
+  "robots": {
+    "url": "https://libcal.uflib.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": 10
+  },
+  "redirects": [],
+  "bytes": 97339,
+  "count": 33,
+  "fieldCoverage": {
+    "name": 33,
+    "description": 33,
+    "location": 29,
+    "start": 33,
+    "end": 33,
+    "organizer": 0,
+    "price": 0,
+    "category": 16,
+    "url": 33,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "NIH Public Access Compliance",
+      "start": "2026-10-16T12:00:00",
+      "end": "2026-10-16T13:00:00",
+      "timezone": "Local clock; RSS omits timezone. Calendar UI says Eastern Time - US & Canada.",
+      "location": "Online",
+      "url": "https://libcal.uflib.ufl.edu/event/17346517",
+      "category": [
+        "Workshops",
+        "Research"
+      ]
+    },
+    {
+      "name": "Stories of Childhood Polio",
+      "start": "2026-10-19T12:50:00",
+      "end": "2026-10-19T13:40:00",
+      "timezone": "Local clock; RSS omits timezone. Calendar UI says Eastern Time - US & Canada.",
+      "location": "",
+      "url": "https://libcal.uflib.ufl.edu/event/17620515",
+      "category": [
+        "Events"
+      ]
+    }
+  ],
+  "usefulRecordsParsed": true
+}

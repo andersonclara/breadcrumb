@@ -1,0 +1,82 @@
+{
+  "id": "uf-calendar-ical",
+  "format": "ical",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:22.367Z",
+  "completedAt": "2026-10-17T03:35:22.513Z",
+  "requestedUrl": "https://calendar.ufl.edu/live/ical/events",
+  "url": "https://calendar.ufl.edu/live/ical/events",
+  "status": 200,
+  "contentType": "text/calendar;charset=UTF-8",
+  "robots": {
+    "url": "https://calendar.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 2505678,
+  "count": 875,
+  "fieldCoverage": {
+    "name": 875,
+    "description": 730,
+    "location": 761,
+    "start": 875,
+    "end": 875,
+    "organizer": 0,
+    "price": 0,
+    "category": 697,
+    "url": 875,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 58,
+  "missingFromEveryRecord": [
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2026-10-16T00:00:00.000Z",
+    "max": "2027-01-26T15:00:00.000Z",
+    "futureOrToday": 836,
+    "datesCompared": 875,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Accessibility for the Web",
+      "start": "2026-10-16",
+      "end": "2026-10-17",
+      "timezone": "floating",
+      "location": "myTraining (online, self-paced)",
+      "url": "https://calendar.ufl.edu/training/event/54966-accessibility-for-the-web",
+      "category": [
+        "For Faculty",
+        "For Staff"
+      ],
+      "price": null,
+      "recurrence": true,
+      "allDay": true
+    },
+    {
+      "name": "An Unreasonable Commitment to the Square",
+      "start": "2026-10-16",
+      "end": "2026-10-17",
+      "timezone": "floating",
+      "location": "4Most Gallery &amp; Studio",
+      "url": "https://calendar.ufl.edu/event/58457-an-unreasonable-commitment-to-the-square",
+      "category": [
+        "Arts & Entertainment",
+        "Culture and Diversity",
+        "Open to the Public"
+      ],
+      "price": null,
+      "recurrence": false,
+      "allDay": true
+    }
+  ],
+  "usefulRecordsParsed": true
+}

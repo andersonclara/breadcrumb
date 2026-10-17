@@ -1,0 +1,70 @@
+{
+  "id": "uf-swe-rss",
+  "format": "rss",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:36:33.543Z",
+  "completedAt": "2026-10-17T03:36:35.390Z",
+  "requestedUrl": "https://uf.swe.org/feed/",
+  "url": "https://uf.swe.org/feed/",
+  "status": 200,
+  "contentType": "application/rss+xml; charset=UTF-8",
+  "robots": {
+    "url": "https://uf.swe.org/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 60288,
+  "count": 10,
+  "fieldCoverage": {
+    "name": 10,
+    "description": 10,
+    "location": 0,
+    "start": 0,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 10,
+    "url": 10,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "location",
+    "start",
+    "end",
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "Imposter Syndrome: Women in Engineering",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://uf.swe.org/2026/03/26/imposter-syndrome-women-in-engineering/",
+      "category": [
+        "Uncategorized"
+      ],
+      "publishedAt": "Thu, 26 Mar 2026 13:45:18 +0000"
+    },
+    {
+      "name": "Women in Engineering and Social Media",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://uf.swe.org/2025/08/15/women-in-engineering-and-social-media/",
+      "category": [
+        "Uncategorized"
+      ],
+      "publishedAt": "Fri, 15 Aug 2025 01:51:00 +0000"
+    }
+  ],
+  "usefulRecordsParsed": true
+}

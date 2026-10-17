@@ -1,0 +1,76 @@
+{
+  "id": "gainesvilleevents-ical",
+  "format": "ical",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:28.868Z",
+  "completedAt": "2026-10-17T03:35:29.097Z",
+  "requestedUrl": "https://gainesvilleevents.com/feed.ics",
+  "url": "https://gainesvilleevents.com/feed.ics",
+  "status": 200,
+  "contentType": "text/calendar",
+  "robots": {
+    "url": "https://gainesvilleevents.com/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 703404,
+  "count": 1052,
+  "fieldCoverage": {
+    "name": 1052,
+    "description": 1052,
+    "location": 1000,
+    "start": 1052,
+    "end": 1052,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 1052,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 208,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "organizer",
+    "price",
+    "category",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2026-10-16T22:00:00.000Z",
+    "max": "2027-03-14T00:00:00.000Z",
+    "futureOrToday": 1047,
+    "datesCompared": 1052,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Comedian CHRIS FRANJOLA with Surfer Jesus",
+      "start": "2026-10-16T22:00:00Z",
+      "end": "2026-10-16T22:00:00Z",
+      "timezone": "UTC",
+      "location": "Signal, Gainesville",
+      "url": "https://wl.seetickets.us/event/comedian-chris-franjola-with-surfer-jesus/699819?afflky=GloryDaysPresents",
+      "category": [],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    },
+    {
+      "name": "Documentary Premiere: POWER GRAB",
+      "start": "2026-10-16T22:00:00Z",
+      "end": "2026-10-16T22:00:00Z",
+      "timezone": "UTC",
+      "location": "Civic Media Center, 433 South Main Street 32601",
+      "url": "https://www.gainesvilleshows.com/event/2026-10-16-civic-media-center",
+      "category": [],
+      "price": null,
+      "recurrence": false,
+      "allDay": false
+    }
+  ],
+  "usefulRecordsParsed": true
+}

@@ -1,0 +1,390 @@
+[
+  {
+    "id": "Closure_Polygon_view",
+    "authentication": "none",
+    "metadataRequest": {
+      "startedAt": "2026-10-17T12:11:44.807Z",
+      "completedAt": "2026-10-17T12:11:45.036Z",
+      "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0?f=json",
+      "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0?f=json",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "robots": {
+        "url": "https://gis.ufl.edu/robots.txt",
+        "status": 404,
+        "allowed": true,
+        "note": "No robots file; not a reuse license.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 11018
+    },
+    "requests": [
+      {
+        "startedAt": "2026-10-17T12:11:45.050Z",
+        "completedAt": "2026-10-17T12:11:46.004Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 13
+      },
+      {
+        "startedAt": "2026-10-17T12:11:46.008Z",
+        "completedAt": "2026-10-17T12:11:47.024Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=1%3D1&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=1%3D1&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 3520
+      },
+      {
+        "startedAt": "2026-10-17T12:11:47.026Z",
+        "completedAt": "2026-10-17T12:11:48.034Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=close_stat%3D%27PUBLISHED%27&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Polygon_view/FeatureServer/0/query?where=close_stat%3D%27PUBLISHED%27&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 4652
+      }
+    ],
+    "layer": {
+      "name": "Closure Polygon",
+      "capabilities": "Query",
+      "geometryType": "esriGeometryPolygon",
+      "maxRecordCount": 1000,
+      "copyrightText": "",
+      "paginationSupported": true
+    },
+    "requestedFields": [
+      "close_id",
+      "close_type",
+      "close_stat",
+      "close_start",
+      "close_end",
+      "close_note"
+    ],
+    "fieldTypes": {
+      "close_id": "esriFieldTypeString",
+      "close_type": "esriFieldTypeString",
+      "close_stat": "esriFieldTypeString",
+      "close_start": "esriFieldTypeDate",
+      "close_end": "esriFieldTypeDate",
+      "close_note": "esriFieldTypeString"
+    },
+    "enums": {
+      "close_stat": [
+        {
+          "code": "ARCHIVED",
+          "name": "ARCHIVED"
+        },
+        {
+          "code": "PROMOTED",
+          "name": "PROMOTED"
+        },
+        {
+          "code": "PUBLISHED",
+          "name": "PUBLISHED"
+        },
+        {
+          "code": "SUBMITTED",
+          "name": "SUBMITTED"
+        }
+      ]
+    },
+    "totalFeatures": 506,
+    "count": 5,
+    "exceededTransferLimit": true,
+    "geometryRecords": 5,
+    "noteRecords": 0,
+    "samples": [
+      {
+        "closureId": "481",
+        "type": null,
+        "status": "ARCHIVED",
+        "start": null,
+        "end": null,
+        "notePresent": false,
+        "geometryType": "esriGeometryPolygon",
+        "vertexCount": 7,
+        "sourceUrl": "https://campusclosures.ufl.edu/"
+      },
+      {
+        "closureId": "601",
+        "type": null,
+        "status": "ARCHIVED",
+        "start": null,
+        "end": null,
+        "notePresent": false,
+        "geometryType": "esriGeometryPolygon",
+        "vertexCount": 10,
+        "sourceUrl": "https://campusclosures.ufl.edu/"
+      }
+    ],
+    "publishedSubset": {
+      "count": 5,
+      "exceededTransferLimit": true,
+      "withStart": 1,
+      "withEnd": 1,
+      "withGeometry": 5,
+      "withNotes": 0,
+      "samples": [
+        {
+          "closureId": "3662",
+          "type": null,
+          "status": "PUBLISHED",
+          "start": null,
+          "end": null,
+          "adaAccess": null
+        },
+        {
+          "closureId": "5582",
+          "type": null,
+          "status": "PUBLISHED",
+          "start": null,
+          "end": null,
+          "adaAccess": null
+        }
+      ]
+    },
+    "usefulRecordsParsed": true
+  },
+  {
+    "id": "Closure_Detour_view",
+    "authentication": "none",
+    "metadataRequest": {
+      "startedAt": "2026-10-17T12:11:48.036Z",
+      "completedAt": "2026-10-17T12:11:49.034Z",
+      "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0?f=json",
+      "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0?f=json",
+      "status": 200,
+      "contentType": "application/json; charset=UTF-8",
+      "robots": {
+        "url": "https://gis.ufl.edu/robots.txt",
+        "status": 404,
+        "allowed": true,
+        "note": "No robots file; not a reuse license.",
+        "crawlDelay": null
+      },
+      "redirects": [],
+      "bytes": 9411
+    },
+    "requests": [
+      {
+        "startedAt": "2026-10-17T12:11:49.038Z",
+        "completedAt": "2026-10-17T12:11:50.054Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 12
+      },
+      {
+        "startedAt": "2026-10-17T12:11:50.055Z",
+        "completedAt": "2026-10-17T12:11:51.050Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=1%3D1&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note%2Cadaaccess&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=1%3D1&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note%2Cadaaccess&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 3254
+      },
+      {
+        "startedAt": "2026-10-17T12:11:51.052Z",
+        "completedAt": "2026-10-17T12:11:52.070Z",
+        "requestedUrl": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=close_stat%3D%27PUBLISHED%27&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note%2Cadaaccess&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "url": "https://gis.ufl.edu/Hosting/rest/services/Hosted/Closure_Detour_view/FeatureServer/0/query?where=close_stat%3D%27PUBLISHED%27&outFields=close_id%2Cclose_type%2Cclose_stat%2Cclose_start%2Cclose_end%2Cclose_note%2Cadaaccess&returnGeometry=true&outSR=4326&resultRecordCount=5&f=json",
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8",
+        "robots": {
+          "url": "https://gis.ufl.edu/robots.txt",
+          "status": 404,
+          "allowed": true,
+          "note": "No robots file; not a reuse license.",
+          "crawlDelay": null
+        },
+        "redirects": [],
+        "bytes": 3753
+      }
+    ],
+    "layer": {
+      "name": "Line layer",
+      "capabilities": "Query",
+      "geometryType": "esriGeometryPolyline",
+      "maxRecordCount": 1000,
+      "copyrightText": "",
+      "paginationSupported": true
+    },
+    "requestedFields": [
+      "close_id",
+      "close_type",
+      "close_stat",
+      "close_start",
+      "close_end",
+      "close_note",
+      "adaaccess"
+    ],
+    "fieldTypes": {
+      "close_id": "esriFieldTypeString",
+      "close_type": "esriFieldTypeString",
+      "close_stat": "esriFieldTypeString",
+      "close_start": "esriFieldTypeDate",
+      "close_end": "esriFieldTypeDate",
+      "close_note": "esriFieldTypeString",
+      "adaaccess": "esriFieldTypeString"
+    },
+    "enums": {
+      "close_type": [
+        {
+          "code": "One Way",
+          "name": "One Way"
+        },
+        {
+          "code": "Two Way",
+          "name": "Two Way"
+        },
+        {
+          "code": "Pedestrian",
+          "name": "Pedestrian"
+        }
+      ],
+      "close_stat": [
+        {
+          "code": "ACTIVE",
+          "name": "ACTIVE"
+        },
+        {
+          "code": "ARCHIVED",
+          "name": "ARCHIVED"
+        },
+        {
+          "code": "PROMOTED",
+          "name": "PROMOTED"
+        },
+        {
+          "code": "PUBLISHED",
+          "name": "PUBLISHED"
+        },
+        {
+          "code": "REQUESTED",
+          "name": "REQUESTED"
+        },
+        {
+          "code": "REVIEWED",
+          "name": "REVIEWED"
+        },
+        {
+          "code": "SUBMITTED",
+          "name": "SUBMITTED"
+        }
+      ],
+      "adaaccess": [
+        {
+          "code": "N",
+          "name": "No"
+        },
+        {
+          "code": "Y",
+          "name": "Yes"
+        }
+      ]
+    },
+    "totalFeatures": 19,
+    "count": 5,
+    "exceededTransferLimit": true,
+    "geometryRecords": 5,
+    "noteRecords": 0,
+    "samples": [
+      {
+        "closureId": "2301",
+        "type": "Two Way",
+        "status": "SAVED",
+        "start": null,
+        "end": null,
+        "adaAccess": null,
+        "notePresent": false,
+        "geometryType": "esriGeometryPolyline",
+        "vertexCount": 3,
+        "sourceUrl": "https://campusclosures.ufl.edu/"
+      },
+      {
+        "closureId": "5803",
+        "type": null,
+        "status": "PUBLISHED",
+        "start": null,
+        "end": null,
+        "adaAccess": "N",
+        "notePresent": false,
+        "geometryType": "esriGeometryPolyline",
+        "vertexCount": 8,
+        "sourceUrl": "https://campusclosures.ufl.edu/"
+      }
+    ],
+    "publishedSubset": {
+      "count": 5,
+      "exceededTransferLimit": true,
+      "withStart": 1,
+      "withEnd": 1,
+      "withGeometry": 5,
+      "withNotes": 0,
+      "samples": [
+        {
+          "closureId": "5803",
+          "type": null,
+          "status": "PUBLISHED",
+          "start": null,
+          "end": null,
+          "adaAccess": "N"
+        },
+        {
+          "closureId": "5803",
+          "type": "One Way",
+          "status": "PUBLISHED",
+          "start": null,
+          "end": null,
+          "adaAccess": "N"
+        }
+      ]
+    },
+    "usefulRecordsParsed": true
+  }
+]

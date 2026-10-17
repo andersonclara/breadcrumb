@@ -1,0 +1,70 @@
+{
+  "id": "uf-alerts-rss",
+  "format": "rss",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:34.978Z",
+  "completedAt": "2026-10-17T03:35:35.638Z",
+  "requestedUrl": "https://ufalert.ufl.edu/feed/",
+  "url": "https://ufalert.ufl.edu/feed/",
+  "status": 200,
+  "contentType": "application/rss+xml; charset=UTF-8",
+  "robots": {
+    "url": "https://ufalert.ufl.edu/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 8876,
+  "count": 10,
+  "fieldCoverage": {
+    "name": 10,
+    "description": 10,
+    "location": 0,
+    "start": 0,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 10,
+    "url": 10,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "location",
+    "start",
+    "end",
+    "organizer",
+    "price",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": null,
+  "samples": [
+    {
+      "name": "Campus Safety Message-Gainesville",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://ufalert.ufl.edu/2026/09/09/campus-safety-message-gainesville-24/",
+      "category": [
+        "Gainesville Campus Safety"
+      ],
+      "publishedAt": "Wed, 09 Sep 2026 17:57:17 +0000"
+    },
+    {
+      "name": "UF Alert-Gainesville",
+      "start": null,
+      "end": null,
+      "location": null,
+      "url": "https://ufalert.ufl.edu/2026/09/01/uf-alert-gainesville-87/",
+      "category": [
+        "Gainesville Emergency Notification"
+      ],
+      "publishedAt": "Tue, 01 Sep 2026 15:49:51 +0000"
+    }
+  ],
+  "usefulRecordsParsed": true
+}

@@ -1,0 +1,66 @@
+{
+  "id": "heartwood-archive-html",
+  "format": "heartwood-archive",
+  "authentication": "none",
+  "startedAt": "2026-10-17T03:35:44.278Z",
+  "completedAt": "2026-10-17T03:35:44.434Z",
+  "requestedUrl": "https://www.heartwoodsoundstage.com/shows",
+  "url": "https://www.heartwoodsoundstage.com/shows",
+  "status": 200,
+  "contentType": "text/html; charset=utf-8",
+  "robots": {
+    "url": "https://www.heartwoodsoundstage.com/robots.txt",
+    "status": 200,
+    "allowed": true,
+    "crawlDelay": null
+  },
+  "redirects": [],
+  "bytes": 184601,
+  "count": 100,
+  "fieldCoverage": {
+    "name": 100,
+    "description": 0,
+    "location": 100,
+    "start": 100,
+    "end": 0,
+    "organizer": 0,
+    "price": 0,
+    "category": 0,
+    "url": 100,
+    "latitude": 0,
+    "longitude": 0
+  },
+  "sameStartAndEnd": 0,
+  "recurringRecords": 0,
+  "missingFromEveryRecord": [
+    "description",
+    "end",
+    "organizer",
+    "price",
+    "category",
+    "latitude",
+    "longitude"
+  ],
+  "dateRange": {
+    "min": "2025-06-14T00:00:00.000Z",
+    "max": "2025-12-16T00:00:00.000Z",
+    "futureOrToday": 0,
+    "datesCompared": 100,
+    "note": "Compared against current UTC day, not a live-now guarantee. Floating local times excluded; retain source timezone. RSS publication dates are not event times."
+  },
+  "samples": [
+    {
+      "name": "Heartwood Music Festival IX",
+      "start": "2025-06-14",
+      "location": "Heartwood Soundstage (source context)",
+      "url": "https://www.heartwoodsoundstage.com/shows/heartwood-music-festival-ix-14-jun"
+    },
+    {
+      "name": "Community Nights (Outside Deck 6 to 9)",
+      "start": "2025-06-18",
+      "location": "Heartwood Soundstage (source context)",
+      "url": "https://www.heartwoodsoundstage.com/shows/community-nights-outside-deck-6-to-9-18-jun"
+    }
+  ],
+  "usefulRecordsParsed": true
+}
