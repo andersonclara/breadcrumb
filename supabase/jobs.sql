@@ -1,4 +1,4 @@
--- Optional: enable pg_cron in the Supabase dashboard before running this file.
+-- Optional: apply BOTH migrations and enable pg_cron before running this file.
 -- Scheduling is separate so the initial migration works without hosted extensions.
 select cron.schedule('expire-crumbs','* * * * *',$$
   update public.crumbs set status = 'expired' where status = 'active'
@@ -14,3 +14,8 @@ select cron.schedule('club-reminders','*/5 * * * *',$$
   on conflict(user_id,event_id) do nothing
 $$);
 -- Event syncing is deferred until a public source and protected endpoint exist.
+-- Run after the pixel-world migration. Queries hide stale positions immediately;
+-- this job also removes expired rows when no clients are sharing.
+select cron.schedule('expire-avatar-presence','* * * * *',$$
+  delete from public.avatar_presence where expires_at<=now()
+$$);

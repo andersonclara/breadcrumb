@@ -1,5 +1,5 @@
 export const palette = {
-  cream: "#F5E9D5", toasted: "#D59A55", crust: "#774D35", sage: "#A4B99A", coral: "#E37B64",
+  cream: "#FFF2D8", toasted: "#D59A55", crust: "#774D35", sage: "#79B77A", coral: "#EE896A",
 } as const;
 
 export const categories = [
@@ -13,6 +13,13 @@ export const categories = [
 export type CrumbCategory = typeof categories[number]["id"];
 export const UF_VIEW = { longitude: -82.347, latitude: 29.6465, zoom: 14 };
 export const FULL_LOAF_CONFIRMATIONS = 3;
+export * from './pixel';
+export * from './world';
+export * from './landmarks';
+export * from './walking';
+export * from './campus-landmarks';
+export * from './communities';
+export * from './camera';
 
 export function normalizeUfEmail(value: unknown): string | null {
   if (typeof value !== "string") return null;

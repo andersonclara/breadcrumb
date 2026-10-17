@@ -12,7 +12,7 @@ export function EmptyScreen({ title, description }: { title: string; description
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: palette.cream, padding: 28, justifyContent: "center", gap: 16 },
   eyebrow: { color: palette.crust, fontSize: 11, fontWeight: "700", letterSpacing: 2 },
-  title: { color: palette.crust, fontSize: 36, fontWeight: "700" },
+  title: { color: palette.crust,fontFamily:'PressStart2P_400Regular',fontSize:19,lineHeight:34 },
   description: { color: palette.crust, fontSize: 16, lineHeight: 26 },
   note: { color: palette.crust, opacity: 0.6, fontSize: 13, marginTop: 12 },
 });

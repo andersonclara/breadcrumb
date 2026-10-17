@@ -7,7 +7,7 @@ The local scaffold runs without service accounts. Follow these steps together wi
 1. Sign up at https://supabase.com/dashboard and create a project named `breadcrumb`. Choose a region near Florida, such as US East, if offered. Save the database password in your password manager.
 2. Once provisioned, copy the project URL and publishable key from the project's Connect dialog into `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local`.
 3. Copy a server secret key (or legacy service-role key) into `SUPABASE_SERVICE_ROLE_KEY`. This key bypasses RLS and belongs only in server environment variables.
-4. On a **fresh project**, run `supabase/migrations/20261017000100_initial_schema.sql` in SQL Editor. It creates the schema, RLS, Realtime publication entries, UF account restrictions, and moderation triggers. Do not rerun it on an existing schema. If you use SQL Editor, it does not record CLI migration history; baseline this migration before switching to `db push`.
+4. On a **fresh project**, run `supabase/migrations/20261017000100_initial_schema.sql`, then `supabase/migrations/20261017000200_pixel_world.sql` in SQL Editor. They create the schema, RLS, account restrictions, moderation, avatars, friendships, and game RPCs. On the existing project, run only the new pixel-world migration once. If you use SQL Editor, it does not record CLI migration history; baseline these migrations before switching to `db push`.
 5. In Authentication → URL Configuration, set Site URL to `http://localhost:3000` and allow `http://localhost:3000/auth/confirm`. When deployed, replace Site URL with the production URL and allow its `/auth/confirm` URL too.
 6. Enable email sign-in and email confirmations. In **both** Confirm signup and Magic Link email templates, use the contents of `supabase/templates/magic-link.html`. The callback accepts token hashes and PKCE codes, so the login works across devices.
 7. Configure a custom SMTP provider before testing with UF student addresses. Supabase's default email service restricts delivery to project team addresses and is unsuitable for a campus demo. Sender verification may require a domain. We can choose the provider together.
@@ -27,9 +27,9 @@ npx supabase@latest db reset
 
 These commands use `supabase/config.toml` and apply the migration. Copy local API details from CLI output to `.env.local`. Local emails appear at `http://localhost:54324`. `db reset` destroys the local database; do not run it against a remote project. Hosted cron extensions are optional and not part of the core migration.
 
-## 2 Mapbox
+## 2 Optional Mapbox account
 
-Create an account at https://account.mapbox.com and create a public access token. Put it in `NEXT_PUBLIC_MAPBOX_TOKEN`. Allow localhost and your production domains in the token's URL restrictions. This token is intentionally visible to browsers; private Mapbox tokens must never be used here. Restart the dev server to show the UF map. No location permission or location storage is needed for this initial map.
+The current game-like map uses a cached OpenStreetMap dataset and does not need a Mapbox token or Google Maps key. An already configured public Mapbox token can remain in `.env.local` for possible future conventional map views; it is not used by the pixel renderer. See [the pixel-world guide](PIXEL_WORLD.md) for data attribution and location-sharing behavior.
 
 ## 3 Gemini
 

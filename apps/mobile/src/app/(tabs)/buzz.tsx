@@ -1,2 +1,5 @@
-import { EmptyScreen } from "@/components/empty-screen";
-export default function BuzzScreen() { return <EmptyScreen title="A little campus buzz." description="Fresh crumbs and club events will appear here as the community shares them." />; }
+import {ScrollView,Text,View} from 'react-native';
+import {useCampus} from '@/providers/world-provider';
+import {PixelBread} from '@/components/pixel-art';
+import {gameStyles as s} from '@/components/game-ui';
+export default function BuzzScreen(){const {world,error}=useCampus();return <ScrollView style={s.page} contentContainerStyle={s.content}><Text style={s.title}>FRESH FROM{ '\n' }THE OVEN.</Text>{world.crumbs.filter(c=>(c.community_id??'campus')==='campus').length?world.crumbs.filter(c=>(c.community_id??'campus')==='campus').map(c=><View key={c.id} style={{gap:12,borderBottomWidth:2,borderColor:'#C5AE8C',paddingBottom:18}}><View style={s.row}><PixelBread state={c.state}/><Text style={[s.body,{flex:1,fontWeight:'700'}]}>{c.title}</Text></View><Text style={s.body}>{c.description}</Text><Text style={s.label}>{c.confirm_count}/3 CONFIRMATIONS · {c.related_posts} RELATED POSTS</Text></View>):<Text style={s.body}>Nothing in the oven yet. Be the first to drop a crumb on the map.</Text>}{error&&<Text style={s.error}>{error}</Text>}</ScrollView>;}
