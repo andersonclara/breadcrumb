@@ -11,7 +11,7 @@ export const eventQuery=z.object({
 export async function readEvents(db:SupabaseClient,query:z.infer<typeof eventQuery>,now=new Date()) {
   const end=new Date(now.getTime()+query.days*86400000);
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
-  const {data,error}=await db.from('club_events').select('id,source,source_id,title,club,venue_text,starts_at,ends_at,event_date,all_day,url,price_text,tags,last_synced_at')
+  const {data,error}=await db.from('club_events').select('id,source,source_id,title,description,club,venue_text,starts_at,ends_at,event_date,all_day,url,price_text,tags,last_synced_at')
     .eq('ingestion_status','published').or(`ends_at.gt.${now.toISOString()},starts_at.gte.${now.toISOString()},event_date.eq.${today}`).lte('starts_at',end.toISOString())
     .order('starts_at').order('id').range(query.offset,query.offset+query.limit-1);
   dbError(error);

@@ -14,7 +14,7 @@ buildings.forEach((b, index) => {
       if (cell) cell.push(index); else cells.set(key, [index]);
     }
 });
-export function hitTileBuilding(point: { x: number; y: number }) {
+export function hitTileBuilding(point: { x: number; y: number }, simplified = false) {
   const candidates = (cells.get(`${Math.floor(point.x / 4)}:${Math.floor(point.y / 4)}`) ?? [])
     .map(i => buildings[i]).sort((a, b) => b.y - a.y);
   for (const b of candidates) {
@@ -23,6 +23,7 @@ export function hitTileBuilding(point: { x: number; y: number }) {
     const y = (point.y - b.y + b.artHeight) / b.artHeight * mask.height;
     for (const row of mask.rows) {
       if (y < row[0] || y > row[1]) continue;
+      if (simplified && x >= row[2] && x <= row[row.length - 1]) return b;
       for (let i = 2; i < row.length; i += 2) if (x >= row[i] && x <= row[i + 1]) return b;
     }
   }

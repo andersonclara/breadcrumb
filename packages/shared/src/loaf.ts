@@ -9,12 +9,13 @@ const median=(values:number[])=>{const s=[...values].sort((a,b)=>a-b),m=Math.flo
 // cutAt is where the knife went (median x). It is also returned for a full cut in the wrong spot,
 // so the slicers can split the loaf there and show the miss.
 export function checkSliceGesture(cut:number,trace:unknown):{ok:true;cutAt:number}|{ok:false;reason:SliceFailure;cutAt?:number}{
- if(!Array.isArray(trace)||trace.length<8||trace.length>400)return {ok:false,reason:'points'};
+ // Fast mobile swipes can deliver only a few move events plus touch-down and release.
+ if(!Array.isArray(trace)||trace.length<4||trace.length>400)return {ok:false,reason:'points'};
  const points=trace as SlicePoint[];
  if(!points.every(p=>p&&[p.x,p.y,p.t].every(Number.isFinite)&&p.x>=-0.2&&p.x<=1.2&&p.y>=-0.2&&p.y<=1.2))return {ok:false,reason:'points'};
  for(let i=1;i<points.length;i++)if(points[i].t<=points[i-1].t)return {ok:false,reason:'time'};
  const duration=points[points.length-1].t-points[0].t;
- if(duration<250||duration>15000)return {ok:false,reason:'speed'};
+ if(duration<100||duration>15000)return {ok:false,reason:'speed'};
  const ys=points.map(p=>p.y);
  if(Math.min(...ys)>0.15||Math.max(...ys)<0.85)return {ok:false,reason:'partial'};
  const xs=points.map(p=>p.x),cutAt=Math.min(0.98,Math.max(0.02,median(xs)));

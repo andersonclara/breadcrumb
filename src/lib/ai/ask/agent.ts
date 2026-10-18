@@ -32,7 +32,7 @@ export async function ask(request:AskRequest,deps:AskDependencies,signal:AbortSi
   }
   function response(status:AskResponse['status'],answer:string,cards:DiscoveryRecord[]=[],followUps:string[]=[]):AskResponse {
     return {status,answer,cards,appliedConstraints:{...constraints,window,origin},
-      context:{constraints,results:cards.map(({id,kind})=>({id,kind})),referencePlace:constraints.nearPlace},
+      context:{constraints,results:status==='clarification'?(request.context?.results??[]):cards.map(({id,kind})=>({id,kind})),referencePlace:constraints.nearPlace},
       suggestedFollowUps:followUps,dataFreshnessNote:freshness};
   }
   if(intent.action==='unsupported')return response('unsupported',intent.clarification??'I can help discover published campus events and fresh public Crumbs.');
@@ -48,9 +48,17 @@ export async function ask(request:AskRequest,deps:AskDependencies,signal:AbortSi
     else return response('clarification',matches.length?`Which place do you mean: ${matches.map(p=>p.name).join(', ')}?`:`I couldn't resolve “${constraints.nearPlace}” to a known campus location. Try Reitz, Marston, or Library West.`);
   }
   const comparison=intent.action==='compare';
+  const details=intent.action==='details';
+  let refs=comparison?request.context:undefined;
+  if(details) {
+    const prior=request.context?.results ?? [];
+    const selected=intent.resultIndex?prior[intent.resultIndex-1]:prior.length===1?prior[0]:null;
+    if(!selected)return response('clarification',prior.length?'Which result would you like to hear more about? Choose its number.':'Find some events first, then ask about one of the results.');
+    refs={constraints,results:[selected],referencePlace:constraints.nearPlace};
+  }
   if(comparison&&!request.context?.results.length)return response('clarification','Run a discovery search first so I can compare its results.');
   if(comparison&&!origin)return response('clarification','Which campus place should I use to compare distances?');
-  const records=rankRecords(await deps.search(constraints,window,origin,comparison?request.context:undefined));
+  const records=rankRecords(await deps.search(constraints,window,origin,refs),constraints.terms);
   if(!records.length)return response('no_results',"I couldn't find matching records in our current data. That doesn't mean nothing is happening. You can broaden the search below.",[],[
     ...(constraints.nearPlace||constraints.useUserLocation?['Search across campus']:[]),
     ...(constraints.time.period!=='next7days'?['Show upcoming events this week']:[]),
@@ -62,7 +70,7 @@ export async function ask(request:AskRequest,deps:AskDependencies,signal:AbortSi
   try {if(!comparison)explanation=await deps.explain(request.message,constraints,records,signal);}catch {
     if(signal.aborted)throw new Error('ask_timeout');
   }
-  const current=rankRecords(await deps.search(constraints,window,origin,{constraints,results:records.map(({id,kind})=>({id,kind})),referencePlace:constraints.nearPlace}));
+  const current=rankRecords(await deps.search(constraints,window,origin,{constraints,results:records.map(({id,kind})=>({id,kind})),referencePlace:constraints.nearPlace}),constraints.terms);
   if(!current.length)return response('no_results','Those records are no longer available under this search. Try searching again.');
   if(comparison) {
     const nearest=current[0];

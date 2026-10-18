@@ -3,6 +3,7 @@ import {load} from 'cheerio';
 
 export type EventInput = {
   id: string; title: string; url: string; description?: string | null;
+  summary?: string | null;
   start?: string | null; end?: string | null; timezone?: string | null;
   allDay?: boolean; cancelled?: boolean; recurring?: boolean; venue?: string | null;
   organizer?: string | null; price?: string | null; tags?: string[];
@@ -95,7 +96,7 @@ export function normalizeEvent(input: EventInput, source: string, now = new Date
   if (!title || !url || !start) return {event: null, issues};
   return {issues, event: {
     source, source_id: input.id, title, url, club: text(input.organizer, 180) || null,
-    description: null, // Store facts and source links; do not republish full publisher descriptions.
+    description: text(input.summary,600) || null, // Only a reviewed factual summary; never a raw publisher description.
     venue_text: text(input.venue, 280) || null, starts_at: start, ends_at: end,
     event_date: allDay && day ? day : localDay(new Date(start)), all_day: allDay,
     price_text: text(input.price, 160) || null, tags: (input.tags ?? []).map(t => text(t, 80)).filter(Boolean).slice(0, 20),

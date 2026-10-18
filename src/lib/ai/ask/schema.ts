@@ -29,7 +29,8 @@ export type AskRequest=z.infer<typeof askRequestSchema>;
 
 // Null patch values mean KEEP, not clear. Reset is an explicit separate action.
 export const intentSchema=z.object({
-  action:z.enum(['search','refine','compare','reset','clarify','unsupported']),
+  action:z.enum(['search','refine','compare','details','reset','clarify','unsupported']),
+  resultIndex:z.number().int().min(1).max(4).nullable().optional(),
   clearLocation:z.boolean(),
   clarification:z.string().max(300).nullable(),
   patch:z.object({

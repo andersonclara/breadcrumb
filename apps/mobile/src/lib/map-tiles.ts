@@ -28,14 +28,34 @@ function atLevel(level: number, camera: MapCamera, size: MapSize): MapTile[] {
   return result.sort((a, b) => Math.hypot(a.left + span / 2 - camera.x, a.top + span / 2 - camera.y) -
     Math.hypot(b.left + span / 2 - camera.x, b.top + span / 2 - camera.y));
 }
-export function visibleMapTiles(camera: MapCamera, size: MapSize, density = 2, maxLevel = MAX_TILE_LEVEL): MapTile[] {
+export function mapTileLevel(camera: MapCamera, size: MapSize, density = 2, maxLevel = MAX_TILE_LEVEL) {
+  'worklet';
   // Floor avoids decoding four times as many textures for a tiny zoom change.
   // Source pixels intentionally enlarge at close zoom to retain pixel artwork.
-  let level = Math.max(0, Math.min(maxLevel, MAX_TILE_LEVEL,
+  return Math.max(0, Math.min(maxLevel, MAX_TILE_LEVEL,
     Math.floor(Math.log2(Math.max(size.width, size.height, 1) * camera.zoom * density / TILE_PIXELS))));
+}
+export function visibleMapTiles(camera: MapCamera, size: MapSize, density = 2, maxLevel = MAX_TILE_LEVEL): MapTile[] {
+  let level = mapTileLevel(camera, size, density, maxLevel);
   let tiles = atLevel(level, camera, size);
   while (tiles.length > MAX_VISIBLE_TILES && level > 0) tiles = atLevel(--level, camera, size);
   return tiles;
+}
+export function mapTileOpacity(level: number, camera: MapCamera, size: MapSize) {
+  'worklet';
+  if (level > mapTileLevel(camera, size)) return 0;
+  // Reveal close-up artwork over its simpler parent as the user zooms in.
+  // Zooming out hides cached detail immediately on UI, before React refreshes the scene.
+  if (level === MAX_TILE_LEVEL) {
+    const resolution = Math.max(size.width, size.height, 1) * camera.zoom * 2 / TILE_PIXELS;
+    return Math.max(0, Math.min(1, (Math.log2(resolution) - MAX_TILE_LEVEL) * 3));
+  }
+  return 1;
+}
+export function cachedMapTiles<T>(entries: { key: string; value: T }[], camera: MapCamera, size: MapSize, level: number) {
+  return entries.map(entry => ({ ...entry, tile: tileFromKey(entry.key) }))
+    .filter(entry => entry.tile.level <= level && (entry.key === OVERVIEW_TILE || tileIntersectsView(entry.tile, camera, size)))
+    .sort((a, b) => a.tile.level - b.tile.level);
 }
 export function wantedMapTiles(tiles: MapTile[]): string[] {
   const parents = tiles.filter(t => t.level > 0).map(t => `${t.level - 1}/${Math.floor(t.x / 2)}/${Math.floor(t.y / 2)}`);

@@ -21,6 +21,25 @@ let deps:AskDependencies;
 beforeEach(()=>{deps={interpret:vi.fn().mockResolvedValue(intent()),explain:vi.fn().mockResolvedValue({answer:'There is a matching workshop.',citations:[{kind:'event',id}]}),places:vi.fn().mockResolvedValue([place]),search:vi.fn().mockResolvedValue([record])};});
 
 describe('Ask search context and grounding',()=>{
+  it('retrieves only the selected prior result for a details follow-up',async()=>{
+    vi.mocked(deps.interpret).mockResolvedValue({...intent({},'details'),resultIndex:2});
+    const context={constraints:defaultConstraints,results:[{kind:'event' as const,id:other},{kind:'event' as const,id}],referencePlace:null};
+    const result=await ask({message:'Tell me more about the second one',context},deps,signal,now);
+    expect(result.status).toBe('results');
+    expect(deps.search).toHaveBeenNthCalledWith(1,defaultConstraints,expect.anything(),null,expect.objectContaining({results:[{kind:'event',id}]}));
+  });
+  it('clarifies an ambiguous or out-of-range result reference without searching',async()=>{
+    vi.mocked(deps.interpret).mockResolvedValue({...intent({},'details'),resultIndex:3});
+    const result=await ask({message:'Tell me about the third one',context:{constraints:defaultConstraints,results:[{kind:'event',id}],referencePlace:null}},deps,signal,now);
+    expect(result.status).toBe('clarification');expect(deps.search).not.toHaveBeenCalled();
+    expect(result.context.results).toEqual([{kind:'event',id}]);
+  });
+  it('does not answer details about a record removed from public retrieval',async()=>{
+    vi.mocked(deps.interpret).mockResolvedValue({...intent({},'details'),resultIndex:1});
+    vi.mocked(deps.search).mockResolvedValue([]);
+    const result=await ask({message:'Is the first one free?',context:{constraints:defaultConstraints,results:[{kind:'event',id}],referencePlace:null}},deps,signal,now);
+    expect(result.status).toBe('no_results');expect(deps.explain).not.toHaveBeenCalled();
+  });
   it('preserves time/location/interests on a free-only follow-up',()=>{
     const previous={...defaultConstraints,time:{period:'tonight' as const,date:null},nearPlace:'Reitz',terms:['coding']};
     expect(mergeConstraints(previous,intent({freeOnly:true},'refine'))).toEqual({...previous,freeOnly:true});

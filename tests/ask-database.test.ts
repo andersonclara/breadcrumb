@@ -23,7 +23,7 @@ beforeAll(async()=>{
    create function extensions.st_dwithin(point,point,double precision) returns boolean language sql immutable as $$select extensions.st_distance($1,$2)<=$3$$;
    grant usage on schema extensions to anon,authenticated;
   `);
-  for(const name of ['20261017000200_pixel_world','20261017000300_expanded_campus','20261017000400_communities','20261017000500_custom_communities','20261017183922_event_ingestion','20261017185639_ask_backend']) {
+  for(const name of ['20261017000200_pixel_world','20261017000300_expanded_campus','20261017000400_communities','20261017000500_custom_communities','20261017183922_event_ingestion','20261017185639_ask_backend','20261018010000_ask_discovery_quality']) {
     await db.exec(migration(name).replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
   }
 });
@@ -48,6 +48,19 @@ async function crumb(patch:Record<string,unknown>={}) {
   const keys=Object.keys(values);await db.query(`insert into public.crumbs(${keys.join(',')}) values(${keys.map((_,i)=>`$${i+1}`).join(',')})`,Object.values(values));return values.id;
 }
 describe('Ask SQL retrieval and isolation',()=>{
+  it('ranks relevant titles before the retrieval limit rather than losing them to earlier events',async()=>{
+    for(let i=0;i<22;i++)await event({title:'Campus event',tags:['music'],starts_at:new Date(Date.now()+100000+i*1000).toISOString()});
+    const best=await event({title:'Music music music workshop',starts_at:new Date(Date.now()+8000000).toISOString()});
+    const rows=await search('events',filters({terms:['music']}));
+    expect(rows).toHaveLength(20);expect(rows[0].id).toBe(best);
+  });
+  it('resolves explicit room suffixes on known venues but leaves Plaza unknown',async()=>{
+    const known=await event({venue_text:'Communicore (C1-007)'});
+    const vague=await event({venue_text:'Plaza'});
+    const rows=await search('events');
+    expect(rows.find(r=>r.id===known)?.latitude).not.toBeNull();
+    expect(rows.find(r=>r.id===vague)?.latitude).toBeNull();
+  });
   it('resolves canonical aliases without giving the model guessed coordinates',async()=>{
     await db.exec('set role anon');
     try {const rows=(await db.query<{rows:{name:string;latitude:number}[]}>("select public.ask_places('Lib West') as rows")).rows[0].rows;expect(rows).toHaveLength(1);expect(rows[0].name).toBe('Library West');}

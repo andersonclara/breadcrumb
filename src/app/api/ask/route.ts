@@ -29,6 +29,9 @@ async function post(request:Request) {
     return Response.json(await ask(parsed.data,{interpret,explain,...search},signal),{headers});
   } catch(error) {
     if(error instanceof Response)return Response.json({error:await error.text()},{status:error.status,headers:{...headers,...Object.fromEntries(error.headers)}});
+    // Record only a bounded internal code, never prompts, provider bodies or keys.
+    console.warn('ask_request_failed',{code:error instanceof Error&&/^ask_[a-z0-9_]+$/.test(error.message)?error.message:'ask_unavailable'});
+    if(error instanceof Error&&error.message==='ask_groq_unavailable_429')return Response.json({error:'The AI service is busy. Please retry in a minute.'},{status:503,headers:{...headers,'Retry-After':'60'}});
     return Response.json({error:'Ask Breadcrumb is temporarily unavailable. Please try again.'},{status:503,headers});
   }
 }

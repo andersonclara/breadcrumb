@@ -25,12 +25,16 @@ describe('BreadPass loaf slice check',()=>{
   expect(checkSlice(secret,challenge,handTrace(cut),now+121_000)).toEqual({ok:false,reason:'expired'});
   expect(checkSlice(secret,undefined,handTrace(cut),now)).toEqual({ok:false,reason:'missing'});
  });
+ it('accepts a short mobile swipe using the same rules as the client',()=>{
+  const {challenge,cut}=createLoafChallenge(secret,now);
+  expect(checkSlice(secret,challenge,handTrace(cut,{points:4,duration:140}),now)).toEqual({ok:true});
+ });
  it('rejects cuts in the wrong place, partial cuts, and impossible speeds',()=>{
   const fresh=()=>createLoafChallenge(secret,now);
   let c=fresh();expect(checkSlice(secret,c.challenge,handTrace(c.cut>0.5?0.1:0.9),now)).toEqual({ok:false,reason:'position'});
   c=fresh();expect(checkSlice(secret,c.challenge,handTrace(c.cut,{to:0.5}),now)).toEqual({ok:false,reason:'partial'});
   c=fresh();expect(checkSlice(secret,c.challenge,handTrace(c.cut,{duration:60}),now)).toEqual({ok:false,reason:'speed'});
-  c=fresh();expect(checkSlice(secret,c.challenge,handTrace(c.cut,{points:4}),now)).toEqual({ok:false,reason:'points'});
+  c=fresh();expect(checkSlice(secret,c.challenge,handTrace(c.cut,{points:3}),now)).toEqual({ok:false,reason:'points'});
  });
  it('rejects a perfectly straight, constant-speed scripted line',()=>{
   const {challenge,cut}=createLoafChallenge(secret,now);

@@ -31,11 +31,16 @@ export function createSearch(db:SupabaseClient,signal:AbortSignal) {
     },
   };
 }
-export function rankRecords(records:DiscoveryRecord[]) {
+export function rankRecords(records:DiscoveryRecord[],terms:string[]=[]) {
   // Deterministic order: proximity if known, then fresh/corroborated reports,
   // then upcoming starts. Duplicate announcements retain separate storage.
   const sorted=[...records].sort((a,b)=>{
     if(a.distanceMeters!==null&&b.distanceMeters!==null&&a.distanceMeters!==b.distanceMeters)return a.distanceMeters-b.distanceMeters;
+    const relevance=(r:DiscoveryRecord)=>terms.reduce((score,term)=>{
+      const words=term.toLowerCase().split(/\s+/).filter(Boolean);
+      return score+words.reduce((sum,word)=>sum+(r.title.toLowerCase().includes(word)?3:0)+(r.description?.toLowerCase().includes(word)?1:0),0);
+    },0);
+    if(relevance(a)!==relevance(b))return relevance(b)-relevance(a);
     const score=(r:DiscoveryRecord)=>r.kind==='crumb'?Math.min(r.confirmCount,3)-r.disputeCount:0;
     const timeOrder=a.kind===b.kind?(a.kind==='crumb'
       ?Date.parse(b.createdAt??'')-Date.parse(a.createdAt??'')

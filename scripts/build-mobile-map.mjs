@@ -8,9 +8,19 @@ import { buildingArt } from '../packages/shared/src/building-art.ts';
 import { identifyLandmark, campusLandmarkSprites } from '../packages/shared/src/campus-landmarks.ts';
 import { canopyArt, frenchFriesArt } from '../packages/shared/src/landscape-art.ts';
 import { groundMaterials } from '../packages/shared/src/ground-materials.ts';
+import { MAP_STYLE_VERSION, mapDetail, silhouettePath, simpleSprite } from './mobile-map-style.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const source = await fs.readFile(path.join(root, 'packages/shared/src/campus-map.json'));
+const geometryHash = createHash('sha256').update(source).digest('hex');
+// Explicit migration mode for changes confined to overview styling. A changed
+// campus source must always rebuild the detailed artwork too.
+const reuseDetail = process.argv.includes('--reuse-detail');
+if (reuseDetail) {
+  const previous = await fs.readFile(path.join(root, 'apps/mobile/src/generated/map-assets.ts'), 'utf8');
+  if (!previous.includes(`"geometryHash":"${geometryHash}"`) && !previous.includes(`"version":1,"sourceHash":"${geometryHash}"`))
+    throw new Error('Campus geometry changed. Rebuild without --reuse-detail.');
+}
 const campus = JSON.parse(source);
 const output = path.join(root, 'apps/mobile/assets/campus');
 const generated = path.join(root, 'apps/mobile/src/generated');
@@ -69,14 +79,23 @@ const sprites = campus.buildings.map((b, index) => {
 });
 const hitBuildings = sprites.map(b => ({ index: b.index, width: round(b.width), artHeight: round(b.height), mask: b.mask, landmark: b.landmark }));
 const treeArt = [0, 1, 2].map(canopyArt);
-for (const tree of campus.trees) sprites.push({ x: tree.x, y: tree.y, width: 1.05, height: 1.05, art: treeArt[tree.variant] });
+for (const tree of campus.trees) sprites.push({ x: tree.x, y: tree.y, width: 1.05, height: 1.05, art: treeArt[tree.variant], tree: true });
 const marston = campus.buildings.find(b => b.name === 'Marston Science Library');
 if (marston) sprites.push({ x: marston.x - marston.width / 2 - .6, y: marston.y - .3,
   width: 15.24 / campus.metersPerUnit, height: 1.2, art: frenchFriesArt() });
 sprites.sort((a, b) => a.y - b.y);
+const artMasks = new WeakMap(), outlines = new Map();
 for (const b of sprites) {
   b.bounds = { left: b.x - b.width / 2, right: b.x + b.width / 2, top: b.y - b.height, bottom: b.y };
   b.svg = `<g transform="translate(${b.x - b.width / 2} ${b.y - b.height}) scale(${b.width / b.art.width} ${b.height / b.art.height})">${rects(b.art)}</g>`;
+  if (b.index === undefined && !b.tree) { b.overview = ''; b.blocks = ''; continue; }
+  const maskId = b.mask ?? artMasks.get(b.art) ?? maskFor(b.art);
+  artMasks.set(b.art, maskId);
+  if (!outlines.has(maskId)) outlines.set(maskId, silhouettePath(masks[maskId].rows));
+  const outline = outlines.get(maskId);
+  const simple = level => `<g transform="translate(${b.x - b.width / 2} ${b.y - b.height}) scale(${b.width / b.art.width} ${b.height / b.art.height})">${simpleSprite(outline, b.landmark, level, b.tree)}</g>`;
+  b.overview = b.tree || b.index === undefined ? '' : simple(0);
+  b.blocks = b.index === undefined && !b.tree ? '' : simple(3);
 }
 const defs = Object.entries(groundMaterials).map(([id, m]) => `<pattern id="g-${id}" width="${m.size}" height="${m.size}" patternUnits="userSpaceOnUse"><rect width="${m.size}" height="${m.size}" fill="${m.color}"/><path d="${m.path}" fill="${m.detail}"/></pattern>`).join('');
 const catalog = { size: campus.size, bounds: campus.bounds, colors: campus.colors, metersPerUnit: campus.metersPerUnit,
@@ -93,6 +112,15 @@ for (let level = 0; level <= maxLevel; level++) {
   const count = 2 ** level, span = campus.size / count, pad = span * bleed / tilePixels;
   const tasks = [];
   for (let y = 0; y < count; y++) for (let x = 0; x < count; x++) tasks.push({ x, y });
+  if (reuseDetail && level === maxLevel) {
+    for (const { x, y } of tasks) {
+      const name = `${level}-${x}-${y}.png`;
+      totalBytes += (await fs.stat(path.join(output, name))).size;
+      assets.push({ key: `${level}/${x}/${y}`, name });
+    }
+    console.log(`Retained ${tasks.length} unchanged close-up tiles`);
+    continue;
+  }
   let cursor = 0;
   await Promise.all(Array.from({ length: 4 }, async () => {
     while (cursor < tasks.length) {
@@ -100,20 +128,25 @@ for (let level = 0; level <= maxLevel; level++) {
       const view = { left, top, right: (x + 1) * span + pad, bottom: (y + 1) * span + pad };
       const features = terrain.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="${campus.colors[p.color]}"/>`).join('') +
         roads.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#C4B594" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
-        walks.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#FFE7B1" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
-        campus.surfaces.filter(p => intersects(p, view)).map(p => `<path d="${p.path}" fill="${level < 3 ? (groundMaterials[p.material] ?? groundMaterials.unknown).color : `url(#g-${p.material in groundMaterials ? p.material : 'unknown'})`}" fill-rule="evenodd"/>`).join('') +
-        sprites.filter(b => intersects(b.bounds, view)).map(b => b.svg).join('');
+        walks.filter(p => (level >= 3 || p.width >= .2) && intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#FFE7B1" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
+        campus.surfaces.filter(p => intersects(p, view)).map(p => `<path d="${p.path}" fill="${level < 5 ? (groundMaterials[p.material] ?? groundMaterials.unknown).color : `url(#g-${p.material in groundMaterials ? p.material : 'unknown'})`}" fill-rule="evenodd"/>`).join('') +
+        sprites.filter(b => intersects(b.bounds, view)).map(b => mapDetail(level) === 'detail' ? b.svg : level < 3 ? b.overview : b.blocks).join('');
       const pixels = tilePixels + bleed * 2;
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pixels}" height="${pixels}" viewBox="${left} ${top} ${span + pad * 2} ${span + pad * 2}" shape-rendering="crispEdges"><defs>${defs}</defs><rect x="${left}" y="${top}" width="${span + pad * 2}" height="${span + pad * 2}" fill="${campus.colors[0]}"/>${features}</svg>`;
       const name = `${level}-${x}-${y}.png`;
       const png = await sharp(Buffer.from(svg), { limitInputPixels: false }).png({ palette: true, colours: 256 }).toBuffer();
-      await fs.writeFile(path.join(output, name), png);
+      const destination = path.join(output, name);
+      const previous = await fs.readFile(destination).catch(() => null);
+      // Avoid repeatedly invalidating a running Metro server for identical assets.
+      if (!previous?.equals(png)) await fs.writeFile(destination, png);
       totalBytes += png.length; assets.push({ key: `${level}/${x}/${y}`, name });
     }
   }));
   console.log(`Compiled map level ${level}: ${count * count} tiles`);
 }
 assets.sort((a, b) => a.key.localeCompare(b.key));
-const hash = createHash('sha256').update(source).digest('hex');
-await fs.writeFile(path.join(generated, 'map-assets.ts'), `/* Generated by npm run map:mobile. Asset references do not decode images. */\nexport const mapAssetInfo = ${JSON.stringify({ version: 1, sourceHash: hash, tilePixels, bleed, maxLevel, tileCount: assets.length, encodedBytes: totalBytes })} as const;\nexport const mapAssets: Record<string, number> = {\n${assets.map(a => `  "${a.key}": require("../../assets/campus/${a.name}"),`).join('\n')}\n};\n`);
+const hash = createHash('sha256').update(source)
+  .update(await fs.readFile(new URL('./build-mobile-map.mjs', import.meta.url)))
+  .update(await fs.readFile(new URL('./mobile-map-style.mjs', import.meta.url))).digest('hex');
+await fs.writeFile(path.join(generated, 'map-assets.ts'), `/* Generated by npm run map:mobile. Asset references do not decode images. */\nexport const mapAssetInfo = ${JSON.stringify({ version: MAP_STYLE_VERSION, sourceHash: hash, geometryHash, tilePixels, bleed, maxLevel, tileCount: assets.length, encodedBytes: totalBytes })} as const;\nexport const mapAssets: Record<string, number> = {\n${assets.map(a => `  "${a.key}": require("../../assets/campus/${a.name}"),`).join('\n')}\n};\n`);
 console.log(`Built ${assets.length} tiles (${(totalBytes / 1048576).toFixed(1)} MiB), ${masks.length} shared hit masks.`);

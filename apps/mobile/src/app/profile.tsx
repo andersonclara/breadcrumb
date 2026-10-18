@@ -69,11 +69,12 @@ export default function ProfileScreen() {
             </GameButton>
           </>
         ) : !c.world.profile ? (
-          <>
+          c.loading || c.refreshing ? <View style={[s.row, { paddingVertical: 24 }]}>
+            <ActivityIndicator/>
+            <Text accessibilityLiveRegion="polite" style={s.body}>Loading your profile...</Text>
+          </View> : <>
             <Text style={s.body}>
-              {c.loading
-                ? "Loading your profile?"
-                : "Your profile could not load."}
+              Your profile could not load.
             </Text>
             <Feedback error message={c.error} />
             <GameButton variant="secondary" onPress={() => void c.refresh()}>

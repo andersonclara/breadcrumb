@@ -45,7 +45,7 @@ const Context = createContext<{
   actionError: "",
   loading: false,
   refreshing: false,
-  refresh: async () => {},
+  refresh: async () => undefined,
   pending: false,
   isPending: () => false,
   sharing: false,

@@ -34,8 +34,10 @@ export function panCamera(
   const s = 320 / camera.zoom / Math.max(size.width, size.height);
   return {
     ...camera,
-    x: Math.max(0, Math.min(320, camera.x - delta.x * s)),
-    y: Math.max(0, Math.min(320, camera.y - delta.y * s)),
+    // Pinching around an edge can legitimately leave the center outside campus.
+    // Let a subsequent drag bring it back gradually rather than snapping to the edge.
+    x: Math.max(Math.min(0, camera.x), Math.min(Math.max(320, camera.x), camera.x - delta.x * s)),
+    y: Math.max(Math.min(0, camera.y), Math.min(Math.max(320, camera.y), camera.y - delta.y * s)),
   };
 }
 export function zoomCamera(

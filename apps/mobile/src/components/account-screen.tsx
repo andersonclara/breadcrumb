@@ -27,6 +27,7 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [pending, setPending] = useState(false);
+  const [entering, setEntering] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [slice, setSlice] = useState<LoafSlice | null>(null);
@@ -37,6 +38,7 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
 
   async function enterCampus() {
     if (!supabase) return;
+    setEntering(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !normalizeUfEmail(user.email) || !user.email_confirmed_at) {
       await supabase.auth.signOut({ scope: "local" });
@@ -55,7 +57,7 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
     setMessage("");
     setSuccess(false);
     try { await action(); }
-    catch (e) { setMessage(e instanceof Error ? e.message : "Could not connect. Please retry."); }
+    catch (e) { setEntering(false); setMessage(e instanceof Error ? e.message : "Could not connect. Please retry."); }
     finally { lock.current = false; setPending(false); }
   }
 
@@ -81,6 +83,9 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
       if (signup) setSliceRetry(n => n + 1);
       const result = await response.json();
       if (!response.ok || !result.session) throw new Error(result.error ?? "Account services are unavailable. Please retry.");
+      // Auth listeners fire before setSession resolves. Keep the handoff visible
+      // instead of briefly rendering the signed-in account menu underneath it.
+      setEntering(true);
       const { error } = await client.auth.setSession(result.session);
       if (error) throw new Error("Could not save your session. Please sign in.");
       setPassword("");
@@ -102,6 +107,11 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
     });
   }
 
+  if (entering) return <View style={[s.page, { alignItems: "center", justifyContent: "center", gap: 12 }]}>
+    <ActivityIndicator color={t.ink}/>
+    <Text accessibilityLiveRegion="polite" style={styles.description}>{signup ? "Opening your profile..." : "Signing you in..."}</Text>
+  </View>;
+
   return (
     <KeyboardAvoidingView style={s.page} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView
@@ -109,11 +119,11 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
         scrollEnabled={!slicing} canCancelContentTouches={false}
       >
-        <View style={[styles.hero, signup && styles.signupHero, compact && styles.compactHero]}>
-          <ToastLogo size={session ? 96 : height < 500 ? 96 : signup ? 132 : compact ? 152 : 168} centered/>
+        {!signup && <View style={[styles.hero, compact && styles.compactHero]}>
+          <ToastLogo size={session ? 96 : height < 500 ? 96 : compact ? 152 : 168} centered/>
           <Text style={styles.wordmark}>breadcrumb</Text>
           <Text style={styles.tagline}>Leave a crumb. Spread the word.</Text>
-        </View>
+        </View>}
         {session ? <View style={styles.form}>
           <Text style={s.title}>Welcome back.</Text>
           <GameButton loading={pending} onPress={() => void run(enterCampus)}>Continue to campus</GameButton>
@@ -160,7 +170,7 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
               <Text style={styles.link}>Forgot password?</Text>
             </Pressable>}
           <Feedback error={!success} message={message || error || (!supabase ? "Sign-in is unavailable. Please try again later." : "")}/>
-          <View style={[styles.buttonBase, disabled && styles.disabled]}>
+          <View style={[styles.buttonBase, signup && styles.signupButtonBase, disabled && styles.disabled]}>
             <Pressable accessibilityRole="button" accessibilityState={{ disabled, busy: pending }} disabled={disabled}
               onPress={() => void submit()} style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}>
               {pending && <ActivityIndicator color={t.ink}/>}
@@ -187,7 +197,6 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
 const styles = StyleSheet.create({
   content: { flexGrow: 1, width: "100%", maxWidth: 440, alignSelf: "center", paddingHorizontal: 28 },
   hero: { alignItems: "center", paddingTop: 8, paddingBottom: 36, gap: 14 },
-  signupHero: { paddingBottom: 28, gap: 12 },
   compactHero: { paddingTop: 0, paddingBottom: 24, gap: 10 },
   wordmark: { fontFamily: "PressStart2P_400Regular", fontSize: 22, lineHeight: 32, color: t.ink, textAlign: "center" },
   tagline: { fontSize: 14, lineHeight: 22, color: t.muted, textAlign: "center" },
@@ -206,6 +215,7 @@ const styles = StyleSheet.create({
   forgotButton: { alignSelf: "flex-end", minHeight: 44, justifyContent: "center", marginTop: -16, paddingHorizontal: 2 },
   link: { color: t.ink, fontSize: 14, lineHeight: 22, fontWeight: "600", textDecorationLine: "underline" },
   buttonBase: { backgroundColor: t.ink, borderRadius: 6, paddingBottom: 4, marginTop: 4 },
+  signupButtonBase: { marginTop: -12 },
   primaryButton: { minHeight: 58, paddingHorizontal: 16, paddingVertical: 16, borderWidth: 2, borderColor: t.ink, borderRadius: 6, backgroundColor: t.toast, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 12 },
   primaryLabel: { color: t.ink, fontSize: 17, lineHeight: 24, fontWeight: "700" },
   buttonPressed: { transform: [{ translateY: 3 }] },

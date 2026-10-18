@@ -42,6 +42,14 @@ async function groqJSON(model:string,instruction:string,data:unknown,schema:unkn
 export async function generateAskJSON<T>(schema:z.ZodType<T>,instruction:string,data:unknown,signal:AbortSignal,maxOutputTokens:number):Promise<T> {
   const config=getAskModelConfig();if(!config)throw new Error('ask_model_unconfigured');
   const jsonSchema=z.toJSONSchema(schema);
+  // Strict providers require even nullable/optional properties in required.
+  function requireProperties(node:unknown) {
+    if(!node||typeof node!=='object')return;
+    const value=node as Record<string,unknown>;
+    if(value.properties&&typeof value.properties==='object')value.required=Object.keys(value.properties);
+    for(const child of Object.values(value))if(Array.isArray(child))child.forEach(requireProperties);else requireProperties(child);
+  }
+  requireProperties(jsonSchema);
   let content:string;
   if(config.provider==='groq')content=await groqJSON(config.model,instruction,data,jsonSchema,signal,maxOutputTokens);
   else {

@@ -25,6 +25,10 @@ it.skipIf(process.env.ASK_HOSTED_SMOKE!=='1')('runs the real Ask route with host
     const row=data?.find(r=>r.id===card.id);expect(row).toBeDefined();expect(row?.ingestion_status).toBe('published');
     expect(card.sourceUrl).toBe(publicSourceUrl(row!.url));expect(card.kind).toBe('event');
   }
+  const details=await request({message:'Tell me more about the first result.',context:first.context});
+  expect(details.status).toBe('results');expect(details.cards).toHaveLength(1);
+  expect(details.cards[0].id).toBe(first.cards[0].id);
+  expect(details.appliedConstraints.time).toEqual(first.appliedConstraints.time);
   const followUp=await request({message:'Only free ones',context:first.context});
   expect(['results','no_results']).toContain(followUp.status);expect(followUp.appliedConstraints.freeOnly).toBe(true);
   expect(followUp.appliedConstraints.kind).toBe(first.appliedConstraints.kind);
