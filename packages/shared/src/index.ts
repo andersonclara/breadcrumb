@@ -20,6 +20,7 @@ export * from './toast-status';
 export * from './post-recipe';
 export * from './post-location';
 export * from './discovery';
+export * from './category-icons';
 export * from './demo';
 
 export * from './loaf';

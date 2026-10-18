@@ -11,6 +11,7 @@ import {
 import { useExplore } from "@/providers/explore-provider";
 import { useCampus } from "@/providers/world-provider";
 import { Chip, GameButton, useGameStyles } from "./game-ui";
+import { PixelIcon } from "./pixel-art";
 import { useTheme } from "@/lib/theme-context";
 import { isDarkTheme } from "@/lib/map-ui-theme";
 export function CrumbComposer({
@@ -72,6 +73,7 @@ export function CrumbComposer({
             key={c.id}
             label={c.label}
             selected={draft.category === c.id}
+            icon={<PixelIcon name={c.id} size={18} />}
             onPress={() =>
               setDraft((d) => ({ ...d, category: c.id as CrumbCategory }))
             }

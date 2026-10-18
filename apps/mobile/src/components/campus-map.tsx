@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useRef, useLayoutEffect, useState, type Pro
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
-import Svg, { Defs, RadialGradient, Stop, G, Path, Circle, Text as SvgText } from "react-native-svg";
+import Svg, { Defs, RadialGradient, Stop, G, Circle, Text as SvgText } from "react-native-svg";
 import {
   campus, toWorld, fromWorld, inCampus,
   type MapCamera, type MapSize, type MapBuilding, type Coordinate, type World, type DiscoveryRecord,
@@ -14,7 +14,7 @@ import { overlayPosition } from "@/lib/map-viewport";
 import { mapTileLevel, tileBounds } from "@/lib/map-tiles";
 import { useMapCamera } from "@/lib/use-map-camera";
 import { CampusTiles } from "./campus-tiles";
-import { BreadGlyph, PixelAvatar } from "./pixel-art";
+import { DiscoveryGlyph, PixelAvatar } from "./pixel-art";
 import { Icon } from "./icon";
 import { PixelFrame } from "./pixel-frame";
 import { theme, type Theme } from "@/lib/theme";
@@ -156,8 +156,7 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
           <Svg width={48} height={48} viewBox="-24 -24 48 48">
             <Circle r={22} fill={t.surface} stroke={t.ink} strokeWidth={1.5} />
             {g.records.length > 1 ? <SvgText fontSize={16} fontWeight="bold" fill={t.ink} textAnchor="middle" y={6}>{g.records.length}</SvgText> :
-              g.records[0].kind === "crumb" ? <G transform="translate(-16 -16) scale(2)"><BreadGlyph state={g.records[0].state ?? "crumb"} /></G> :
-              <Path d="M-8 -10h16v18H-8zM-8 -4H8M-4 -13v6M4 -13v6" fill={t.sage} stroke={t.ink} strokeWidth={2} />}
+              <G transform="translate(-14 -14) scale(1.75)"><DiscoveryGlyph record={g.records[0]} state={g.records[0].state} /></G>}
           </Svg>
         </MapAnchor>)}
       </View>

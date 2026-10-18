@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { discoveryTime, isDemoRecord, type DiscoveryRecord } from "@breadcrumb/shared";
-import { PixelBread } from "./pixel-art";
+import { PixelDiscovery } from "./pixel-art";
 import { Icon } from "./icon";
 import { useGameStyles } from "./game-ui";
 import { useTheme } from "@/lib/theme-context";
@@ -38,11 +38,7 @@ export function DiscoveryRow({
           justifyContent: "center",
         }}
       >
-        {r.kind === "crumb" ? (
-          <PixelBread size={30} state={r.state ?? "crumb"} />
-        ) : (
-          <Icon name="list" />
-        )}
+        <PixelDiscovery record={r} state={r.state} size={30} />
       </View>
       <View style={{ flex: 1, gap: 4 }}>
         <Text

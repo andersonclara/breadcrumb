@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Linking, Text, View } from "react-native";
 import { router } from "expo-router";
 import {
+  categories,
+  iconForRecord,
   crumbRecord,
   discoveryKey,
   discoveryTime,
@@ -14,6 +16,7 @@ import { useExplore } from "@/providers/explore-provider";
 import { useCampus } from "@/providers/world-provider";
 import { apiFetch } from "@/lib/api";
 import { GameButton, Feedback, useGameStyles } from "./game-ui";
+import { PixelIcon } from "./pixel-art";
 export function DiscoveryDetail({
   record: input,
   onClose,
@@ -132,11 +135,16 @@ export function DiscoveryDetail({
       setFailure("Could not open this link. Please retry.");
     }
   }
+  const categoryLabel = r.kind === "crumb" ? categories.find((c) => c.id === r.category)?.label : undefined;
   return (
     <View style={{ gap: 16 }}>
-      <Text style={s.muted}>
-        {isDemoRecord(r) ? "DEMO · SIMULATED REPORT" : r.kind === "crumb" ? "CAMPUS REPORT" : "SCHEDULED EVENT"}
-      </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <PixelIcon name={iconForRecord(r)} size={40} />
+        <Text style={[s.muted, { flexShrink: 1 }]}>
+          {isDemoRecord(r) ? "DEMO · SIMULATED REPORT" : r.kind === "crumb" ? "CAMPUS REPORT" : "SCHEDULED EVENT"}
+          {categoryLabel ? " · " + categoryLabel.toUpperCase() : ""}
+        </Text>
+      </View>
       <Text style={s.title}>{r.title}</Text>
       <Text style={s.body}>{r.venue ?? "Venue not listed"}</Text>
       <Text style={s.label}>{discoveryTime(r)}</Text>

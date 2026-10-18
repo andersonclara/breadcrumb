@@ -7,9 +7,10 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import { useMemo, type PropsWithChildren } from "react";
+import { useMemo, type PropsWithChildren, type ReactNode } from "react";
 import { theme, type Theme } from "@/lib/theme";
 import { PixelFrame } from "./pixel-frame";
+import { PixelIcon } from "./pixel-art";
 import { usePixelTheme, useTheme } from "@/lib/theme-context";
 const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
   page: { flex: 1, backgroundColor: t.background },
@@ -135,6 +136,16 @@ export function Feedback({
   error?: boolean;
 }) {
   const t = useTheme(), gameStyles = useGameStyles();
+  if (message && error)
+    return (
+      <View style={[gameStyles.error, { flexDirection: "row", alignItems: "center", gap: 10 }]}>
+        <PixelIcon name="warning" size={20} />
+        <Text accessibilityRole="alert" accessibilityLiveRegion="polite"
+          style={[gameStyles.error, { flex: 1, padding: 0, backgroundColor: "transparent" }]}>
+          {message}
+        </Text>
+      </View>
+    );
   return message ? (
     <Text
       accessibilityRole={error ? "alert" : undefined}
@@ -156,10 +167,12 @@ export function Chip({
   label,
   selected,
   onPress,
+  icon,
 }: {
   label: string;
   selected: boolean;
   onPress: () => void;
+  icon?: ReactNode;
 }) {
   const t = useTheme(), pixel = usePixelTheme();
   return (
@@ -177,8 +190,12 @@ export function Chip({
         backgroundColor: selected ? t.ink : t.surface,
         opacity: pressed ? 0.7 : 1,
         justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
       })}
     >
+      {icon}
       <Text
         style={{
           fontFamily: pixel ? "PressStart2P_400Regular" : undefined,

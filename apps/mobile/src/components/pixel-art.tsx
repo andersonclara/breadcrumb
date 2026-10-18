@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import Svg, { G, Rect } from "react-native-svg";
+import Svg, { G, Path, Rect } from "react-native-svg";
 import {
   avatarPixels,
   breadPixels,
+  categories,
+  categoryIconPixels,
+  iconForRecord,
   toastPixels,
   defaultAvatar,
   type AvatarConfig,
+  type DiscoveryRecord,
+  type PixelIconName,
   type WorldCrumb,
 } from "@breadcrumb/shared";
+import { spritePaths } from "@/lib/map-sprites";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 export function AvatarGlyph({
   avatar = defaultAvatar,
@@ -73,6 +79,63 @@ export function PixelBread({
   return (
     <Svg width={size} height={size} viewBox="0 0 16 16">
       <BreadGlyph state={state} />
+    </Svg>
+  );
+}
+
+export function CategoryGlyph({ name }: { name: PixelIconName }) {
+  return (
+    <G>
+      {spritePaths(categoryIconPixels(name)).map((p) => (
+        <Path key={p.color} d={p.path} fill={p.color} />
+      ))}
+    </G>
+  );
+}
+const iconLabel = (name: PixelIconName) =>
+  name === "calendar" ? "Scheduled event" : name === "warning" ? "Warning"
+    : categories.find((c) => c.id === name)?.label ?? "Campus report";
+export function PixelIcon({ name, size = 24 }: { name: PixelIconName; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 16 16" accessibilityLabel={iconLabel(name)}>
+      <CategoryGlyph name={name} />
+    </Svg>
+  );
+}
+// Category art with a bread badge in the corner showing how confirmed a crumb is.
+export function DiscoveryGlyph({
+  record,
+  state,
+}: {
+  record: Pick<DiscoveryRecord, "kind" | "category">;
+  state?: WorldCrumb["state"] | null;
+}) {
+  return (
+    <G>
+      <CategoryGlyph name={iconForRecord(record)} />
+      {record.kind === "crumb" && (
+        <G>
+          <Rect x={9.3} y={9.3} width={6.4} height={6.4} fill="#FFF1DA" stroke="#493E48" strokeWidth={0.6} />
+          <G transform="translate(9.5 9.5) scale(0.375)">
+            <BreadGlyph state={state ?? "crumb"} />
+          </G>
+        </G>
+      )}
+    </G>
+  );
+}
+export function PixelDiscovery({
+  record,
+  state,
+  size = 30,
+}: {
+  record: Pick<DiscoveryRecord, "kind" | "category">;
+  state?: WorldCrumb["state"] | null;
+  size?: number;
+}) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 16 16">
+      <DiscoveryGlyph record={record} state={state} />
     </Svg>
   );
 }

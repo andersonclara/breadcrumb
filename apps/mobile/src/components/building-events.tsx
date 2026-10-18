@@ -6,7 +6,7 @@ import {
   type WorldCrumb,
 } from "@breadcrumb/shared";
 import { GameButton, gameStyles as s } from "./game-ui";
-import { PixelBread } from "./pixel-art";
+import { PixelDiscovery } from "./pixel-art";
 
 export function BuildingEvents({
   building,
@@ -30,7 +30,7 @@ export function BuildingEvents({
       {loaves.length ? (
         loaves.map((c) => (
           <View key={c.id} style={{ gap: 8 }}>
-            <PixelBread state="full_loaf" />
+            <PixelDiscovery record={{ kind: "crumb", category: c.category }} state="full_loaf" size={32} />
             <GameButton onPress={() => onCrumb(c)}>{c.title}</GameButton>
             <Text style={s.body}>Full Loaf</Text>
           </View>

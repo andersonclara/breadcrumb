@@ -33,6 +33,7 @@ import {
   type Coordinate,
   type DiscoveryRecord,
   type DiscoveryPeriod,
+  type CrumbCategory,
 } from "@breadcrumb/shared";
 import { CampusMap } from "@/components/campus-map";
 import { CrumbComposer } from "@/components/crumb-composer";
@@ -41,7 +42,7 @@ import { DiscoveryRow } from "@/components/discovery-row";
 import { Sheet } from "@/components/sheet";
 import { PixelFrame } from "@/components/pixel-frame";
 import { Icon } from "@/components/icon";
-import { ToastLogo, PixelAvatar } from "@/components/pixel-art";
+import { ToastLogo, PixelAvatar, PixelIcon } from "@/components/pixel-art";
 import {
   GameButton,
   Chip,
@@ -372,7 +373,11 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
             style={styles.scope}
           >
             <PixelFrame fill={t.sage} />
-            <Icon name="filter" size={18} />
+            {categories.some((c) => c.id === explore.category) ? (
+              <PixelIcon name={explore.category as CrumbCategory} size={18} />
+            ) : (
+              <Icon name="filter" size={18} />
+            )}
             <Text numberOfLines={2} style={[styles.pixelLabel, { flexShrink: 1 }]}>
               {scopeName} ·{" "}
               {periods.find((p) => p.id === explore.period)?.label}
@@ -632,6 +637,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
                     key={c.id}
                     label={c.label}
                     selected={explore.category === c.id}
+                    icon={c.id === "all" ? undefined : <PixelIcon name={c.id as CrumbCategory} size={18} />}
                     onPress={() => explore.setCategory(c.id)}
                   />
                 ),
