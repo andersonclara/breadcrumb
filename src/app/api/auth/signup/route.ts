@@ -2,11 +2,11 @@ import {createClient} from '@/lib/supabase/server';
 import {createAuth0Account} from '@/lib/auth/password';
 import {auth0Config,trustedClientIp} from '@/lib/auth/auth0';
 import {allowedApiOrigin,mobileApi,mobileOptions} from '@/lib/mobile-api';
-// Mobile sign-up. Returns {mode:'email'} when Auth0 is off so the app keeps its email-code flow.
+// Mobile signup always uses Auth0. A configuration problem must not change the signup method.
 async function post(request:Request){
  try{
   if(!allowedApiOrigin(request))return Response.json({error:'Invalid request origin'},{status:403});
-  if(!auth0Config())return Response.json({mode:'email'},{headers:{'Cache-Control':'no-store'}});
+  if(!auth0Config())return Response.json({error:'Account creation is temporarily unavailable. Please try again later.'},{status:503,headers:{'Cache-Control':'no-store'}});
   const raw=await request.text();if(raw.length>20000)return Response.json({error:'Invalid sign-up request'},{status:400});
   let body;try{body=JSON.parse(raw);}catch{return Response.json({error:'Invalid sign-up request'},{status:400});}
   if(!body||typeof body!=='object')return Response.json({error:'Invalid sign-up request'},{status:400});

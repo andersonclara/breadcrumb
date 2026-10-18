@@ -34,6 +34,13 @@ beforeEach(()=>{
 });
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();});
 describe('Auth0 username/password accounts',()=>{
+ it('creates an email/password account and defers username selection to profile setup',async()=>{
+  const result=await createAuth0Account(client,{email:signup.email,password:signup.password});
+  expect(result.next).toBe('/profile?setup=1');
+  expect(calls()).toEqual(['/dbconnections/signup','/oauth/token','/userinfo']);
+  expect(mocks.lookup).not.toHaveBeenCalled();
+  expect(mocks.complete).not.toHaveBeenCalled();
+ });
  it('rejects bad sign-up input before calling Auth0',async()=>{
   expect((await createAuth0Account(client,{...signup,email:'albert@gmail.com'})).error).toContain('@ufl.edu');
   expect((await createAuth0Account(client,{...signup,username:'a@b'})).error).toContain('username');

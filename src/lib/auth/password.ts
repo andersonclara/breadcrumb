@@ -1,6 +1,7 @@
 import 'server-only';
 import type {SupabaseClient} from '@supabase/supabase-js';
-import {normalizeUfLogin,normalizeUfEmail,signupPasswordError} from '@breadcrumb/shared';
+import {normalizeUfLogin,signupPasswordError} from '@breadcrumb/shared/login';
+import {normalizeUfEmail} from '@breadcrumb/shared/email';
 import {createAdminClient} from '@/lib/supabase/admin';
 import {auth0Authenticate,auth0Config,auth0Signup,SLICE_MESSAGE} from '@/lib/auth/auth0';
 import {checkSlice,loafSecret,mintSliceToken} from '@/lib/auth/loaf';
@@ -43,21 +44,24 @@ export async function passwordLogin(client:SupabaseClient,identifier:unknown,pas
 
 // Auth0 sign-up with a @ufl.edu address, username, and password. No email is sent, so ownership
 // of the address is not verified (accepted hackathon limitation; see docs/AUTH.md).
-export async function createAuth0Account(client:SupabaseClient,input:{email:unknown;username:unknown;password:unknown;confirm:unknown;loafChallenge?:unknown;loafTrace?:unknown},ip?:string|null){
+export async function createAuth0Account(client:SupabaseClient,input:{email:unknown;username?:unknown;password:unknown;confirm?:unknown;loafChallenge?:unknown;loafTrace?:unknown},ip?:string|null){
  const email=normalizeUfEmail(input.email);
  if(!email)return {error:'Use your @ufl.edu email address.'};
- const username=normalizeUfLogin(input.username);
- if(!username||username.includes('@'))return {error:'Use 3–30 letters, numbers, dots, underscores, or hyphens for your username.'};
- const passwordError=signupPasswordError(input.password,input.confirm);
+ // Mobile chooses a username during profile setup; the existing web form may supply one now.
+ const username=input.username===undefined?null:normalizeUfLogin(input.username);
+ if(input.username!==undefined&&(!username||username.includes('@')))return {error:'Use 3–30 letters, numbers, dots, underscores, or hyphens for your username.'};
+ const passwordError=signupPasswordError(input.password,input.confirm===undefined?input.password:input.confirm);
  if(passwordError)return {error:passwordError};
  const password=input.password as string;
  // BreadPass human check: only when LOAF_SECRET is set (the Auth0 Action then requires the token).
  const secret=loafSecret();
  if(secret&&!checkSlice(secret,input.loafChallenge,input.loafTrace).ok)return {error:SLICE_MESSAGE};
  const sliceToken=secret?mintSliceToken(secret,email):null;
+ if(username){
  const taken=await createAdminClient().rpc('login_email_for_username',{p_username:username});
  if(taken.error){console.error(`Username availability check failed: ${taken.error.code ?? 'unknown'}`);return {error:'Could not check that username. Please try again.'};}
  if(taken.data&&taken.data!==email)return {error:'That username is taken.'};
+ }
  const signup=await auth0Signup(email,password,sliceToken);
  if(signup.error)return {error:signup.error};
  const identity=await auth0Authenticate(email,password,ip);
@@ -65,8 +69,10 @@ export async function createAuth0Account(client:SupabaseClient,input:{email:unkn
  let session;
  try{({session}=await openSupabaseSession(client,identity,{legacyPassword:password}));}
  catch(e){if(e instanceof AccountLinkError)return {error:'This UF email already has a Breadcrumb account. Log in with its existing password instead.'};throw e;}
+ if(username){
  const {error}=await client.rpc('complete_account',{p_username:username});
  // The account exists either way; a username problem is fixable on the profile setup page.
  if(error)console.error(`complete_account after Auth0 signup failed: ${error.code ?? 'unknown'}`);
+ }
  return {session,next:'/profile?setup=1'};
 }

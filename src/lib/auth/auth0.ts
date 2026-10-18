@@ -1,5 +1,5 @@
 import 'server-only';
-import {normalizeUfEmail} from '@breadcrumb/shared';
+import {normalizeUfEmail} from '@breadcrumb/shared/email';
 
 // Auth0 owns Breadcrumb passwords. The server calls Auth0's database-connection APIs directly so the
 // pixel login form stays in the app; no hosted login page or Auth0 session cookie is involved.

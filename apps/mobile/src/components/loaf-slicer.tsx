@@ -25,10 +25,10 @@ export function LoafSlicer({onChange,onReady,resetKey}:{onChange:(slice:LoafSlic
   onChange(null);onReady(false);
   apiFetch('/api/auth/loaf').then(response=>{if(!response.ok)throw new Error();return response.json();}).then(data=>{
    if(!live)return;setTrace([]);setHint('');onChange(null);
-   if(data.enabled===false){setStatus('off');onReady(true);return;}
+   if(data.enabled===false)throw new Error('Account creation is temporarily unavailable. Please retry.');
    if(typeof data.challenge!=='string'||!Number.isFinite(data.cut))throw new Error();
    setLoaf(data);setStatus('ready');
-  }).catch(()=>{if(live)setStatus('error');});
+  }).catch(e=>{if(live){setHint(e instanceof Error&&e.message?e.message:'Could not load the bread challenge. Please retry.');setStatus('error');}});
   return ()=>{live=false;};
  },[nonce,resetKey,onChange,onReady]);
  const fresh=()=>{setStatus('loading');setTrace([]);setHint('');onChange(null);onReady(false);setNonce(n=>n+1);};
@@ -67,8 +67,8 @@ export function LoafSlicer({onChange,onReady,resetKey}:{onChange:(slice:LoafSlic
     {!cutDone&&trace.length>1&&<Polyline fill="none" stroke="#49382C" strokeWidth={0.5} points={trace.map(p=>`${BOX.x+p.x*BOX.w},${BOX.y+p.y*BOX.h}`).join(' ')}/>}
    </Svg>
   </View>
-  <Text style={s.body} accessibilityLiveRegion="polite">{status==='loading'?'Baking a fresh loaf…':status==='error'?'Could not load the loaf.':status==='sliced'?'Sliced! You’re human.':hint||'Drag your finger down through the dotted line.'}</Text>
+  <Text style={s.body} accessibilityLiveRegion="polite">{status==='loading'?'Loading bread challenge...':status==='error'?hint:status==='sliced'?'Sliced! You’re human.':hint||'Drag your finger down through the dotted line.'}</Text>
   {status==='ready'&&<Pressable accessibilityRole="button" accessibilityLabel="Slice loaf without dragging" onPress={assistedSlice} style={{minHeight:48,justifyContent:'center'}}><Text style={s.label}>SLICE WITHOUT DRAGGING</Text></Pressable>}
-  {status!=='loading'&&<Pressable accessibilityRole="button" onPress={fresh} style={{minHeight:48,justifyContent:'center'}}><Text style={s.label}>NEW LOAF</Text></Pressable>}
+  {status!=='loading'&&<Pressable accessibilityRole="button" onPress={fresh} style={{minHeight:48,justifyContent:'center'}}><Text style={s.label}>{status==='error'?'Retry bread challenge':'NEW LOAF'}</Text></Pressable>}
  </View>;
 }

@@ -46,10 +46,12 @@ describe('mobile authentication routes',()=>{
   for(const body of ['{','null','x'.repeat(20001)])expect((await signup(request('signup',body))).status).toBe(400);
   expect(mocks.signup).not.toHaveBeenCalled();
  });
- it('exposes only a public signup mode and preserves email signup when Auth0 is off',async()=>{
+ it('reports Auth0 misconfiguration without switching mobile signup to email codes',async()=>{
   expect(await (await config(new Request('http://localhost:3000/api/auth/signup'))).json()).toEqual({passwordSignup:true});
   mocks.config.mockReturnValue(null);
-  expect(await (await signup(request('signup','{}'))).json()).toEqual({mode:'email'});
+  const response=await signup(request('signup','{}'));
+  expect(response.status).toBe(503);
+  expect(await response.json()).toEqual({error:'Account creation is temporarily unavailable. Please try again later.'});
   expect(mocks.signup).not.toHaveBeenCalled();
  });
  it('sends normalized UF password resets through Auth0 and keeps the response generic',async()=>{
