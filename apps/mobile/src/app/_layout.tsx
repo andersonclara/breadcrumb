@@ -51,6 +51,9 @@ function CampusNavigation() {
             <Stack.Screen name="friends" options={{title:"Friends"}}/>
             <Stack.Screen name="saved" options={{title:"Saved discoveries"}}/>
           </Stack.Protected>
+          <Stack.Protected guard={__DEV__}>
+            <Stack.Screen name="map-appearance-lab" options={{title:"Appearance check"}}/>
+          </Stack.Protected>
           <Stack.Screen name="login" options={{
             title:"Your account",headerShown:signedIn,gestureEnabled:signedIn,
           }}/>

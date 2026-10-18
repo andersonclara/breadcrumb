@@ -10,7 +10,7 @@ while (Date.now() < deadline) {
     for (const target of targets) {
       if (!target.webSocketDebuggerUrl || attached.has(target.id)) continue;
       attached.add(target.id);
-      const socket = new WebSocket(target.webSocketDebuggerUrl);
+      const socket = new WebSocket(target.webSocketDebuggerUrl, { origin: 'http://127.0.0.1:8081' });
       sockets.add(socket);
       socket.on('open', () => {
         console.log('Device inspector connected:', target.title);

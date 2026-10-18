@@ -1,8 +1,9 @@
-export type MapAppearance = 'auto' | 'day' | 'dusk' | 'night';
+export type MapAppearance = 'auto' | 'day' | 'dusk' | 'night' | 'original';
 export type MapLight = { day: number; dusk: number; night: number };
 export const mapAppearances: { id: MapAppearance; label: string }[] = [
   { id: 'auto', label: 'Automatic' }, { id: 'day', label: 'Day' },
   { id: 'dusk', label: 'Dusk' }, { id: 'night', label: 'Night' },
+  { id: 'original', label: 'Original' },
 ];
 export const isMapAppearance = (value: unknown): value is MapAppearance =>
   mapAppearances.some(option => option.id === value);
@@ -36,6 +37,7 @@ export function lightAtAltitude(altitude: number): MapLight {
   return { day, dusk: 1 - day - night, night };
 }
 export function mapLight(mode: MapAppearance, date = new Date()): MapLight {
+  if (mode === 'original') return { day: 1, dusk: 0, night: 0 };
   return mode === 'auto' ? lightAtAltitude(campusSunAltitude(date)) :
     { day: Number(mode === 'day'), dusk: Number(mode === 'dusk'), night: Number(mode === 'night') };
 }

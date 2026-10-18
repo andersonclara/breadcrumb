@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cachedMapTiles, mapTileLevel, mapTileOpacity } from '../apps/mobile/src/lib/map-tiles';
+import { cachedMapTiles, mapTileLevel, mapTileOpacity, visibleMapTiles } from '../apps/mobile/src/lib/map-tiles';
 import { mapDetail, silhouettePath } from '../scripts/mobile-map-style.mjs';
 
 const size = { width: 390, height: 844 };
@@ -8,8 +8,16 @@ const entries = ['0/0/0', '3/3/2', '4/7/5', '5/14/11'].map(key => ({ key, value:
 describe('map detail follows the visible scale', () => {
   it('uses quiet outlines, simple blocks, then close-up artwork', () => {
     expect([0, 1, 2].map(mapDetail)).toEqual(['overview', 'overview', 'overview']);
-    expect([3, 4].map(mapDetail)).toEqual(['blocks', 'blocks']);
-    expect(mapDetail(5)).toBe('detail');
+    expect(mapDetail(3)).toBe('blocks');
+    expect([4, 5].map(mapDetail)).toEqual(['detail', 'detail']);
+  });
+  it('selects full artwork at half the previous resolution threshold', () => {
+    const previousThreshold = 512 * 32 / (size.height * 2);
+    const earlier = { ...camera, zoom: previousThreshold / 2 + .01 };
+    expect(mapDetail(mapTileLevel(earlier, size))).toBe('detail');
+    expect(mapDetail(mapTileLevel({ ...earlier, zoom: earlier.zoom / 2 }, size))).toBe('blocks');
+    // The actual budgeted scheduler must select the richer assets too.
+    expect(visibleMapTiles({ ...camera, zoom: 6 }, size).every(t => mapDetail(t.level) === 'detail')).toBe(true);
   });
   it('does not redraw cached close-up artwork when zooming back out', () => {
     const close = cachedMapTiles(entries, camera, size, mapTileLevel(camera, size));
