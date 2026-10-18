@@ -18,6 +18,7 @@ export function withDemoSearch(search: Pick<AskDependencies, 'places' | 'search'
         if (refs && !refs.results.some(ref => ref.kind === r.kind && ref.id === r.id)) return false;
         if (Date.parse(r.createdAt!) >= Date.parse(window.end) || Date.parse(r.expiresAt!) <= Date.parse(window.start)) return false;
         if (constraints.freeOnly && r.priceType !== 'free') return false;
+        if (constraints.freeFoodOnly && (r.category !== 'freebie' || !/\b(food|pizza|snacks?|cookies?|refreshments?|lunch|dinner|breakfast)\b/i.test(`${r.title} ${r.description??''}`))) return false;
         if (constraints.categories.length && !constraints.categories.some(c => c === r.category)) return false;
         const text = new Set(tokens(`${r.title} ${r.venue} ${r.category === 'freebie' ? 'free food snacks' : ''}`));
         return !constraints.terms.length || constraints.terms.some(term => tokens(term).every(token => text.has(token)));

@@ -11,6 +11,7 @@ export const constraintsSchema=z.object({
   nearPlace:z.string().trim().min(1).max(100).nullable(),
   useUserLocation:z.boolean(),radiusMeters:z.number().int().min(100).max(5000),
   freeOnly:z.boolean(),categories:z.array(category).max(5),
+  freeFoodOnly:z.boolean().optional(),
   terms:z.array(z.string().trim().min(1).max(60)).max(6),
 }).strict();
 export type Constraints=z.infer<typeof constraintsSchema>;
@@ -19,6 +20,7 @@ export const contextSchema=z.object({
   constraints:constraintsSchema,results:z.array(referenceSchema).max(4),
   // Reference place is public campus geography, never a person's GPS position.
   referencePlace:z.string().max(100).nullable(),
+  pending:z.object({action:z.enum(['search','compare','details']),resultIndex:z.number().int().min(1).max(4).nullable()}).strict().optional(),
 }).strict();
 export const askRequestSchema=z.object({
   message:z.string().trim().min(1).max(1200),
@@ -39,6 +41,7 @@ export const intentSchema=z.object({
     nearPlace:z.string().trim().min(1).max(100).nullable(),
     useUserLocation:z.boolean().nullable(),radiusMeters:z.number().int().min(100).max(5000).nullable(),
     freeOnly:z.boolean().nullable(),categories:z.array(category).max(5).nullable(),
+    freeFoodOnly:z.boolean().nullable().optional(),
     terms:z.array(z.string().trim().min(1).max(60)).max(6).nullable(),
   }).strict(),
 }).strict();
@@ -53,7 +56,7 @@ export const recordSchema=z.object({
   venue:z.string().nullable(),latitude:z.number().nullable(),longitude:z.number().nullable(),
   startsAt:z.string().nullable(),endsAt:z.string().nullable(),eventDate:z.string().nullable(),allDay:z.boolean(),
   createdAt:z.string().nullable(),expiresAt:z.string().nullable(),
-  state:z.enum(['crumb','rising','full_loaf','stale']).nullable(),confirmCount:z.number(),disputeCount:z.number(),
+  state:z.enum(['crumb','rising','full_loaf','stale','burnt']).nullable(),confirmCount:z.number(),disputeCount:z.number(),
   source:z.string(),sourceUrl:z.string().nullable(),lastSyncedAt:z.string().nullable(),
   priceText:z.string().nullable(),priceType:z.enum(['free','unknown']),distanceMeters:z.number().nullable(),
 });

@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
 import { useCampus } from "@/providers/world-provider";
 import { AvatarWorkshop } from "./avatar-workshop";
-import { PixelAvatar } from "./pixel-art";
+import { AvatarStage } from "./avatar-stage";
 import { GameButton, Feedback, gameStyles as s } from "./game-ui";
 export function ProfileEditor({
   initialUsername,
@@ -58,7 +58,7 @@ export function ProfileEditor({
     if (!supabase || pending) return;
     const chosen = username.trim().toLowerCase();
     if (!/^[a-z0-9][a-z0-9_.-]{2,29}$/.test(chosen)) {
-      setMessage("Use 3?30 letters, numbers, dots, underscores, or hyphens.");
+      setMessage("Use 3 to 30 letters, numbers, dots, underscores, or hyphens.");
       return;
     }
     if (!passwordManagedByAuth0 && (!complete || password || confirm)) {
@@ -118,7 +118,7 @@ export function ProfileEditor({
         maxLength={30}
       />
       <Text style={s.muted}>
-        3?30 characters. This is how friends recognize you.
+        3 to 30 characters. This is how friends recognize you.
       </Text>
       {!passwordManagedByAuth0&&<><Text style={s.label}>
         {complete ? "New password (optional)" : "Create a password"}
@@ -159,8 +159,8 @@ export function ProfileEditor({
       {customize ? (
         <AvatarWorkshop initial={avatar} hideSave onChange={setAvatar} />
       ) : (
-        <View style={[s.card, { alignItems: "center" }]}>
-          <PixelAvatar avatar={avatar} size={56} />
+        <View style={{ gap: 12 }}>
+          <AvatarStage avatar={avatar} />
           <Text style={s.muted}>
             This avatar is ready to use. You can customize it later.
           </Text>

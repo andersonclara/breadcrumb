@@ -3,5 +3,5 @@ import { theme, type Theme } from './theme';
 
 export const ThemeContext = createContext<Theme>(theme);
 export const useTheme = () => useContext(ThemeContext);
-export const PixelThemeContext = createContext(false);
+export const PixelThemeContext = createContext(true);
 export const usePixelTheme = () => useContext(PixelThemeContext);

@@ -21,6 +21,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "./icon";
+import { PixelFrame } from "./pixel-frame";
+import { PIXEL_FONT } from "./game-ui";
 import type { Theme } from "@/lib/theme";
 import { usePixelTheme, useTheme } from "@/lib/theme-context";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
@@ -105,6 +107,7 @@ export function Sheet({
             },
           ]}
         >
+          {pixel && <PixelFrame panel />}
           <View {...pan.panHandlers}>
             <View style={styles.handle} />
             <View style={styles.header}>
@@ -124,6 +127,7 @@ export function Sheet({
                   pressed && { opacity: 0.5 },
                 ]}
               >
+                {pixel && <PixelFrame fill={t.sage} />}
                 <Icon name="close" />
               </Pressable>
             </View>
@@ -151,36 +155,38 @@ const createStyles = (t: Theme, pixel: boolean) => StyleSheet.create({
     backgroundColor: t.backdrop,
   },
   sheet: {
-    backgroundColor: t.surface,
-    borderTopLeftRadius: pixel ? 12 : 24,
-    borderTopRightRadius: pixel ? 12 : 24,
+    backgroundColor: pixel ? "transparent" : t.surface,
+    borderTopLeftRadius: pixel ? 0 : 24,
+    borderTopRightRadius: pixel ? 0 : 24,
     width: "100%",
     maxWidth: 640,
     alignSelf: "center",
-    borderWidth: pixel ? 2 : 0,
+    borderWidth: 0,
     borderColor: pixel ? t.border : "transparent",
     borderBottomWidth: 0,
   },
   handle: {
     width: 36,
     height: 4,
-    borderRadius: 2,
-    backgroundColor: t.border,
+    borderRadius: pixel ? 0 : 2,
+    backgroundColor: pixel ? t.ink : t.border,
     alignSelf: "center",
     marginTop: 10,
   },
   header: {
     paddingLeft: 16,
-    paddingRight: 8,
+    paddingRight: 16,
+    paddingVertical: 8,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
   },
   title: {
     flex: 1,
-    fontSize: 20,
-    lineHeight: 28,
-    fontWeight: "700",
+    fontFamily: pixel ? PIXEL_FONT : undefined,
+    fontSize: pixel ? 14 : 20,
+    lineHeight: pixel ? 24 : 28,
+    fontWeight: pixel ? "400" : "700",
     color: t.ink,
   },
   close: {

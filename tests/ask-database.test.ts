@@ -8,7 +8,7 @@ const migration=(name:string)=>readFileSync(new URL(`../supabase/migrations/${na
 beforeAll(async()=>{
   db=new PGlite();
   await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
-   create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
+   create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz,encrypted_password text);
    create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
    grant usage on schema auth to anon,authenticated;grant execute on function auth.uid() to anon,authenticated;`);
   await db.exec(migration('20261017000100_initial_schema').replace(/^create extension .*;$/gm,'')
@@ -23,7 +23,7 @@ beforeAll(async()=>{
    create function extensions.st_dwithin(point,point,double precision) returns boolean language sql immutable as $$select extensions.st_distance($1,$2)<=$3$$;
    grant usage on schema extensions to anon,authenticated;
   `);
-  for(const name of ['20261017000200_pixel_world','20261017000300_expanded_campus','20261017000400_communities','20261017000500_custom_communities','20261017183922_event_ingestion','20261017185639_ask_backend','20261018010000_ask_discovery_quality']) {
+  for(const name of ['20261017000200_pixel_world','20261017000300_expanded_campus','20261017000400_communities','20261017000500_custom_communities','20261017000600_username_accounts','20261017000700_burnt_toast','20261017000800_dispute_removal','20261017183922_event_ingestion','20261017185639_ask_backend','20261018010000_ask_discovery_quality']) {
     await db.exec(migration(name).replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
   }
 });

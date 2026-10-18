@@ -1,7 +1,7 @@
 # 🍞 Ask Breadcrumb — AI Discovery Engine Implementation Plan
 
 > **Project:** Breadcrumb · SwampHacks XII · University of Florida  
-> **Status:** Proposed implementation blueprint; features below are not automatically implemented  
+> **Status:** Core discovery experience implemented; see ASK_BACKEND.md for the current contract, validation, and optional future work
 > **Updated:** October 17, 2026  
 > **Website:** `leaveacrumb.us`  
 > **Tagline:** *Leave a crumb. Spread the word.*  
@@ -467,15 +467,15 @@ Implement tool functions as ordinary TypeScript service methods; don't create se
 
 ### P0 — Working discovery end-to-end
 
-- [ ] Identify live/seeded normalized event records with source links and valid time/place fields.
-- [ ] Read current active Crumbs through existing Supabase queries.
-- [ ] Implement `resolve_place`, `search_events`, `search_crumbs` with strict filtering.
-- [ ] Implement `POST /api/ask` using a current supported Gemini model/SDK and read-only tool calls.
-- [ ] Validate all tool args, source IDs, result counts, timezones, and rate limits.
-- [ ] Return short **grounded** responses with 1–4 server-verified citation cards.
-- [ ] Show card → open/highlight correct Mapbox marker.
-- [ ] Include **no-results + useful nearby alternatives** behavior.
-- [ ] Test on mobile and desktop.
+- [x] Identify published normalized event records with source links and valid time/place fields.
+- [x] Read current active Crumbs through existing Supabase queries.
+- [x] Implement place resolution and event/Crumb searches with strict filtering.
+- [x] Implement `POST /api/ask` with Groq/Gemini structured output and read-only retrieval.
+- [x] Validate all tool args, source IDs, result counts, timezones, and rate limits.
+- [x] Return short **grounded** responses with 1–4 server-verified citation cards.
+- [x] Show card → open/highlight correct Mapbox marker.
+- [x] Include **no-results + useful nearby alternatives** behavior.
+- [x] Test desktop and mobile browser layouts, Expo screens, and both native bundles. Physical-device and two-phone live-post verification remain manual.
 
 **P0 done when:** A live Crumb posted on phone A becomes discoverable in Ask on phone B, while expired/deleted Crumbs do not appear as active and every displayed card resolves to a real record.
 
@@ -484,7 +484,7 @@ Implement tool functions as ordinary TypeScript service methods; don't create se
 - [ ] Add controlled community and hobby/interest filtering to event retrieval.
 - [ ] Add keyword search and, if beneficial, embeddings + pgvector hybrid search.
 - [ ] Use deterministic evidence-aware ranking and “why this matches” explanations.
-- [ ] Preserve time/location/price filters across follow-up questions.
+- [x] Preserve time/location/price filters across follow-ups and clarification replies.
 - [ ] Add optional preferences stored locally or behind BreadPass consent.
 - [ ] Add concise stream responses and polished source/freshness UI states.
 

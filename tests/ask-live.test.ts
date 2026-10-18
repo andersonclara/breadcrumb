@@ -6,6 +6,13 @@ import {mergeConstraints} from '../src/lib/ai/ask/agent';
 import {defaultConstraints,type DiscoveryRecord} from '../src/lib/ai/ask/schema';
 
 // Explicit opt-in: consumes one real provider request, never writes to Supabase.
+it.skipIf(process.env.ASK_LIVE_SMOKE!=='1')('separates free food from admission in a real interpreted request',async()=>{
+  nextEnv.loadEnvConfig(process.cwd(),false,{info(){},error(){}});
+  const result=await interpret({message:'Any events advertising free cookies over the next seven days? Admission price can be unknown.'},new Date(),AbortSignal.timeout(22000));
+  expect(result.action).toBe('search');expect(result.patch.freeFoodOnly).toBe(true);
+  expect(result.patch.freeOnly).not.toBe(true);expect(result.patch.time?.period).toBe('next7days');
+},25000);
+
 it.skipIf(process.env.ASK_LIVE_SMOKE!=='1')('interprets a real discovery question with the configured Ask model',async()=>{
   nextEnv.loadEnvConfig(process.cwd(),false,{info(){},error(){}});
   const result=await interpret({message:'Any free events near Reitz tonight?'},new Date(),AbortSignal.timeout(22000));

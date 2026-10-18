@@ -16,6 +16,8 @@ import { useExplore } from "@/providers/explore-provider";
 import { supabase } from "@/lib/supabase";
 import { ProfileEditor } from "@/components/profile-editor";
 import { PixelAvatar } from "@/components/pixel-art";
+import { PixelFrame } from "@/components/pixel-frame";
+import { useTheme } from "@/lib/theme-context";
 import {
   GameButton,
   Feedback,
@@ -23,6 +25,7 @@ import {
   gameStyles as s,
 } from "@/components/game-ui";
 export default function ProfileScreen() {
+  const t = useTheme();
   const { session, loading } = useAuth(),
     c = useCampus(),
     e = useExplore(),
@@ -119,11 +122,14 @@ export default function ProfileScreen() {
           />
         ) : (
           <>
-            <View style={[s.row, { paddingVertical: 8 }]}>
-              <PixelAvatar avatar={c.world.profile.avatar} size={48} />
+            <View style={[s.row, { padding: 20 }]}>
+              <PixelFrame panel />
+              <View style={{ padding: 12, backgroundColor: t.sage, borderWidth: 2, borderColor: t.border }}>
+                <PixelAvatar avatar={c.world.profile.avatar} size={56} />
+              </View>
               <View style={{ flex: 1, gap: 8 }}>
-                <Text style={s.title}>{c.world.profile.handle}</Text>
-                <Text style={s.muted}>Your campus self</Text>
+                <Text numberOfLines={2} style={[s.title, { fontSize: 14, lineHeight: 24 }]}>{c.world.profile.handle}</Text>
+                <Text style={s.label}>Your campus self</Text>
               </View>
             </View>
             <GameButton variant="secondary" onPress={() => setEditing(true)}>

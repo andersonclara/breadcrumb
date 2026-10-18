@@ -471,6 +471,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
               onPress={() => choose(records[0])}
               style={styles.pickPreview}
             >
+              <PixelFrame fill={t.sage} />
               <Text numberOfLines={1} style={styles.pixelLabel}>
                 {records[0].title}
               </Text>
@@ -717,17 +718,20 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
         {panel === "search" && (
           <>
             <Text style={s.label}>Place or discovery</Text>
-            <TextInput
-              autoFocus
-              accessibilityLabel="Search campus"
-              placeholder="Try Reitz, pizza, or a club?"
-              placeholderTextColor={t.muted}
-              selectionColor={t.ink}
-              keyboardAppearance={dark ? "dark" : "light"}
-              style={s.input}
-              value={explore.query}
-              onChangeText={explore.setQuery}
-            />
+            <View>
+              <PixelFrame />
+              <TextInput
+                autoFocus
+                accessibilityLabel="Search campus"
+                placeholder="Reitz, pizza, or a club"
+                placeholderTextColor={t.muted}
+                selectionColor={t.ink}
+                keyboardAppearance={dark ? "dark" : "light"}
+                style={[s.input, { borderWidth: 0, borderRightWidth: 0, borderBottomWidth: 0, backgroundColor: "transparent" }]}
+                value={explore.query}
+                onChangeText={explore.setQuery}
+              />
+            </View>
             {explore.query.length > 0 && (
               <GameButton
                 variant="secondary"
@@ -861,7 +865,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   pixelBody: { fontFamily: "PressStart2P_400Regular", fontSize: 10, lineHeight: 19, color: t.muted },
   picksTitle: { fontFamily: "PressStart2P_400Regular", fontSize: 13, lineHeight: 21, color: t.ink, flexShrink: 1 },
   picksHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, borderBottomWidth: 2, borderBottomColor: t.border, paddingBottom: 8 },
-  pickPreview: { minHeight: 60, justifyContent: "center", gap: 6, padding: 10, backgroundColor: t.sage, borderWidth: 2, borderColor: t.border },
+  pickPreview: { minHeight: 64, justifyContent: "center", gap: 6, padding: 12 },
   top: { position: "absolute", left: 16, right: 16, gap: 10 },
   topRow: { flexDirection: "row", gap: 8 },
   search: {

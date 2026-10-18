@@ -12,7 +12,7 @@ hosted job; Instagram remains manual.
 Ask Breadcrumb now has a public discovery backend with source-linked event/Crumb
 results, conversational filters, and database-backed rate limits. It prefers
 Groq GPT-OSS 120B when configured and also supports Gemini. Hosted retrieval and
-Groq responses have been checked; the web Ask panel and native Ask tab connect to this backend. See
+Groq responses have been checked; the web Ask panel and public native Ask screen connect to this backend. See
 [the Ask backend guide](docs/ASK_BACKEND.md) for configuration and the API contract.
 
 A community map of what's happening around the University of Florida, presented as an 8-bit campus world. Next.js powers the web app; React Native and Expo power iPhone and Android. Both render the same pixel map, avatar outfits, breadcrumbs, and loaves using one Supabase backend.
@@ -52,7 +52,7 @@ See [the mobile setup guide](apps/mobile/README.md) for environment configuratio
 - UI dependencies and shadcn aliases ready for web feature work, native Expo Router tabs, and CI checks for both platforms.
 - `@breadcrumb/shared` supplies map data, sprites, outfit validation, categories, coordinates, and account rules. `@breadcrumb/client` supplies the shared campus polling hook.
 
-Chatbot UI, Radar settings, push notifications, event-map UI, and deployment remain feature work. Source adapters and manual Instagram/flyer extraction are documented in [the ingestion guide](docs/EVENT_INGESTION.md). Campus state refreshes every five seconds. New game writes use a guarded API and transactionally rate-limited auth-scoped SQL functions; they do not require a service-role key. See [the pixel-world guide](docs/PIXEL_WORLD.md) for the exact privacy, grouping, and rollout rules.
+Ask now includes source cards, map actions, retained follow-up filters, free-food discovery separate from admission prices, cancellation, and retry recovery on both clients. Radar settings, push notifications, and deployment remain feature work. Source adapters and manual Instagram/flyer extraction are documented in [the ingestion guide](docs/EVENT_INGESTION.md). Campus state refreshes every five seconds. New game writes use a guarded API and transactionally rate-limited auth-scoped SQL functions; they do not require a service-role key. See [the pixel-world guide](docs/PIXEL_WORLD.md) for the exact privacy, grouping, and rollout rules.
 
 ## Connect accounts
 

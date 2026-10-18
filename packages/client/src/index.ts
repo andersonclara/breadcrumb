@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { emptyWorld, type World } from "@breadcrumb/shared";
 import { activeWorld, reconcileWorld } from './world-state';
+export {useAskRequest} from './use-ask-request';
 
 export function useWorld(
   client: SupabaseClient | null,
