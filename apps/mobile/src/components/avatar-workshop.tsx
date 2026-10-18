@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import { avatarOptions, type AvatarConfig } from "@breadcrumb/shared";
 import { useCampus } from "@/providers/world-provider";
-import { PixelAvatar } from "./pixel-art";
+import { AvatarStage } from "./avatar-stage";
 import { Chip, GameButton, Feedback, gameStyles as s } from "./game-ui";
 export function AvatarWorkshop({
   initial,
@@ -44,11 +44,7 @@ export function AvatarWorkshop({
     color = value.startsWith("#");
   return (
     <View style={{ gap: 16 }}>
-      <View
-        style={[s.card, { alignItems: "center", backgroundColor: "#E8EEDC" }]}
-      >
-        <PixelAvatar avatar={avatar} size={64} />
-      </View>
+      <AvatarStage avatar={avatar} />
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {(Object.keys(labels) as (keyof AvatarConfig)[]).map((k) => (
           <Chip
@@ -72,9 +68,9 @@ export function AvatarWorkshop({
             style={{
               width: 36,
               height: 36,
-              borderRadius: 8,
+              borderRadius: 0,
               backgroundColor: value,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: "#49382C",
             }}
           />

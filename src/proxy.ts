@@ -21,5 +21,7 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  // Public credential/challenge endpoints manage their own authentication.
+  // Refreshing an old browser session here can hold up a new sign-in request.
+  matcher: ["/((?!api/auth/(?:loaf|password|signup|reset-password)(?:/|$)|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };

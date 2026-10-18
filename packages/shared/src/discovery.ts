@@ -35,11 +35,13 @@ export type AskContext = {
     useUserLocation: boolean;
     radiusMeters: number;
     freeOnly: boolean;
+    freeFoodOnly?: boolean;
     categories: string[];
     terms: string[];
   };
   results: { kind: "event" | "crumb"; id: string }[];
   referencePlace: string | null;
+  pending?: { action: "search" | "compare" | "details"; resultIndex: number | null };
 };
 export type AskResult = {
   status: "results" | "no_results" | "clarification" | "unsupported";

@@ -14,7 +14,6 @@ export default function ExploreLayout() {
         name="index"
         options={{ headerShown: false, title: "Explore" }}
       />
-      <Stack.Screen name="ask" options={{ title: "Ask Breadcrumb" }} />
       <Stack.Screen name="buzz" options={{ title: "Nearby" }} />
       <Stack.Screen name="communities" options={{ title: "Communities" }} />
       <Stack.Screen name="radar" options={{ headerShown: false }} />

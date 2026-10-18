@@ -4,6 +4,7 @@ import { PixelBread } from "./pixel-art";
 import { Icon } from "./icon";
 import { useGameStyles } from "./game-ui";
 import { useTheme } from "@/lib/theme-context";
+import { PixelFrame } from "./pixel-frame";
 export function DiscoveryRow({
   record: r,
   onPress,
@@ -25,14 +26,17 @@ export function DiscoveryRow({
       onPress={onPress}
       style={({ pressed }) => [
         s.card,
-        { flexDirection: "row", gap: 12, opacity: pressed ? 0.65 : 1 },
+        { flexDirection: "row", gap: 12, borderWidth: 0, borderRightWidth: 0, borderBottomWidth: 0, backgroundColor: "transparent", opacity: pressed ? 0.65 : 1 },
       ]}
     >
+      <PixelFrame />
       <View
         style={{
           width: 40,
           height: 40,
-          borderRadius: 12,
+          borderRadius: 0,
+          borderWidth: 2,
+          borderColor: t.border,
           backgroundColor: r.kind === "crumb" ? t.crumbSurface : t.sage,
           alignItems: "center",
           justifyContent: "center",
@@ -46,12 +50,7 @@ export function DiscoveryRow({
       </View>
       <View style={{ flex: 1, gap: 4 }}>
         <Text
-          style={{
-            fontSize: 17,
-            lineHeight: 23,
-            fontWeight: "600",
-            color: t.ink,
-          }}
+          style={s.label}
         >
           {r.title}
         </Text>

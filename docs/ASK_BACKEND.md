@@ -92,11 +92,13 @@ type AskRequest = {
       useUserLocation: boolean;
       radiusMeters: number;
       freeOnly: boolean;
+      freeFoodOnly?: boolean; // Advertised food, independent of admission
       categories: ('event' | 'freebie' | 'crowd' | 'construction' | 'hazard')[];
       terms: string[];
     };
     results: {kind: 'event' | 'crumb'; id: string}[];
     referencePlace: string | null;
+    pending?: {action: 'search' | 'compare' | 'details'; resultIndex: number | null};
   };
   coarseUserLocation?: {latitude: number; longitude: number};
 };
@@ -279,4 +281,54 @@ npm run events:enrich -- --approve EVENT_UUID
 
 The default command only lists eligible upcoming published Instagram events missing a summary. `--stage` generates at most ten private metadata proposals, records their model/source/event fingerprints, and reuses unchanged proposals. Review the output against the source before `--approve`; approval writes only summary/tags and never changes publication status or price. Source or event changes invalidate the proposal. Caption-only enrichment does not claim to read a flyer. This update reviewed and approved summaries/tags for C-Lunch, Fall Open House, and the Elizabeth Bello speaker event. The speaker summary includes the caption's advertised free cookies; event admission remains unknown.
 
-Remaining limitations: unreviewed Instagram candidates remain private, keyword matching is not embedding search, many venues remain unresolved, and admission price and an advertised free food offer are not yet separate search filters. No scheduler, new scrape, or broad automatic publication was enabled.
+Remaining ingestion limitations: unreviewed Instagram candidates remain private, keyword matching is not embedding search, and many venues remain unresolved. No scheduler, new scrape, or broad automatic publication was enabled.
+
+## Completed conversation experience (October 18)
+
+Web and native now share the response validator, filter labels, evidence labels,
+and cancellable request hook. Web cards open a freshly rechecked discovery on
+the campus map, with a selected marker and a return-to-chat action. Native uses
+the existing discovery sheet and signed-in map selection. `/ask` is also a public
+native route, available from the sign-in screen; guests can open a listed public
+location in their maps app. Other account routes retain their sign-in guards.
+Public discovery requests do not wait for a saved Supabase session to refresh.
+
+Both clients retain at most 30 turns in memory, preserve the question on errors
+or cancellation, expose Stop search, honor `Retry-After`, and distinguish New chat
+from Clear filters. Clearing filters preserves visible history but discards the
+active search context and location consent. New chat cancels in-flight work and
+clears history as well. Late responses and permission results cannot repopulate
+a reset conversation. Responses remain complete JSON; partial generated prose
+is never presented before evidence validation. The explanation call has a short
+sub-deadline, preserving time to recheck records and return deterministic cards
+when explanation is slow or unavailable.
+
+`constraints.freeFoodOnly?: boolean` now searches for explicitly advertised free
+food separately from `freeOnly` (free admission/reported free). Missing admission
+prices remain unknown, including events advertising free cookies. Published
+event summaries must contain explicit food evidence; ambiguous, conditional,
+or negated offers are conservatively excluded. Live reports require a freebie
+category and food wording. This check runs over the existing bounded keyword
+candidate set, so it does not promise exhaustive food coverage. No new database
+migration or re-ingestion is required for this field.
+
+`context.pending?: {action: 'search' | 'compare' | 'details'; resultIndex: number | null}`
+preserves a pending task through place/result clarification. For example, a
+closest-result question without an origin offers campus-place choices; choosing
+Reitz continues the comparison against the original result IDs. Unsupported
+detours preserve the prior search. Exact common commands avoid a model parsing
+call; compound or ambiguous requests still use the validated interpreter.
+
+Burnt and stale reports are excluded at the retrieval boundary. The record
+decoder recognizes the current moderation schema, so a burnt row cannot fail an
+otherwise valid search. Database regression tests now apply account and
+moderation migrations alongside the discovery migrations.
+
+Verification includes the full local check, live Groq intent/grounding checks,
+and the hosted read-only end-to-end test. Browser checks exercise result cards,
+follow-up context, rechecked web map selection, returning to chat, filter reset,
+stop/replacement races, retry cooldowns, malformed responses, and portrait /
+landscape layouts. Browser interaction fixtures are isolated and never written
+to campus tables. Expo preview and native bundle checks complement these tests;
+physical-device keyboard, permission dialogs, and two-phone live posting still
+require device verification.

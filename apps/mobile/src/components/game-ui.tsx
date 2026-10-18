@@ -11,7 +11,8 @@ import { useMemo, type PropsWithChildren } from "react";
 import { theme, type Theme } from "@/lib/theme";
 import { PixelFrame } from "./pixel-frame";
 import { usePixelTheme, useTheme } from "@/lib/theme-context";
-const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
+export const PIXEL_FONT = "PressStart2P_400Regular";
+const createGameStyles = (t: Theme, pixel = true) => StyleSheet.create({
   page: { flex: 1, backgroundColor: t.background },
   content: {
     padding: 16,
@@ -21,12 +22,12 @@ const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
     maxWidth: 640,
     alignSelf: "center",
   },
-  title: { fontSize: 24, lineHeight: 30, fontWeight: "700", color: t.ink },
+  title: { fontFamily: pixel ? PIXEL_FONT : undefined, fontSize: pixel ? 16 : 24, lineHeight: pixel ? 27 : 30, fontWeight: pixel ? "400" : "700", color: t.ink },
   body: { fontSize: 16, lineHeight: 24, color: t.ink },
-  label: { fontSize: 14, lineHeight: 20, fontWeight: "600", color: t.ink },
+  label: { fontFamily: pixel ? PIXEL_FONT : undefined, fontSize: pixel ? 11 : 14, lineHeight: 20, fontWeight: pixel ? "400" : "600", color: t.ink },
   input: {
     backgroundColor: t.surface,
-    borderRadius: pixel ? 8 : 12,
+    borderRadius: pixel ? 0 : 12,
     borderWidth: pixel ? 2 : 1,
     borderColor: t.border,
     borderRightWidth: pixel ? 3 : 1,
@@ -56,6 +57,7 @@ const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
     fontWeight: pixel ? "400" : "600",
     color: t.buttonInk,
     textAlign: "center",
+    flexShrink: 1,
   },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
   error: {
@@ -64,16 +66,16 @@ const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
     color: t.danger,
     padding: 12,
     backgroundColor: t.dangerSurface,
-    borderRadius: 12,
+    borderRadius: pixel ? 0 : 12,
   },
   card: {
     padding: 16,
-    borderRadius: pixel ? 8 : 16,
+    borderRadius: pixel ? 0 : 16,
     borderColor: t.border,
     backgroundColor: t.surface,
     borderWidth: pixel ? 2 : 1,
-    borderRightWidth: pixel ? 3 : 1,
-    borderBottomWidth: pixel ? 3 : 1,
+    borderRightWidth: pixel ? 4 : 1,
+    borderBottomWidth: pixel ? 4 : 1,
     gap: 8,
   },
   muted: { fontSize: 14, lineHeight: 20, color: t.muted },
@@ -81,7 +83,7 @@ const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
 export const gameStyles = createGameStyles(theme);
 export function useGameStyles() {
   const t = useTheme(), pixel = usePixelTheme();
-  return useMemo(() => t === theme && !pixel ? gameStyles : createGameStyles(t, pixel), [t, pixel]);
+  return useMemo(() => t === theme && pixel ? gameStyles : createGameStyles(t, pixel), [t, pixel]);
 }
 export function GameButton({
   children,
@@ -144,7 +146,7 @@ export function Feedback({
           ? gameStyles.error
           : [
               gameStyles.muted,
-              { padding: 12, backgroundColor: t.sage, borderRadius: 12 },
+              { padding: 12, backgroundColor: t.sage, borderRadius: 0 },
             ]
       }
     >
@@ -171,14 +173,15 @@ export function Chip({
         minHeight: 48,
         paddingHorizontal: 16,
         paddingVertical: 12,
-        borderRadius: pixel ? 8 : 24,
-        borderWidth: 1,
+        borderRadius: pixel ? 0 : 24,
+        borderWidth: pixel ? 0 : 1,
         borderColor: selected ? t.ink : t.border,
-        backgroundColor: selected ? t.ink : t.surface,
+        backgroundColor: pixel ? "transparent" : selected ? t.ink : t.surface,
         opacity: pressed ? 0.7 : 1,
         justifyContent: "center",
       })}
     >
+      {pixel && <PixelFrame fill={selected ? t.ink : t.surface} />}
       <Text
         style={{
           fontFamily: pixel ? "PressStart2P_400Regular" : undefined,

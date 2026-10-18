@@ -28,7 +28,8 @@ export async function apiFetch(path: `/api/${string}`, init: RequestInit = {}) {
   // These endpoints authenticate credentials or issue a public challenge. They
   // must not wait for an existing Supabase session to refresh before fetching.
   const publicAuth = publicAuthEndpoints.has(path);
-  if (supabase && !publicAuth) {
+  const publicDiscovery = ["/api/ask", "/api/discover", "/api/events"].includes(path.split("?")[0]);
+  if (supabase && !publicAuth && !publicDiscovery) {
     const { data, error } = await supabase.auth.getSession();
     if (error) throw new Error("Please sign in again.");
     if (data.session)
@@ -38,7 +39,12 @@ export async function apiFetch(path: `/api/${string}`, init: RequestInit = {}) {
   const abort = () => controller.abort();
   if (init.signal?.aborted) controller.abort();
   init.signal?.addEventListener("abort", abort, { once: true });
-  const timer = setTimeout(abort, path === "/api/auth/loaf" ? 8000 : path === "/api/ask" || publicAuth ? 30000 : 15000);
+  // Next compiles each endpoint on its first development request. An 8-second
+  // bread timeout can disconnect the phone before that route is even ready.
+  const timeout = __DEV__ && publicAuth ? 60000
+    : path === "/api/auth/loaf" ? 8000
+    : path === "/api/ask" || publicAuth ? 30000 : 15000;
+  const timer = setTimeout(abort, timeout);
   try {
     return await fetch(url.toString(), {
       ...init,

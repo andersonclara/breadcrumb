@@ -10,7 +10,8 @@ import { useAuth } from "@/providers/auth-provider";
 import { useCampus } from "@/providers/world-provider";
 import { ToastLogo } from "./pixel-art";
 import { Icon } from "./icon";
-import { GameButton, Feedback, gameStyles as s } from "./game-ui";
+import { PixelFrame } from "./pixel-frame";
+import { GameButton, Feedback, PIXEL_FONT, gameStyles as s } from "./game-ui";
 import { theme as t } from "@/lib/theme";
 
 export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
@@ -140,15 +141,19 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>UF email</Text>
-            <TextInput style={[styles.input, focused === "email" && styles.focused]} accessibilityLabel="UF email address" value={email} onChangeText={setEmail}
-              placeholder="you@ufl.edu" placeholderTextColor={t.muted} autoCapitalize="none" autoCorrect={false}
-              autoComplete="email" textContentType="emailAddress" keyboardType="email-address" editable={!pending}
-              onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-              returnKeyType="next" submitBehavior="submit" onSubmitEditing={() => passwordInput.current?.focus()}/>
+            <View style={styles.inputFrame}>
+              <PixelFrame fill={focused === "email" ? t.crumbSurface : t.surface} />
+              <TextInput style={styles.input} accessibilityLabel="UF email address" value={email} onChangeText={setEmail}
+                placeholder="you@ufl.edu" placeholderTextColor={t.muted} autoCapitalize="none" autoCorrect={false}
+                autoComplete="email" textContentType="emailAddress" keyboardType="email-address" editable={!pending}
+                onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
+                returnKeyType="next" submitBehavior="submit" onSubmitEditing={() => passwordInput.current?.focus()}/>
+            </View>
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Password</Text>
-            <View style={[styles.passwordField, focused === "password" && styles.focused]}>
+            <View style={styles.passwordField}>
+            <PixelFrame fill={focused === "password" ? t.crumbSurface : t.surface} />
             <TextInput ref={passwordInput} style={styles.passwordInput} accessibilityLabel="Password" value={password} onChangeText={setPassword}
               secureTextEntry={!showPassword} autoComplete={signup ? "new-password" : "current-password"}
               textContentType={signup ? "newPassword" : "password"} autoCapitalize="none" autoCorrect={false}
@@ -173,6 +178,7 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
           <View style={[styles.buttonBase, signup && styles.signupButtonBase, disabled && styles.disabled]}>
             <Pressable accessibilityRole="button" accessibilityState={{ disabled, busy: pending }} disabled={disabled}
               onPress={() => void submit()} style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}>
+              <PixelFrame fill={t.toast} accent />
               {pending && <ActivityIndicator color={t.ink}/>}
               <Text style={styles.primaryLabel}>{pending ? (signup ? "Creating account..." : "Signing in...") : (signup ? "Create account" : "Sign in")}</Text>
               {!pending && <Icon name="chevron" size={20}/>}
@@ -188,6 +194,10 @@ export function AccountScreen({ mode }: { mode: "login" | "signup" }) {
               <Text style={styles.footerLink}>{signup ? "Sign in" : "Create an account"}</Text>
               <Icon name="chevron" size={16}/>
             </Pressable>
+            {!signup && <Pressable accessibilityRole="button" disabled={pending} onPress={()=>router.push("/ask")}
+              style={({pressed})=>[styles.footerButton,pressed&&styles.pressed]}>
+              <Text style={styles.footerLink}>Explore with Ask Breadcrumb</Text>
+            </Pressable>}
           </View>}
       </ScrollView>
     </KeyboardAvoidingView>
@@ -202,29 +212,29 @@ const styles = StyleSheet.create({
   tagline: { fontSize: 14, lineHeight: 22, color: t.muted, textAlign: "center" },
   form: { gap: 20 },
   intro: { gap: 6, marginBottom: 4 },
-  heading: { fontSize: 28, lineHeight: 36, fontWeight: "700", color: t.ink, letterSpacing: -0.7 },
+  heading: { fontFamily: PIXEL_FONT, fontSize: 19, lineHeight: 32, color: t.ink },
   description: { fontSize: 15, lineHeight: 23, color: t.muted },
   field: { gap: 8 },
-  label: { fontSize: 14, lineHeight: 20, fontWeight: "600", color: t.ink },
-  input: { minHeight: 56, paddingHorizontal: 16, paddingVertical: 14, borderWidth: 1.5, borderColor: t.border, borderRadius: 6, backgroundColor: t.surface, fontSize: 16, color: t.ink },
-  passwordField: { flexDirection: "row", alignItems: "center", minHeight: 56, borderWidth: 1.5, borderColor: t.border, borderRadius: 6, backgroundColor: t.surface },
-  passwordInput: { flex: 1, minWidth: 0, minHeight: 53, paddingLeft: 16, paddingRight: 4, paddingVertical: 14, fontSize: 16, color: t.ink },
-  focused: { borderColor: t.ink },
-  eyeButton: { minHeight: 52, minWidth: 52, alignItems: "center", justifyContent: "center", borderRadius: 4 },
+  label: { fontFamily: PIXEL_FONT, fontSize: 11, lineHeight: 20, color: t.ink },
+  inputFrame: { minHeight: 56 },
+  input: { minHeight: 56, paddingHorizontal: 16, paddingVertical: 14, fontFamily: PIXEL_FONT, fontSize: 11, lineHeight: 22, color: t.ink },
+  passwordField: { flexDirection: "row", alignItems: "center", minHeight: 56 },
+  passwordInput: { flex: 1, minWidth: 0, minHeight: 53, paddingLeft: 16, paddingRight: 4, paddingVertical: 14, fontFamily: PIXEL_FONT, fontSize: 11, lineHeight: 22, color: t.ink },
+  eyeButton: { minHeight: 52, minWidth: 48, alignItems: "center", justifyContent: "center" },
   helper: { fontSize: 13, lineHeight: 20, color: t.muted },
   forgotButton: { alignSelf: "flex-end", minHeight: 44, justifyContent: "center", marginTop: -16, paddingHorizontal: 2 },
-  link: { color: t.ink, fontSize: 14, lineHeight: 22, fontWeight: "600", textDecorationLine: "underline" },
-  buttonBase: { backgroundColor: t.ink, borderRadius: 6, paddingBottom: 4, marginTop: 4 },
+  link: { color: t.ink, fontFamily: PIXEL_FONT, fontSize: 10, lineHeight: 20, textDecorationLine: "underline" },
+  buttonBase: { paddingBottom: 4, marginTop: 4 },
   signupButtonBase: { marginTop: -12 },
-  primaryButton: { minHeight: 58, paddingHorizontal: 16, paddingVertical: 16, borderWidth: 2, borderColor: t.ink, borderRadius: 6, backgroundColor: t.toast, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 12 },
-  primaryLabel: { color: t.ink, fontSize: 17, lineHeight: 24, fontWeight: "700" },
+  primaryButton: { minHeight: 58, paddingHorizontal: 16, paddingVertical: 16, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 12 },
+  primaryLabel: { color: t.ink, fontFamily: PIXEL_FONT, fontSize: 12, lineHeight: 22, flexShrink: 1, textAlign: "center" },
   buttonPressed: { transform: [{ translateY: 3 }] },
   pressed: { opacity: 0.65 },
   disabled: { opacity: 0.5 },
   footer: { alignItems: "center", paddingTop: 32, marginTop: "auto" },
   compactFooter: { paddingTop: 24 },
-  divider: { width: 40, height: 2, backgroundColor: t.border, marginBottom: 24 },
+  divider: { width: 48, height: 4, backgroundColor: t.border, marginBottom: 24 },
   footerPrompt: { color: t.muted, fontSize: 14, lineHeight: 22, textAlign: "center" },
   footerButton: { flexDirection: "row", gap: 8, minHeight: 48, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
-  footerLink: { color: t.ink, fontSize: 15, lineHeight: 23, fontWeight: "700", textDecorationLine: "underline" },
+  footerLink: { color: t.ink, fontFamily: PIXEL_FONT, fontSize: 10, lineHeight: 20, textAlign: "center", flexShrink: 1, textDecorationLine: "underline" },
 });

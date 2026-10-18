@@ -49,7 +49,8 @@ Sessions persist in AsyncStorage following Supabase's React Native client patter
 
 - Pixel UF campus map with pan/zoom, category filters, breadcrumb placement, confirmation, disputes, and reports.
 - Avatar customization, friend codes/requests, and opt-in friends-only avatar locations.
-- Map, Live Buzz, Ask, and Radar navigation. Live Buzz shows active crumbs; Ask and Radar are placeholders.
+- Explore, Nearby, communities, and a full-height Ask screen. Ask supports public event/report discovery, follow-ups, source details, map actions, cancellation, and retry recovery. Radar remains a placeholder.
+- Public `/ask` access from the sign-in screen; guest discovery does not require an account. Signed-in users can open campus map selections, while guests can open public event locations externally.
 - UF email-code sign-in, restoration, sign-out, and app-state session refresh.
 - Shared category definitions, palette, coordinates, and UF account rules from `@breadcrumb/shared`.
 - `src/lib/api.ts` attaches the user's access token to guarded Next.js writes.

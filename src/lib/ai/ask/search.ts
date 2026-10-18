@@ -1,6 +1,7 @@
 import 'server-only';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {z} from 'zod';
+import {advertisedFreeFood} from '@breadcrumb/shared';
 import {placeSchema,recordSchema,type Constraints,type Place,type DiscoveryRecord,type AskRequest} from './schema';
 
 export function publicSourceUrl(value:string|null) {
@@ -25,7 +26,8 @@ export function createSearch(db:SupabaseClient,signal:AbortSignal) {
         if(ids&&ids.length===0)return [];
         return z.array(recordSchema).max(20).parse(await rpc(`ask_search_${kind}`,{p:{...p,...(ids?{ids}:{})}}));
       }));
-      return results.flat().filter(r=>r.kind==='crumb'||publicSourceUrl(r.sourceUrl)).map(r=>({...r,
+      return results.flat().filter(r=>(r.kind==='crumb'?r.state!=='burnt'&&r.state!=='stale':publicSourceUrl(r.sourceUrl))&&(!constraints.freeFoodOnly||
+        (r.kind==='crumb'?r.category==='freebie'&&/\b(food|pizza|snacks?|cookies?|refreshments?|lunch|dinner|breakfast|donuts?|coffee|tacos?)\b/i.test(`${r.title} ${r.description??''}`):advertisedFreeFood(r)))).map(r=>({...r,
         sourceUrl:publicSourceUrl(r.sourceUrl),title:r.title.slice(0,180),description:r.description?.slice(0,1000)??null,
       }));
     },
