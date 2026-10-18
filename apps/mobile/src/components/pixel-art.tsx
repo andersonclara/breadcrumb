@@ -104,12 +104,12 @@ export function ToastGlyph({ once = false }: { once?: boolean }) {
     </G>
   );
 }
-export function ToastLogo({ size = 36 }: { size?: number }) {
+export function ToastLogo({ size = 36, centered = false }: { size?: number; centered?: boolean }) {
   return (
     <Svg
       width={size}
       height={size}
-      viewBox="0 0 36 36"
+      viewBox={centered ? "-4 0 36 31" : "0 0 36 36"}
       accessibilityLabel="Breadcrumb toast logo"
     >
       <ToastGlyph />

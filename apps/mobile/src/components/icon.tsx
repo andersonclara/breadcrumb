@@ -13,6 +13,8 @@ export type IconName =
   | "user"
   | "bookmark"
   | "chevron"
+  | "eye"
+  | "eye-off"
   | "more";
 export function Icon({
   name,
@@ -52,6 +54,12 @@ export function Icon({
         <>
           <Circle cx={10.5} cy={10.5} r={6.5} />
           <Path d="m16 16 5 5" />
+        </>
+      ) : name === "eye" || name === "eye-off" ? (
+        <>
+          <Path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+          <Circle cx={12} cy={12} r={3} />
+          {name === "eye-off" && <Path d="m3 3 18 18" />}
         </>
       ) : name === "user" ? (
         <>
