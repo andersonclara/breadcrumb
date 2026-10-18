@@ -1,9 +1,9 @@
 import { Pressable, Text, View } from "react-native";
-import { discoveryTime, type DiscoveryRecord } from "@breadcrumb/shared";
+import { discoveryTime, isDemoRecord, type DiscoveryRecord } from "@breadcrumb/shared";
 import { PixelBread } from "./pixel-art";
 import { Icon } from "./icon";
-import { gameStyles as s } from "./game-ui";
-import { theme as t } from "@/lib/theme";
+import { useGameStyles } from "./game-ui";
+import { useTheme } from "@/lib/theme-context";
 export function DiscoveryRow({
   record: r,
   onPress,
@@ -11,6 +11,7 @@ export function DiscoveryRow({
   record: DiscoveryRecord;
   onPress: () => void;
 }) {
+  const t = useTheme(), s = useGameStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -32,7 +33,7 @@ export function DiscoveryRow({
           width: 40,
           height: 40,
           borderRadius: 12,
-          backgroundColor: r.kind === "crumb" ? "#FFF0CB" : t.sage,
+          backgroundColor: r.kind === "crumb" ? t.crumbSurface : t.sage,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -63,7 +64,7 @@ export function DiscoveryRow({
             color: r.kind === "crumb" ? t.success : t.muted,
           }}
         >
-          {r.kind === "crumb"
+          {isDemoRecord(r) ? 'Demo · simulated report' : r.kind === "crumb"
             ? r.confirmCount
               ? "Confirmed by " +
                 r.confirmCount +

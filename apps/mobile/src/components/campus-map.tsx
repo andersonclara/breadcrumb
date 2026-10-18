@@ -2,10 +2,11 @@ import { memo, useCallback, useMemo, useRef, useLayoutEffect, useState, type Pro
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
-import Svg, { G, Path, Circle, Text as SvgText } from "react-native-svg";
+import Svg, { Defs, RadialGradient, Stop, G, Path, Circle, Text as SvgText } from "react-native-svg";
 import {
   campus, toWorld, fromWorld, inCampus,
   type MapCamera, type MapSize, type MapBuilding, type Coordinate, type World, type DiscoveryRecord,
+  reportHeatCells,
 } from "@breadcrumb/shared";
 import { screenToWorld } from "@/lib/map-gesture";
 import { hitTileBuilding, tileBuildingLabels, mapPeople } from "@/lib/map-catalog";
@@ -15,7 +16,8 @@ import { useMapCamera } from "@/lib/use-map-camera";
 import { CampusTiles } from "./campus-tiles";
 import { BreadGlyph, PixelAvatar } from "./pixel-art";
 import { Icon } from "./icon";
-import { theme as t } from "@/lib/theme";
+import { theme, type Theme } from "@/lib/theme";
+import { useTheme } from "@/lib/theme-context";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import type { MapLightProbe } from "@/lib/map-lighting";
 
@@ -40,6 +42,7 @@ type Props = {
   colorMatrix?: number[];
   lightProbe?: MapLightProbe | null;
   lightingLevel?: number;
+  heatmap?: boolean;
 };
 type MarkerGroup = { x: number; y: number; records: DiscoveryRecord[] };
 
@@ -62,7 +65,9 @@ const MapAnchor = memo(function MapAnchor({ point, live, size, width = 48, heigh
 });
 
 export function CampusMap({ camera, onCamera, onInteract, followPosition, followRequest, world, records, placing, onDrop, onRecord,
-  onGroup, onBuilding, onBlank, selected, ownPosition, walking = false, bottomInset = 190, colorMatrix, lightProbe, lightingLevel }: Props) {
+  onGroup, onBuilding, onBlank, selected, ownPosition, walking = false, bottomInset = 190, colorMatrix, lightProbe, lightingLevel, heatmap = false }: Props) {
+  const t = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const reduced = useReducedMotion();
   const [size, setSize] = useState<MapSize>({ width: 390, height: 700 });
   const displayedGroups = useRef<MarkerGroup[]>([]);
@@ -115,6 +120,7 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
     return mapPeople(world, ownPosition).filter(p => p.x >= bounds.left && p.x <= bounds.right &&
       p.y >= bounds.top && p.y <= bounds.bottom);
   }, [world, ownPosition, scene, size]);
+  const heat = useMemo(() => heatmap ? reportHeatCells(records) : [], [heatmap, records]);
   return <View style={styles.map} onLayout={(e) => {
     const { width, height } = e.nativeEvent.layout;
     // Stack transitions can briefly report a hidden screen as 0×0. Keep the
@@ -125,6 +131,16 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
     <GestureDetector gesture={gesture} touchAction="none">
       <View collapsable={false} accessible={false} style={StyleSheet.absoluteFill}>
         <CampusTiles scene={scene} size={size} live={live} colorMatrix={colorMatrix} lightProbe={lightProbe} lightingLevel={lightingLevel} />
+        {heat.map(cell => <MapAnchor key={cell.key} point={cell} live={live} size={size} width={140} height={140}>
+          <Svg width={140} height={140} viewBox="-70 -70 140 140">
+            <Defs><RadialGradient id={`density-${cell.key.replace(':', '-')}`} cx="50%" cy="50%" r="50%">
+              <Stop offset="0" stopColor={cell.count >= 8 ? '#D66B2B' : '#EFC654'} stopOpacity={Math.min(.8, .2 + cell.count / 30)} />
+              <Stop offset=".5" stopColor="#EFC654" stopOpacity={Math.min(.4, cell.count / 50)} />
+              <Stop offset="1" stopColor="#EFC654" stopOpacity="0" />
+            </RadialGradient></Defs>
+            <Circle r={70} fill={`url(#density-${cell.key.replace(':', '-')})`} />
+          </Svg>
+        </MapAnchor>)}
         {labels.map((l) => <MapAnchor key={l.id} point={l.point} live={live} size={size} width={180} height={24} bottomInset={bottomInset + 20} label>
           <Text numberOfLines={1} style={styles.label}>{l.name}</Text>
         </MapAnchor>)}
@@ -154,15 +170,16 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
     <Text pointerEvents="none" style={[styles.credit, { bottom: bottomInset + 2 }]}>© UF GIS + OpenStreetMap · ODbL</Text>
   </View>;
 }
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   map: { flex: 1, backgroundColor: campus.colors[0], overflow: "hidden" },
   scenery: { position: "absolute", top: 0, left: 0, transformOrigin: [0, 0, 0] },
   anchor: { position: "absolute", top: 0, left: 0, alignItems: "center", justifyContent: "center" },
-  label: { fontSize: 12, fontWeight: "700", color: t.ink, backgroundColor: "#FFFCF5E6", paddingHorizontal: 4, borderRadius: 4 },
+  label: { fontSize: 12, fontWeight: "700", color: t.ink, backgroundColor: t.surface + "E6", paddingHorizontal: 4, borderRadius: 4 },
   personLabel: { fontSize: 10, color: t.ink, backgroundColor: t.surface },
   locationHalo: { position: "absolute", bottom: 0, width: 28, height: 12, borderRadius: 14, borderWidth: 2, borderColor: t.ink, backgroundColor: t.sage },
   target: { width: 32, height: 32, borderRadius: 16, borderWidth: 2, borderColor: t.ink, backgroundColor: "#F4BC5588" },
   controls: { position: "absolute", right: 16, gap: 8 },
   control: { width: 48, height: 48, borderRadius: 14, backgroundColor: t.surface, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: t.border },
-  credit: { position: "absolute", left: 12, fontSize: 10, color: t.ink, backgroundColor: "#FFFCF5E6", padding: 3, borderRadius: 4 },
+  credit: { position: "absolute", left: 12, fontSize: 10, color: t.ink, backgroundColor: t.surface + "E6", padding: 3, borderRadius: 4 },
 });
+const styles = createStyles(theme);

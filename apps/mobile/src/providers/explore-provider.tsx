@@ -22,6 +22,11 @@ import {
   type AskContext,
   type AskResult,
   type MapCamera,
+  createDemoReports,
+  demoRemaining,
+  demoKey,
+  isDemoRecord,
+  type DemoSession,
 } from "@breadcrumb/shared";
 import { useCampus } from "./world-provider";
 import { useAuth } from "./auth-provider";
@@ -33,7 +38,7 @@ export type Draft = {
   point: Coordinate | null;
   owner: string | null;
 };
-export type ChatTurn = { id: string; question: string; result: AskResult };
+export type ChatTurn = { id: string; question: string; result: AskResult; demoKey?: string | null };
 const initialCamera: MapCamera = {
   ...toWorld({ latitude: 29.6484, longitude: -82.3445 }),
   zoom: 12,
@@ -64,6 +69,39 @@ function useExploreValue() {
     [context, setContext] = useState<AskContext | undefined>(),
     [chatInput, setChatInput] = useState(""),
     [chatScroll, setChatScroll] = useState(0);
+  const [demo, setDemo] = useState<DemoSession | null>(null),
+    [demoSeconds, setDemoSeconds] = useState(0),
+    [heatmap, setHeatmap] = useState(false);
+  const endDemo = useCallback(() => {
+    setDemo(null);
+    setDemoSeconds(0);
+    setSelected(r => r && isDemoRecord(r) ? null : r);
+    setTurns(items => items.filter(turn => !turn.demoKey));
+    setContext(undefined);
+  }, []);
+  const startDemo = () => {
+    endDemo();
+    setDemo({ startedAt: Date.now(), seed: 1 + Math.floor(Math.random() * 0x7ffffffe) });
+    setDemoSeconds(180);
+    setHeatmap(true);
+    setScope('campus');
+    setPeriod('now');
+    setCategory('all');
+    setQuery('');
+    setCamera({ x: 228, y: 76, zoom: 2.3 });
+  };
+  useEffect(() => {
+    if (!demo) return;
+    const tick = () => {
+      const remaining = demoRemaining(demo);
+      if (!remaining) endDemo();
+      else setDemoSeconds(Math.ceil(remaining / 1000));
+    };
+    const timer = setInterval(tick, 1000);
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') tick(); });
+    return () => { clearInterval(timer); listener.remove(); };
+  }, [demo, endDemo]);
+  const demoRecords = useMemo(() => demo ? createDemoReports(demo) : [], [demo]);
   const [saved, setSaved] = useState<DiscoveryRecord[]>([]),
     [savedReady, setSavedReady] = useState(false),
     [savedError, setSavedError] = useState(""),
@@ -77,6 +115,7 @@ function useExploreValue() {
     [now, setNow] = useState(() => Date.now());
   if (owner !== identity) {
     setOwner(identity);
+    if (demo) endDemo();
     if (owner) {
       setDraft(emptyDraft);
       setResumePost(false);
@@ -210,7 +249,7 @@ function useExploreValue() {
       );
   }, [saved, savedReady, storageKey, loadedKey, canPersist]);
   const toggleSaved = (r: DiscoveryRecord) =>
-    setSaved((items) =>
+    !isDemoRecord(r) && setSaved((items) =>
       items.some((i) => discoveryKey(i) === discoveryKey(r))
         ? items.filter((i) => discoveryKey(i) !== discoveryKey(r))
         : [...items, r],
@@ -234,7 +273,7 @@ function useExploreValue() {
         hourCycle: "h23",
       }).format(now),
     );
-    return [...crumbRecords, ...publicRecords]
+    return [...crumbRecords, ...publicRecords, ...(scope === 'campus' ? demoRecords : [])]
       .filter(
         (r) =>
           isCurrentRecord(r, now) &&
@@ -254,7 +293,7 @@ function useExploreValue() {
             ? -1
             : 1,
       );
-  }, [world.crumbs, crumbRecords, events, scope, category, period, query, identity, now]);
+  }, [world.crumbs, crumbRecords, events, scope, category, period, query, identity, now, demoRecords]);
   function selectRecord(r: DiscoveryRecord, frame = true) {
     setSelected(r);
     if (frame && r.latitude !== null && r.longitude !== null) {
@@ -291,7 +330,15 @@ function useExploreValue() {
     resumePost,
     setResumePost,
     records,
-    loading,
+    demo: demo && demoRemaining(demo) ? demo : null,
+    demoKey: demoKey(demo),
+    demoRecords,
+    demoSeconds,
+    startDemo,
+    endDemo,
+    heatmap,
+    setHeatmap,
+    loading: loading && !demo,
     error,
     refreshing,
     refresh,

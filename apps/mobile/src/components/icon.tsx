@@ -1,5 +1,5 @@
 import Svg, { Path, Circle, Rect } from "react-native-svg";
-import { theme } from "@/lib/theme";
+import { useTheme } from "@/lib/theme-context";
 export type IconName =
   | "search"
   | "filter"
@@ -19,12 +19,13 @@ export type IconName =
 export function Icon({
   name,
   size = 22,
-  color = theme.ink,
+  color,
 }: {
   name: IconName;
   size?: number;
   color?: string;
 }) {
+  const theme = useTheme();
   const paths: Partial<Record<IconName, string>> = {
     filter: "M4 6h16M7 12h10M10 18h4",
     close: "m6 6 12 12M6 18 18 6",
@@ -45,7 +46,7 @@ export function Icon({
       height={size}
       viewBox="0 0 24 24"
       fill="none"
-      stroke={color}
+      stroke={color ?? theme.ink}
       strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"

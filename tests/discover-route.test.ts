@@ -3,6 +3,7 @@ const mocks = vi.hoisted(() => ({
   client: vi.fn(),
   search: vi.fn(),
   config: vi.fn(),
+  mapEvents: vi.fn(),
 }));
 vi.mock("server-only", () => ({}));
 vi.mock("@supabase/supabase-js", () => ({ createClient: mocks.client }));
@@ -10,6 +11,7 @@ vi.mock("../src/lib/env", () => ({ getSupabaseConfig: mocks.config }));
 vi.mock("../src/lib/ai/ask/search", () => ({
   createSearch: () => ({ search: mocks.search }),
 }));
+vi.mock('../src/lib/events/map', () => ({ readMapEvents: mocks.mapEvents }));
 import { GET } from "../src/app/api/discover/route";
 beforeEach(() => {
   vi.resetAllMocks();
@@ -18,8 +20,18 @@ beforeEach(() => {
     key: "public-key",
   });
   mocks.search.mockResolvedValue([]);
+  mocks.mapEvents.mockResolvedValue([]);
 });
 describe("public discovery read route", () => {
+  it('includes the wider published-event batch and resolves explicit Instagram building rooms', async () => {
+    const id='00000000-0000-4000-8000-000000000002';
+    mocks.mapEvents.mockResolvedValue([{kind:'event',id,source:'instagram',title:'Guest speaker',venue:'Communicore (C1-007)',latitude:null,longitude:null}]);
+    const response=await GET(new Request('https://example.test/api/discover?period=next7days'));
+    const data=await response.json();
+    expect(data.records).toHaveLength(1);
+    expect(data.records[0]).toMatchObject({source:'instagram',latitude:expect.any(Number),longitude:expect.any(Number)});
+    expect(mocks.mapEvents).toHaveBeenCalledOnce();
+  });
   it("uses anonymous publication-scoped retrieval without a model or privileged client", async () => {
     const response = await GET(
       new Request("https://example.test/api/discover?period=now"),
@@ -56,6 +68,7 @@ describe("public discovery read route", () => {
     expect(mocks.search.mock.calls[0][3]).toMatchObject({
       results: [{ kind: "event", id }],
     });
+    expect(mocks.mapEvents).not.toHaveBeenCalled();
   });
   it("never disguises storage failure as an empty result", async () => {
     mocks.search.mockRejectedValue(new Error("upstream-secret"));

@@ -7,9 +7,10 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import type { PropsWithChildren } from "react";
-import { theme as t } from "@/lib/theme";
-export const gameStyles = StyleSheet.create({
+import { useMemo, type PropsWithChildren } from "react";
+import { theme, type Theme } from "@/lib/theme";
+import { useTheme } from "@/lib/theme-context";
+const createGameStyles = (t: Theme) => StyleSheet.create({
   page: { flex: 1, backgroundColor: t.background },
   content: {
     padding: 16,
@@ -47,7 +48,7 @@ export const gameStyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     fontWeight: "600",
-    color: t.ink,
+    color: t.buttonInk,
     textAlign: "center",
   },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
@@ -56,7 +57,7 @@ export const gameStyles = StyleSheet.create({
     lineHeight: 21,
     color: t.danger,
     padding: 12,
-    backgroundColor: "#FCEAE1",
+    backgroundColor: t.dangerSurface,
     borderRadius: 12,
   },
   card: {
@@ -69,6 +70,11 @@ export const gameStyles = StyleSheet.create({
   },
   muted: { fontSize: 14, lineHeight: 20, color: t.muted },
 });
+export const gameStyles = createGameStyles(theme);
+export function useGameStyles() {
+  const t = useTheme();
+  return useMemo(() => t === theme ? gameStyles : createGameStyles(t), [t]);
+}
 export function GameButton({
   children,
   onPress,
@@ -83,6 +89,7 @@ export function GameButton({
   variant?: "primary" | "secondary" | "danger";
   style?: StyleProp<ViewStyle>;
 } & PropsWithChildren) {
+  const t = useTheme(), gameStyles = useGameStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -92,17 +99,18 @@ export function GameButton({
       style={({ pressed }) => [
         gameStyles.button,
         variant !== "primary" && {
-          backgroundColor: variant === "danger" ? "#FCEAE1" : t.sage,
+          backgroundColor: variant === "danger" ? t.dangerSurface : t.sage,
         },
         (disabled || loading) && { opacity: 0.5 },
         pressed && { opacity: 0.7 },
         style,
       ]}
     >
-      {loading && <ActivityIndicator color={t.ink} />}
+      {loading && <ActivityIndicator color={variant === "primary" ? t.buttonInk : t.ink} />}
       <Text
         style={[
           gameStyles.buttonText,
+          variant === "secondary" && { color: t.ink },
           variant === "danger" && { color: t.danger },
         ]}
       >
@@ -118,6 +126,7 @@ export function Feedback({
   message?: string | null;
   error?: boolean;
 }) {
+  const t = useTheme(), gameStyles = useGameStyles();
   return message ? (
     <Text
       accessibilityRole={error ? "alert" : undefined}
@@ -144,6 +153,7 @@ export function Chip({
   selected: boolean;
   onPress: () => void;
 }) {
+  const t = useTheme();
   return (
     <Pressable
       accessibilityRole="button"
@@ -185,10 +195,11 @@ export function EmptyState({
   action?: string;
   onAction?: () => void;
 }) {
+  const s = useGameStyles();
   return (
     <View style={{ gap: 12, paddingVertical: 16 }}>
-      <Text style={gameStyles.title}>{title}</Text>
-      <Text style={gameStyles.muted}>{description}</Text>
+      <Text style={s.title}>{title}</Text>
+      <Text style={s.muted}>{description}</Text>
       {action && onAction && (
         <GameButton variant="secondary" onPress={onAction}>
           {action}

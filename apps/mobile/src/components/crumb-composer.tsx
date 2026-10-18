@@ -10,7 +10,9 @@ import {
 } from "@breadcrumb/shared";
 import { useExplore } from "@/providers/explore-provider";
 import { useCampus } from "@/providers/world-provider";
-import { Chip, GameButton, gameStyles as s } from "./game-ui";
+import { Chip, GameButton, useGameStyles } from "./game-ui";
+import { useTheme } from "@/lib/theme-context";
+import { isDarkTheme } from "@/lib/map-ui-theme";
 export function CrumbComposer({
   onChangeLocation,
   onConfirm,
@@ -18,6 +20,7 @@ export function CrumbComposer({
   onChangeLocation: () => void;
   onConfirm: (id: string) => void;
 }) {
+  const t = useTheme(), s = useGameStyles();
   const { draft, setDraft } = useExplore(),
     { world } = useCampus();
   const joined = world.communities?.filter(
@@ -50,7 +53,9 @@ export function CrumbComposer({
         onChangeText={(text) => setDraft((d) => ({ ...d, text }))}
         maxLength={2000}
         placeholder="Free pizza outside Reitz until 2?"
-        placeholderTextColor="#786451"
+        placeholderTextColor={t.muted}
+        selectionColor={t.ink}
+        keyboardAppearance={isDarkTheme(t) ? "dark" : "light"}
       />
       <Text style={s.muted}>{draft.text.length}/2000</Text>
       <Text style={s.label}>Location</Text>

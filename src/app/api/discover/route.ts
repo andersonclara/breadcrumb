@@ -6,6 +6,7 @@ import { defaultConstraints } from "@/lib/ai/ask/schema";
 import { timeWindow } from "@/lib/ai/ask/time";
 import { mobileApi, mobileOptions } from "@/lib/mobile-api";
 import { resolveDiscoveryLocation } from "@breadcrumb/shared";
+import { readMapEvents } from "@/lib/events/map";
 
 export const runtime = "nodejs";
 const query = z.object({
@@ -54,14 +55,13 @@ async function discover(request: Request) {
             referencePlace: null,
           }
         : undefined;
-    const records = await createSearch(db, signal).search(
-      constraints,
-      window,
-      null,
-      refs,
-    );
+    const [records, mapEvents] = await Promise.all([
+      createSearch(db, signal).search(constraints, window, null, refs),
+      refs ? Promise.resolve([]) : readMapEvents(db, window, p.period === 'now', signal),
+    ]);
+    const discoveries = [...new Map([...mapEvents, ...records].map(r => [`${r.kind}:${r.id}`, r])).values()];
     return Response.json(
-      { records: records.map(resolveDiscoveryLocation), window },
+      { records: discoveries.map(resolveDiscoveryLocation), window },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch {

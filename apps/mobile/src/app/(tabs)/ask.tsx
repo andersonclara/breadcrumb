@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { router } from "expo-router";
 import * as Location from "expo-location";
 import {
@@ -18,6 +18,8 @@ import {
   discoveryKey,
   resolveDiscoveryLocation,
   roundedLocation,
+  demoRemaining,
+  isDemoRecord,
   type AskResult,
   type DiscoveryRecord,
 } from "@breadcrumb/shared";
@@ -29,6 +31,7 @@ import { Sheet } from "@/components/sheet";
 import { ToastLogo } from "@/components/pixel-art";
 import { GameButton, Feedback, gameStyles as s } from "@/components/game-ui";
 import { theme as t } from "@/lib/theme";
+import { DemoBanner } from "@/components/demo-banner";
 const prompts = [
   "Free food now",
   "What’s on tonight?",
@@ -52,6 +55,7 @@ export default function AskScreen() {
     },
     [],
   );
+  useLayoutEffect(() => () => abort.current?.abort(), [e.demoKey]);
   async function send(value = e.chatInput) {
     const question = value.trim();
     if (busy.current || !question) return;
@@ -82,9 +86,13 @@ export default function AskScreen() {
           message: question,
           ...(e.context ? { context: e.context } : {}),
           ...(coarseUserLocation ? { coarseUserLocation } : {}),
+          ...(e.demo ? { demo: e.demo } : {}),
         }),
       });
       const data = await response.json();
+      if (request.signal.aborted) return;
+      if (e.demo && !demoRemaining(e.demo))
+        throw new Error('The demo has ended. Ask again to search live discoveries.');
       if (!response.ok)
         throw new Error(
           response.status === 429
@@ -103,7 +111,7 @@ export default function AskScreen() {
       } as AskResult;
       e.setTurns((turns) => [
         ...turns,
-        { id: Date.now().toString(), question, result },
+        { id: Date.now().toString(), question, result, demoKey: e.demoKey },
       ]);
       e.setContext(result.context);
       e.setChatInput("");
@@ -128,6 +136,7 @@ export default function AskScreen() {
     router.navigate("/");
   }
   const latest = e.turns[e.turns.length - 1]?.result;
+  const visibleDetail = detail && (!isDemoRecord(detail) || e.demo && e.demoRecords.some(r => r.id === detail.id)) ? detail : null;
   return (
     <KeyboardAvoidingView
       style={s.page}
@@ -160,6 +169,7 @@ export default function AskScreen() {
           <Text style={s.label}>New chat</Text>
         </Pressable>
       </View>
+      {e.demo && <View style={{ marginHorizontal: 16, marginVertical: 8 }}><DemoBanner /></View>}
       <ScrollView
         ref={scroll}
         keyboardShouldPersistTaps="handled"
@@ -307,14 +317,14 @@ export default function AskScreen() {
         </GameButton>
       </View>
       <Sheet
-        visible={!!detail}
+        visible={!!visibleDetail}
         title="Discovery"
         onClose={() => setDetail(null)}
       >
-        {detail && (
+        {visibleDetail && (
           <DiscoveryDetail
-            key={discoveryKey(detail)}
-            record={detail}
+            key={discoveryKey(visibleDetail)}
+            record={visibleDetail}
             onClose={() => setDetail(null)}
           />
         )}

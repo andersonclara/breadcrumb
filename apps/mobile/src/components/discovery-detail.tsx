@@ -7,12 +7,13 @@ import {
   discoveryTime,
   isCurrentRecord,
   mappable,
+  isDemoRecord,
   type DiscoveryRecord,
 } from "@breadcrumb/shared";
 import { useExplore } from "@/providers/explore-provider";
 import { useCampus } from "@/providers/world-provider";
 import { apiFetch } from "@/lib/api";
-import { GameButton, Feedback, gameStyles as s } from "./game-ui";
+import { GameButton, Feedback, useGameStyles } from "./game-ui";
 export function DiscoveryDetail({
   record: input,
   onClose,
@@ -20,6 +21,7 @@ export function DiscoveryDetail({
   record: DiscoveryRecord;
   onClose: () => void;
 }) {
+  const s = useGameStyles();
   const { world, act, isPending, refresh } = useCampus(),
     e = useExplore();
   const [checking, setChecking] = useState(true),
@@ -36,13 +38,18 @@ export function DiscoveryDetail({
     !checking &&
     verified &&
     isCurrentRecord(r) &&
-    !(r.kind === "crumb" && world.profile && !crumb);
+    (isDemoRecord(r) ? !!e.demo && e.demoRecords.some(item => item.id === r.id) : !(r.kind === "crumb" && world.profile && !crumb));
   const pending = isPending("vote", r.id) || isPending("report", r.id);
   useEffect(() => {
     let active = true;
     const abort = new AbortController();
     async function check() {
       try {
+        if (isDemoRecord(input)) {
+          const current = e.demoRecords.find(item => item.id === input.id);
+          if (active) { setFresh(current ?? null); setVerified(!!current && isCurrentRecord(current)); }
+          return;
+        }
         if (input.kind === "crumb" && crumb) {
           const next = await refresh();
           if (!next)
@@ -128,7 +135,7 @@ export function DiscoveryDetail({
   return (
     <View style={{ gap: 16 }}>
       <Text style={s.muted}>
-        {r.kind === "crumb" ? "CAMPUS REPORT" : "SCHEDULED EVENT"}
+        {isDemoRecord(r) ? "DEMO · SIMULATED REPORT" : r.kind === "crumb" ? "CAMPUS REPORT" : "SCHEDULED EVENT"}
       </Text>
       <Text style={s.title}>{r.title}</Text>
       <Text style={s.body}>{r.venue ?? "Venue not listed"}</Text>
@@ -139,7 +146,7 @@ export function DiscoveryDetail({
       {r.kind === "crumb" ? (
         <>
           <Text style={s.body}>
-            {r.confirmCount > 0
+            {isDemoRecord(r) ? `${r.confirmCount} simulated confirmations` : r.confirmCount > 0
               ? "Confirmed by " +
                 r.confirmCount +
                 " student" +
@@ -205,16 +212,17 @@ export function DiscoveryDetail({
         </GameButton>
       )}
       <GameButton
-        disabled={!e.savedReady || !e.savedWritable}
+        disabled={isDemoRecord(r) || !e.savedReady || !e.savedWritable}
         variant="secondary"
         onPress={() => e.toggleSaved(r)}
       >
-        {e.saved.some((x) => discoveryKey(x) === discoveryKey(r))
+        {isDemoRecord(r) ? 'Demo reports are temporary' : e.saved.some((x) => discoveryKey(x) === discoveryKey(r))
           ? "Remove from saved"
           : "Save discovery"}
       </GameButton>
       <Feedback error message={e.savedError} />
       {r.kind === "crumb" &&
+        !isDemoRecord(r) &&
         available &&
         (world.profile ? (
           <>

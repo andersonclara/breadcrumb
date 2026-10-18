@@ -21,7 +21,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "./icon";
-import { theme as t } from "@/lib/theme";
+import type { Theme } from "@/lib/theme";
+import { useTheme } from "@/lib/theme-context";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 export function Sheet({
   visible,
@@ -37,6 +38,8 @@ export function Sheet({
   footer?: React.ReactNode;
   scroll?: boolean;
 } & PropsWithChildren) {
+  const t = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
   const insets = useSafeAreaInsets(),
     heading = useRef<Text>(null),
     [translation] = useState(() => new Animated.Value(0)),
@@ -140,11 +143,11 @@ export function Sheet({
     </Modal>
   );
 }
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
   backdrop: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#241C1666",
+    backgroundColor: t.backdrop,
   },
   sheet: {
     backgroundColor: t.surface,
