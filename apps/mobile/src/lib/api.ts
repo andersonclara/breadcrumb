@@ -29,7 +29,7 @@ export async function apiFetch(path: `/api/${string}`, init: RequestInit = {}) {
   const abort = () => controller.abort();
   if (init.signal?.aborted) controller.abort();
   init.signal?.addEventListener("abort", abort, { once: true });
-  const timer = setTimeout(abort, path === "/api/ask" ? 30000 : 15000);
+  const timer = setTimeout(abort, path === "/api/ask" || path.startsWith("/api/auth/") ? 30000 : 15000);
   try {
     return await fetch(url.toString(), {
       ...init,

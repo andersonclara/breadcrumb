@@ -87,6 +87,8 @@ export default function ProfileScreen() {
             initialUsername={c.world.profile.handle}
             initialAvatar={c.world.profile.avatar}
             userId={session!.user.id}
+            passwordManagedByAuth0={!!session!.user.app_metadata?.auth0_sub}
+            email={session!.user.email}
             onSaved={() => {
               setEditing(false);
               router.replace(e.resumePost ? "/" : "/profile");

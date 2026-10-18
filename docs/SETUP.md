@@ -14,7 +14,7 @@ The local scaffold runs without service accounts. Follow these steps together wi
 8. Restart `npm run dev`, visit `/login`, and request a link for a real `@ufl.edu` inbox. Click it, verify `/profile`, sign out, and sign in again. A non-UF address must be rejected. Check a second browser too.
 9. Enable `pg_cron` in Database → Extensions, then run `supabase/jobs.sql` after all migrations to schedule expiry and club reminders. Public-feed syncing has its own protected endpoint and optional GitHub schedule; see [event ingestion](EVENT_INGESTION.md). Instagram collection is manual and excluded from scheduled jobs.
 
-The database rejects non-UF signups even if a caller bypasses the web form. The server write guard additionally requires confirmed email and an active profile. New projects should apply the migration **before** creating test users.
+The database rejects non-UF signups even if a caller bypasses the web form. The server write guard additionally requires Supabase email confirmation and an active profile. In Auth0 immediate-signup mode the bridge sets that confirmation administratively; it does not prove inbox ownership (see [AUTH.md](AUTH.md)). New projects should apply the migration **before** creating test users.
 
 ### Optional local Supabase
 
@@ -26,6 +26,22 @@ npx supabase@latest db reset
 ```
 
 These commands use `supabase/config.toml` and apply the migration. Copy local API details from CLI output to `.env.local`. Local emails appear at `http://localhost:54324`. `db reset` destroys the local database; do not run it against a remote project. Hosted cron extensions are optional and not part of the core migration.
+
+## 1A Auth0 username/password accounts
+
+Auth0 holds Breadcrumb passwords; the pixel login form talks to Auth0 from the server. See [AUTH.md](AUTH.md) for the flow and the no-verification limitation.
+
+1. In Auth0, create a **Regular Web Application** (or reuse one). Copy its Domain, Client ID, and Client Secret into `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` in `.env.local`. `SUPABASE_SERVICE_ROLE_KEY` is also required.
+2. Open Application → Settings → Advanced → **Grant Types**, enable **Password**, and save. Set **Token Endpoint Authentication Method** to **Post** because the server sends the client credentials in the JSON body. On the same Settings page, turn on **Trust Token Endpoint IP Header**, so brute-force protection uses each student's IP on Vercel.
+3. Open Application → **Connections** and enable **Username-Password-Authentication**. If using a different connection name, set `AUTH0_DB_CONNECTION` to match.
+4. Open Authentication → Database → Username-Password-Authentication. Leave **Disable Sign Ups** off and **Requires Username** off; usernames live in Breadcrumb. Keep an appropriate Auth0 password-strength policy with a minimum length of 8. The app displays Auth0 policy errors; its 8-128 character check is only a baseline.
+5. Open Branding → Email Templates → **Verification Email** and turn it off, so Auth0 does not send mail that UF filters.
+6. Generate the BreadPass slice secret with `openssl rand -hex 32` and put it in `LOAF_SECRET` in `.env.local` (and Vercel).
+7. Open Actions → Library → Build Custom → **Pre User Registration** (Node 22 runtime). Paste the contents of [`auth0/actions/pre-user-registration.cjs`](../auth0/actions/pre-user-registration.cjs). Under the Action's **Secrets**, add `LOAF_SECRET` with the **same value**. Deploy it and add it to the Pre User Registration flow. The Action allows only @ufl.edu addresses and rejects any sign-up without a valid loaf-slice token, including direct calls to Auth0's public signup endpoint.
+8. Configure Auth0 password-reset email delivery and its reset template. Immediate signup does not send a verification email, but the profile password-reset action requires mail delivery.
+9. Restart `npm run dev` and Expo. On `/login`, Create Account should show email, username, password, confirm, and the loaf to slice. Test web and iOS using the checklist in [AUTH.md](AUTH.md); repository tests do not validate deployed tenant settings.
+
+Leave `LOAF_SECRET` blank to turn the slice off. In that case, also use an Action without the slice check, or every sign-up will be denied.
 
 ## 2 Optional Mapbox account
 

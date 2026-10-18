@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
 import {
   ActivityIndicator,
@@ -10,7 +10,8 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { normalizeUfEmail, normalizeUfLogin } from "@breadcrumb/shared";
+import { normalizeUfEmail, normalizeUfLogin, signupPasswordError } from "@breadcrumb/shared";
+import { LoafSlicer, type LoafSlice } from "@/components/loaf-slicer";
 import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/providers/auth-provider";
@@ -30,6 +31,21 @@ export default function LoginScreen() {
     [sentTo, setSentTo] = useState<string | null>(null),
     [pending, setPending] = useState(false),
     [message, setMessage] = useState("");
+  const [username,setUsername]=useState(""),[confirm,setConfirm]=useState(""),
+    [signupMode,setSignupMode]=useState<"loading"|"password"|"email"|"error">("loading"),
+    [configRetry,setConfigRetry]=useState(0),[slice,setSlice]=useState<LoafSlice|null>(null),
+    [sliceReady,setSliceReady]=useState(false),[sliceRetry,setSliceRetry]=useState(0);
+  useEffect(()=>{
+    if(mode!=="signup"&&mode!=="recover")return;
+    let active=true;
+    apiFetch("/api/auth/signup").then(async response=>{
+      if(!response.ok)throw new Error();
+      const data=await response.json();
+      if(typeof data.passwordSignup!=="boolean")throw new Error();
+      if(active)setSignupMode(data.passwordSignup?"password":"email");
+    }).catch(()=>{if(active)setSignupMode("error");});
+    return ()=>{active=false;};
+  },[mode,configRetry]);
   async function enterCampus() {
     if (!supabase) return;
     const {
@@ -69,20 +85,7 @@ export default function LoginScreen() {
           setMessage("Enter your UF email or username and password.");
           return;
         }
-        if (login.includes("@")) {
-          const { error } = await supabase.auth.signInWithPassword({
-            email: login,
-            password,
-          });
-          if (error) {
-            setMessage(
-              error.code === "email_not_confirmed"
-                ? "Confirm your UF email before signing in."
-                : "Email/username or password is incorrect.",
-            );
-            return;
-          }
-        } else {
+        {
           const response = await apiFetch("/api/auth/password", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -118,6 +121,22 @@ export default function LoginScreen() {
           setMessage("Use your @ufl.edu email address.");
           return;
         }
+        if(mode==="signup"&&signupMode==="password"){
+          const error=signupPasswordError(password,confirm);
+          if(error){setMessage(error);return;}
+          const response=await apiFetch("/api/auth/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,username,password,confirm,loafChallenge:slice?.challenge,loafTrace:slice?.trace})});
+          const result=await response.json();
+          setSliceRetry(n=>n+1);
+          if(result.mode!=="email"){
+            if(!response.ok||!result.session)throw new Error(result.error??"Could not create your account.");
+            const {error}=await supabase.auth.setSession(result.session);
+            if(error)throw new Error("Could not save your session. Please sign in.");
+            setPassword("");setConfirm("");
+            await enterCampus();return;
+          }
+          setSignupMode("email");
+        }
+        if(mode==="signup"&&(signupMode==="loading"||signupMode==="error"))return;
         const { error } = await supabase.auth.signInWithOtp({
           email,
           options: { shouldCreateUser: mode === "signup" },
@@ -141,6 +160,7 @@ export default function LoginScreen() {
     setSentTo(null);
     setCode("");
     setPassword("");
+    setConfirm("");setSlice(null);setSliceReady(false);setSignupMode("loading");
     setMessage("");
   }
   async function resend() {
@@ -161,6 +181,16 @@ export default function LoginScreen() {
     } finally {
       setPending(false);
     }
+  }
+  async function resetPassword(){
+    if(lock.current)return;
+    const email=normalizeUfEmail(identity);
+    if(!email){setMessage("Use your @ufl.edu email address.");return;}
+    lock.current=true;setPending(true);setMessage("");
+    try{
+      const response=await apiFetch("/api/auth/reset-password",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})});
+      const result=await response.json();setMessage(result.message??result.error??"Could not send a password reset.");
+    }catch{setMessage("Could not connect. Please retry.");}finally{lock.current=false;setPending(false);}
   }
   if (loading)
     return (
@@ -224,8 +254,8 @@ export default function LoginScreen() {
               {mode === "login"
                 ? "Sign in with your UF email or Breadcrumb username."
                 : mode === "recover"
-                  ? "We’ll email a code to sign you in. You can then change your password in your profile."
-                  : "Verify your UF email to share discoveries."}
+                  ? "We’ll email a code to sign you in. Manage your password from your profile."
+                  : signupMode==="password"?"Create your account with your UF email and a password.":"Verify your UF email to share discoveries."}
             </Text>
             <Text style={s.label}>
               {mode === "login" ? "Email or username" : "UF email address"}
@@ -249,7 +279,11 @@ export default function LoginScreen() {
               keyboardType={mode === "login" ? "default" : "email-address"}
               editable={!pending && !sentTo}
             />
-            {mode === "login" && (
+            {mode === "signup" && signupMode === "password" && !sentTo && <>
+              <Text style={s.label}>Username</Text>
+              <TextInput style={s.input} accessibilityLabel="Username" value={username} onChangeText={setUsername} autoCapitalize="none" autoCorrect={false} maxLength={30} editable={!pending}/>
+            </>}
+            {(mode === "login" || (mode === "signup" && signupMode === "password" && !sentTo)) && (
               <>
                 <Text style={s.label}>Password</Text>
                 <View style={s.row}>
@@ -259,8 +293,8 @@ export default function LoginScreen() {
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={!showPassword}
-                    autoComplete="current-password"
-                    textContentType="password"
+                    autoComplete={mode==="login"?"current-password":"new-password"}
+                    textContentType={mode==="login"?"password":"newPassword"}
                     autoCapitalize="none"
                     autoCorrect={false}
                     maxLength={128}
@@ -283,14 +317,24 @@ export default function LoginScreen() {
                     </Text>
                   </Pressable>
                 </View>
-                <GameButton
+                {mode==="login"&&<GameButton
                   variant="secondary"
                   onPress={() => switchMode("recover")}
                 >
                   Forgot password?
-                </GameButton>
+                </GameButton>}
               </>
             )}
+            {mode==="signup"&&signupMode==="password"&&!sentTo&&<>
+              <Text style={s.label}>Confirm password</Text>
+              <TextInput style={s.input} accessibilityLabel="Confirm password" value={confirm} onChangeText={setConfirm} secureTextEntry={!showPassword} autoComplete="new-password" autoCapitalize="none" autoCorrect={false} maxLength={128} editable={!pending}/>
+              <LoafSlicer onChange={setSlice} onReady={setSliceReady} resetKey={sliceRetry}/>
+            </>}
+            {mode==="signup"&&signupMode==="error"&&<>
+              <Feedback error message="Could not load account signup. Please retry."/>
+              <GameButton variant="secondary" onPress={()=>{setSignupMode("loading");setConfigRetry(n=>n+1);}}>Retry signup</GameButton>
+            </>}
+            {mode==="recover"&&signupMode==="password"&&!sentTo&&<GameButton variant="secondary" disabled={pending} onPress={()=>void resetPassword()}>Email a password reset link</GameButton>}
             {sentTo && (
               <>
                 <Text style={s.label}>Verification code sent to {sentTo}</Text>
@@ -326,7 +370,7 @@ export default function LoginScreen() {
             <Feedback
               error={
                 !message.startsWith("Check your") &&
-                !message.startsWith("A new code")
+                !message.startsWith("A new code") && !message.startsWith("If this address")
               }
               message={
                 message ||
@@ -337,7 +381,7 @@ export default function LoginScreen() {
               }
             />
             <GameButton
-              disabled={!supabase}
+              disabled={!supabase||(mode==="signup"&&!sentTo&&(signupMode==="loading"||signupMode==="error"||(signupMode==="password"&&!sliceReady)))}
               loading={pending}
               onPress={() => void submit()}
             >
@@ -345,7 +389,7 @@ export default function LoginScreen() {
                 ? "Sign in"
                 : sentTo
                   ? "Verify code"
-                  : "Send verification code"}
+                  : mode==="signup"&&signupMode==="password"?"Create account":"Send verification code"}
             </GameButton>
             <GameButton
               variant="secondary"

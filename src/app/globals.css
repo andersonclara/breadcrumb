@@ -143,3 +143,5 @@ html,body,body *{cursor:url("/original-toast-cursor.png") 16 16,url("/original-t
 .recipe-meta-controls .recipe-prep-time{grid-column:1/-1;flex-direction:row;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .game-panel .crumb-composer .recipe-meta-field{display:flex;flex-direction:column;gap:10px;min-width:0;margin:0}
 .game-panel .crumb-composer .recipe-meta-field select{width:100%;min-width:0;min-height:48px;margin:0;padding:10px 8px;font-size:12px;background:#fff8e8;border:1px solid #bca175}
+
+.loaf-slicer{display:grid;gap:6px;margin-top:6px}.loaf-slicer>label{font:7px/2 Pixel,monospace}.loaf-slicer svg{width:100%;max-width:320px;justify-self:center;cursor:crosshair;background:#fffdf5;border:2px dashed #d8b67f;user-select:none}.loaf-actions{display:flex;gap:14px;justify-content:center}

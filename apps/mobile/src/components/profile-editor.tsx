@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import { signupPasswordError, type AvatarConfig } from "@breadcrumb/shared";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 import { useCampus } from "@/providers/world-provider";
 import { AvatarWorkshop } from "./avatar-workshop";
 import { PixelAvatar } from "./pixel-art";
@@ -10,11 +11,15 @@ export function ProfileEditor({
   initialUsername,
   initialAvatar,
   userId,
+  passwordManagedByAuth0=false,
+  email,
   onSaved,
 }: {
   initialUsername: string;
   initialAvatar: AvatarConfig;
   userId: string;
+  passwordManagedByAuth0?: boolean;
+  email?: string;
   onSaved: (onboarding: boolean) => void;
 }) {
   const { act } = useCampus();
@@ -56,7 +61,7 @@ export function ProfileEditor({
       setMessage("Use 3?30 letters, numbers, dots, underscores, or hyphens.");
       return;
     }
-    if (!complete || password || confirm) {
+    if (!passwordManagedByAuth0 && (!complete || password || confirm)) {
       const error = signupPasswordError(password, confirm);
       if (error) {
         setMessage(error);
@@ -66,7 +71,7 @@ export function ProfileEditor({
     setPending(true);
     setMessage("");
     try {
-      if (password) {
+      if (!passwordManagedByAuth0 && password) {
         const { error } = await supabase.auth.updateUser({ password });
         if (error && error.code !== "same_password")
           throw new Error(
@@ -115,7 +120,7 @@ export function ProfileEditor({
       <Text style={s.muted}>
         3?30 characters. This is how friends recognize you.
       </Text>
-      <Text style={s.label}>
+      {!passwordManagedByAuth0&&<><Text style={s.label}>
         {complete ? "New password (optional)" : "Create a password"}
       </Text>
       <TextInput
@@ -142,6 +147,14 @@ export function ProfileEditor({
         autoCorrect={false}
         maxLength={128}
       />
+      </>}
+      {passwordManagedByAuth0&&<GameButton variant="secondary" disabled={pending||!email} onPress={()=>{
+        setPending(true);setMessage("");
+        void apiFetch("/api/auth/reset-password",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})})
+          .then(async response=>{const data=await response.json();setMessage(data.message??data.error??"Could not send a password reset.");})
+          .catch(()=>setMessage("Could not connect. Please retry."))
+          .finally(()=>setPending(false));
+      }}>Email a password reset link</GameButton>}
       <Text style={s.label}>Your avatar</Text>
       {customize ? (
         <AvatarWorkshop initial={avatar} hideSave onChange={setAvatar} />
