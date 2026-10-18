@@ -30,6 +30,8 @@ The replay cache is per server process, not a distributed single-use guarantee. 
 
 ## Mobile and map compatibility
 
+Expo opens account creation first when signed out, including the Auth0 loaf challenge when enabled. Existing users can switch to sign-in at the top of the form. The app waits for session restoration before choosing routes; saved sessions open the campus normally. All campus routes require a session, including deep links, and signing out removes them from navigation history. Campus polling and discovery requests pause while signed out. The public web site retains its existing entry flow.
+
 `GET /api/auth/signup` exposes only whether password signup is enabled. `/api/auth/password`, `/api/auth/signup`, `/api/auth/loaf`, and `/api/auth/reset-password` support native requests and the existing localhost Expo web development CORS/preflight allowance. Arbitrary foreign browser origins remain rejected for writes, including localhost origins in production.
 
 Shared loaf helpers are exported from both shared entry points. Keep `login.ts` importing `./email` directly, and keep Expo on `index.mobile.ts`; importing the full web barrel would reintroduce expensive map generators. The tiled Skia renderer, mobile asset generation, and event/Ask functionality remain the integration baseline.

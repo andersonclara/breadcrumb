@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -20,10 +21,11 @@ import { ToastLogo } from "@/components/pixel-art";
 import { GameButton, Feedback, gameStyles as s } from "@/components/game-ui";
 import { theme as t } from "@/lib/theme";
 export default function LoginScreen() {
+  const insets=useSafeAreaInsets();
   const { session, loading, error } = useAuth(),
     { stop } = useCampus(),
     lock = useRef(false);
-  const [mode, setMode] = useState<"login" | "signup" | "recover">("login"),
+  const [mode, setMode] = useState<"login" | "signup" | "recover">("signup"),
     [identity, setIdentity] = useState(""),
     [password, setPassword] = useState(""),
     [showPassword, setShowPassword] = useState(false),
@@ -204,14 +206,20 @@ export default function LoginScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
-        contentContainerStyle={s.content}
+        contentContainerStyle={[s.content,{paddingTop:session?16:insets.top+16,paddingBottom:insets.bottom+40}]}
         keyboardShouldPersistTaps="handled"
       >
         <View style={[s.row, { paddingVertical: 8 }]}>
           <ToastLogo size={48} />
           <Text style={[s.title, { fontSize: 20 }]}>Breadcrumb</Text>
         </View>
-        {session && !sentTo ? (
+        {!session&&mode==="signup"&&!sentTo&&<GameButton variant="secondary" disabled={pending} onPress={()=>switchMode("login")}>Already have an account? Sign in</GameButton>}
+        {!session&&mode==="signup"&&signupMode==="loading" ? (
+          <View style={{gap:12,alignItems:"center",padding:24}}>
+            <ActivityIndicator color={t.ink}/>
+            <Text style={s.body}>Getting your loaf ready...</Text>
+          </View>
+        ) : session && !sentTo ? (
           <>
             <Text style={s.title}>Welcome back.</Text>
             <Text style={s.body}>Your UF account is signed in.</Text>
@@ -245,7 +253,7 @@ export default function LoginScreen() {
               {sentTo
                 ? "Check your UF inbox"
                 : mode === "signup"
-                  ? "Join the campus."
+                  ? "Join the loaf."
                   : mode === "recover"
                     ? "Get back into your account."
                     : "Welcome back."}
@@ -376,7 +384,7 @@ export default function LoginScreen() {
                 message ||
                 error ||
                 (!supabase
-                  ? "Sign-in is unavailable. You can still explore campus."
+                  ? "Sign-in is unavailable. Please try again later."
                   : "")
               }
             />
@@ -391,7 +399,7 @@ export default function LoginScreen() {
                   ? "Verify code"
                   : mode==="signup"&&signupMode==="password"?"Create account":"Send verification code"}
             </GameButton>
-            <GameButton
+            {mode!=="signup"&&<GameButton
               variant="secondary"
               disabled={pending}
               onPress={() => switchMode(mode === "login" ? "signup" : "login")}
@@ -399,12 +407,9 @@ export default function LoginScreen() {
               {mode === "login"
                 ? "Create a UF account"
                 : "Already have an account? Sign in"}
-            </GameButton>
+            </GameButton>}
           </>
         )}
-        <GameButton variant="secondary" onPress={() => router.replace("/")}>
-          Explore campus
-        </GameButton>
       </ScrollView>
     </KeyboardAvoidingView>
   );

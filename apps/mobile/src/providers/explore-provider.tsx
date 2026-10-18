@@ -136,6 +136,7 @@ function useExploreValue() {
     controller.current?.abort();
   }, []);
   useEffect(() => {
+    if(!identity)return;
     let active = true;
     void Promise.resolve().then(() => {
       if (active) return refresh();
@@ -153,7 +154,7 @@ function useExploreValue() {
       clearInterval(timer);
       sub.remove();
     };
-  }, [refresh, cancelDiscovery]);
+  }, [refresh, cancelDiscovery, identity]);
   const storageKey = "breadcrumb:saved:v1:" + (identity ?? "guest");
   useEffect(() => {
     let active = true;

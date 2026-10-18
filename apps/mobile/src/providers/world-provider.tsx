@@ -19,6 +19,7 @@ import {
 } from "@breadcrumb/shared";
 import { supabase } from "@/lib/supabase";
 import { worldAction } from "@/lib/world";
+import { useAuth } from "./auth-provider";
 const Context = createContext<{
   world: World;
   error: string;
@@ -54,11 +55,12 @@ const Context = createContext<{
   stop: async () => {},
 });
 export function WorldProvider({ children }: PropsWithChildren) {
+  const {session}=useAuth();
   const [foreground, setForeground] = useState(
     AppState.currentState !== "background",
   );
-  const { world, error, refresh, loading, refreshing } = useWorld(supabase, {
-    enabled: foreground,
+  const { world, error, refresh, loading, refreshing } = useWorld(session?supabase:null, {
+    enabled: foreground && !!session,
   });
   const [notice, setNotice] = useState(""),
     [actionError, setActionError] = useState(""),
