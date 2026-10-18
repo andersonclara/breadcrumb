@@ -1,5 +1,5 @@
 import 'server-only';
-import {normalizeUfEmail} from '@breadcrumb/shared';
+import {normalizeUfEmail} from '@breadcrumb/shared/email';
 
 // Auth0 owns Breadcrumb passwords. The server calls Auth0's database-connection APIs directly so the
 // pixel login form stays in the app; no hosted login page or Auth0 session cookie is involved.
@@ -25,7 +25,7 @@ export function passwordPolicyMessage(description:unknown):string{
 const generic='Could not reach the account service. Please try again.';
 async function call(path:string,init:{body:unknown;headers?:Record<string,string>}){
  const config=auth0Config();if(!config)throw new Error('Auth0 is not configured.');
- const response=await fetch(`https://${config.domain}${path}`,{method:'POST',headers:{'Content-Type':'application/json',...init.headers},body:JSON.stringify(init.body),cache:'no-store'});
+ const response=await fetch(`https://${config.domain}${path}`,{method:'POST',headers:{'Content-Type':'application/json',...init.headers},body:JSON.stringify(init.body),cache:'no-store',signal:AbortSignal.timeout(8000)});
  const data=await response.json().catch(()=>({})) as Auth0Error&Record<string,unknown>;
  return {ok:response.ok,status:response.status,data};
 }
@@ -69,11 +69,18 @@ export async function auth0Authenticate(email:string,password:string,ip?:string|
  }
  const access=token.data.access_token;
  if(typeof access!=='string')return {error:generic};
- const info=await fetch(`https://${config.domain}/userinfo`,{headers:{Authorization:`Bearer ${access}`},cache:'no-store'});
+ const info=await fetch(`https://${config.domain}/userinfo`,{headers:{Authorization:`Bearer ${access}`},cache:'no-store',signal:AbortSignal.timeout(8000)});
  const user=await info.json().catch(()=>({})) as {sub?:unknown;email?:unknown};
  if(!info.ok){console.error(`Auth0 userinfo failed: HTTP ${info.status}`);return {error:generic};}
  const ufEmail=normalizeUfEmail(user.email);
  // Only the Breadcrumb database connection; ownership of the address is not verified (see docs/AUTH.md).
- if(typeof user.sub!=='string'||!user.sub.startsWith('auth0|')||!ufEmail)return {error:'A UF (@ufl.edu) account is required.'};
+ if(typeof user.sub!=='string'||!user.sub.startsWith('auth0|')||!ufEmail||ufEmail!==email)return {error:'A UF (@ufl.edu) account is required.'};
  return {sub:user.sub,email:ufEmail};
+}
+
+export async function auth0ResetPassword(email:string){
+ const config=auth0Config();if(!config)return {error:generic};
+ const result=await call('/dbconnections/change_password',{body:{client_id:config.clientId,email,connection:config.connection}});
+ if(!result.ok){log('password reset',result.status,result.data);return {error:'Could not send a password reset. Please try again.'};}
+ return {};
 }

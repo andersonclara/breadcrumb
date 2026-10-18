@@ -1,14 +1,14 @@
 import {beforeEach,afterEach,describe,it,expect,vi} from 'vitest';
 import type {SupabaseClient} from '@supabase/supabase-js';
-const mocks=vi.hoisted(()=>({lookup:vi.fn(),createUser:vi.fn(),generateLink:vi.fn(),updateUser:vi.fn(),verifyOtp:vi.fn(),profile:vi.fn(),complete:vi.fn(),fetch:vi.fn(),probeSignIn:vi.fn(),signin:vi.fn()}));
+const mocks=vi.hoisted(()=>({lookup:vi.fn(),createUser:vi.fn(),generateLink:vi.fn(),updateUser:vi.fn(),verifyOtp:vi.fn(),profile:vi.fn(),complete:vi.fn(),fetch:vi.fn(),probeSignIn:vi.fn(),probeSignOut:vi.fn(),signout:vi.fn(),signin:vi.fn()}));
 vi.mock('server-only',()=>({}));
 // The legacy-password proof uses a throwaway supabase-js client.
-vi.mock('@supabase/supabase-js',()=>({createClient:()=>({auth:{signInWithPassword:mocks.probeSignIn,signOut:vi.fn()}})}));
+vi.mock('@supabase/supabase-js',()=>({createClient:()=>({auth:{signInWithPassword:mocks.probeSignIn,signOut:mocks.probeSignOut}})}));
 vi.mock('../src/lib/supabase/admin',()=>({createAdminClient:()=>({rpc:mocks.lookup,auth:{admin:{createUser:mocks.createUser,generateLink:mocks.generateLink,updateUserById:mocks.updateUser}}})}));
 import {createAuth0Account,passwordLogin} from '../src/lib/auth/password';
-import {trustedClientIp} from '../src/lib/auth/auth0';
+import {trustedClientIp,auth0ResetPassword} from '../src/lib/auth/auth0';
 import {createLoafChallenge} from '../src/lib/auth/loaf';
-const client={auth:{verifyOtp:mocks.verifyOtp,signInWithPassword:mocks.signin,signOut:vi.fn()},rpc:mocks.complete,from:()=>({select:()=>({eq:()=>({single:mocks.profile})})})} as unknown as SupabaseClient;
+const client={auth:{verifyOtp:mocks.verifyOtp,signInWithPassword:mocks.signin,signOut:mocks.signout},rpc:mocks.complete,from:()=>({select:()=>({eq:()=>({single:mocks.profile})})})} as unknown as SupabaseClient;
 const json=(status:number,body:unknown)=>Promise.resolve(new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}}));
 const calls=()=>mocks.fetch.mock.calls.map(([url])=>new URL(String(url)).pathname);
 const signup={email:'Albert@UFL.edu',username:'Cool_Albert',password:'bread-loaf-42',confirm:'bread-loaf-42'};
@@ -34,6 +34,13 @@ beforeEach(()=>{
 });
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();});
 describe('Auth0 username/password accounts',()=>{
+ it('creates an email/password account and defers username selection to profile setup',async()=>{
+  const result=await createAuth0Account(client,{email:signup.email,password:signup.password});
+  expect(result.next).toBe('/profile?setup=1');
+  expect(calls()).toEqual(['/dbconnections/signup','/oauth/token','/userinfo']);
+  expect(mocks.lookup).not.toHaveBeenCalled();
+  expect(mocks.complete).not.toHaveBeenCalled();
+ });
  it('rejects bad sign-up input before calling Auth0',async()=>{
   expect((await createAuth0Account(client,{...signup,email:'albert@gmail.com'})).error).toContain('@ufl.edu');
   expect((await createAuth0Account(client,{...signup,username:'a@b'})).error).toContain('username');
@@ -90,7 +97,8 @@ describe('Auth0 username/password accounts',()=>{
   mocks.createUser.mockResolvedValue({data:null,error:{code:'email_exists'}});
   mocks.probeSignIn.mockResolvedValue({data:{session:{access_token:'legacy'}},error:null});
   expect((await passwordLogin(client,'albert@ufl.edu','bread-loaf-42')).next).toBe('/');
-  expect(mocks.updateUser).toHaveBeenCalledWith('user',{app_metadata:{auth0_sub:'auth0|abc'}});
+  expect(mocks.updateUser).toHaveBeenCalledWith('user',{password:expect.any(String),app_metadata:{auth0_sub:'auth0|abc'}});
+  expect(mocks.probeSignOut).toHaveBeenCalledWith({scope:'local'});
   expect(mocks.verifyOtp).toHaveBeenCalledOnce();
  });
  it('refuses an account already linked to a different Auth0 user',async()=>{
@@ -111,6 +119,34 @@ describe('Auth0 username/password accounts',()=>{
   const headers=new Headers({'x-forwarded-for':'203.0.113.9, 10.0.0.1'});
   expect(trustedClientIp(headers,{})).toBeNull();
   expect(trustedClientIp(headers,{VERCEL:'1'})).toBe('203.0.113.9');
+ });
+ it('does not accept another UF identity returned for the submitted address',async()=>{
+  mocks.fetch.mockImplementation((url:string)=>new URL(url).pathname==='/userinfo'?json(200,{sub:'auth0|abc',email:'bob@ufl.edu'}):json(200,{access_token:'access'}));
+  expect((await passwordLogin(client,'albert@ufl.edu','password')).error).toContain('UF');
+  expect(mocks.generateLink).not.toHaveBeenCalled();
+ });
+ it('never falls back to Supabase passwords on an Auth0-linked account',async()=>{
+  mocks.fetch.mockImplementation(()=>json(403,{error:'invalid_grant'}));
+  mocks.signin.mockResolvedValue({data:{user:{id:'user',email:'albert@ufl.edu',email_confirmed_at:'2026-10-17',app_metadata:{auth0_sub:'auth0|abc'}},session:{access_token:'old'}},error:null});
+  expect((await passwordLogin(client,'albert@ufl.edu','old-password')).error).toContain('incorrect');
+  expect(mocks.signout).toHaveBeenCalledWith({scope:'local'});
+ });
+ it('does not bypass Auth0 rate limits with a legacy password attempt',async()=>{
+  mocks.fetch.mockImplementation(()=>json(429,{error:'too_many_attempts'}));
+  expect((await passwordLogin(client,'albert@ufl.edu','password')).error).toContain('Too many');
+  expect(mocks.signin).not.toHaveBeenCalled();
+ });
+ it('lets an already linked identity open a session without a legacy proof',async()=>{
+  mocks.createUser.mockResolvedValue({data:null,error:{code:'email_exists'}});
+  mocks.generateLink.mockResolvedValue({data:{user:{id:'user',app_metadata:{auth0_sub:'auth0|abc'}},properties:{hashed_token:'hash'}},error:null});
+  expect((await passwordLogin(client,'albert@ufl.edu','password')).next).toBe('/');
+  expect(mocks.probeSignIn).not.toHaveBeenCalled();expect(mocks.updateUser).not.toHaveBeenCalled();
+ });
+ it('sends password resets to Auth0 with the configured database connection',async()=>{
+  mocks.fetch.mockImplementation(()=>Promise.resolve(new Response('An email has been sent.')));
+  expect(await auth0ResetPassword('albert@ufl.edu')).toEqual({});
+  expect(calls()).toEqual(['/dbconnections/change_password']);
+  expect(JSON.parse(mocks.fetch.mock.calls[0][1].body)).toEqual({client_id:'client',email:'albert@ufl.edu',connection:'Username-Password-Authentication'});
  });
 });
 describe('BreadPass loaf slice at sign-up',()=>{

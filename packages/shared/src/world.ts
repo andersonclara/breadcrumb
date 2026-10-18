@@ -1,6 +1,6 @@
 import campus from './campus-map.json';
 import type { AvatarConfig } from './pixel';
-import type { CrumbCategory } from './index';
+import type { CrumbCategory } from './constants';
 import type {Community,CommunityId} from './communities';
 export { campus };
 export type Coordinate = { latitude: number; longitude: number };

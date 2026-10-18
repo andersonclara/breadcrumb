@@ -29,6 +29,13 @@ apps/mobile/ios/
 .DS_Store
 *.pem
 
+# Local agent context (keep nested project instructions tracked)
+/AGENTS.md
+
+# Private ingestion checkpoints and local data exports
+/data/
+/supabase/.temp/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -41,6 +41,8 @@ beforeAll(async () => {
   await db.exec(expanded);
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000400_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000500_custom_communities.sql',import.meta.url),'utf8').replaceAll('extensions.geography','point').replaceAll('extensions.geometry','point'));
+  await db.exec(readFileSync(new URL('../supabase/migrations/20261017183922_event_ingestion.sql',import.meta.url),'utf8'));
+  await db.exec('alter role service_role bypassrls');
   await db.exec('alter table auth.users add column encrypted_password text');
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000600_username_accounts.sql',import.meta.url),'utf8'));
   await db.exec(readFileSync(new URL('../supabase/migrations/20261017000700_burnt_toast.sql',import.meta.url),'utf8'));
@@ -54,6 +56,7 @@ beforeEach(async () => {
   await db.exec("select set_config('request.jwt.claim.sub','',false)");
   const seeds=(await db.query<{id:string;name:string;accent:string;background:string;description:string;position:number;featured:boolean}>("select * from public.communities where created_by is null and id not like 'community-%'" )).rows;
   await db.exec("truncate auth.users, public.places, public.sync_runs cascade");
+  await db.exec('truncate public.event_source_records,public.event_source_state,public.event_ingestion_runs');
   for(const c of seeds)await db.query("insert into public.communities(id,name,accent,background,description,position,featured) values($1,$2,$3,$4,$5,$6,$7)",[c.id,c.name,c.accent,c.background,c.description,c.position,c.featured]);
   await db.exec("delete from public.communities where id like 'community-%'");
   users = Array.from({ length: 8 }, () => randomUUID());
@@ -69,6 +72,38 @@ async function world(user:string|null){
  return (await db.query<{result:{presence:{id:string;latitude:number;longitude:number}[];friends:{id:string;accepted:boolean}[];crumbs:{id:string;related_posts:number}[]}}>('select public.pixel_world() as result')).rows[0].result;
 }
 const outfit={skin:1,hair:0,shirt:0,pants:0,hairstyle:0,top:0,accessory:0};
+describe('event ingestion isolation',()=>{
+ it('only serves published listings and keeps staging records private',async()=>{
+  for(const status of ['published','needs_review','cancelled'])await db.query("insert into public.club_events(source,source_id,title,starts_at,ingestion_status) values('test',$1,$1,now(),$1)",[status]);
+  await db.exec('set role anon');
+  try {
+   expect((await db.query<{title:string}>('select title from public.club_events')).rows).toEqual([{title:'published'}]);
+   for(const table of ['event_source_records','event_source_state','event_ingestion_runs'])await expect(db.query(`select * from public.${table}`)).rejects.toThrow('permission denied');
+   await expect(db.query("select public.claim_event_sync('test')")).rejects.toThrow('permission denied');
+  }finally{await db.exec('reset role');}
+  await db.exec('set role authenticated');
+  try{await expect(db.query("select public.release_event_sync('test',gen_random_uuid(),60)")).rejects.toThrow('permission denied');}
+  finally{await db.exec('reset role');}
+ });
+ it('leases jobs atomically, rejects stale releases, and respects cooldown',async()=>{
+  await db.exec('set role service_role');
+  try{
+   const first=(await db.query<{token:string}>("select public.claim_event_sync('test') as token")).rows[0].token;expect(first).toBeTruthy();
+   expect((await db.query<{token:string|null}>("select public.claim_event_sync('test',true) as token")).rows[0].token).toBeNull();
+   expect((await db.query<{ok:boolean}>("select public.release_event_sync('test',gen_random_uuid(),60,true) as ok")).rows[0].ok).toBe(false);
+   expect((await db.query<{ok:boolean}>("select public.release_event_sync('test',$1,1800,true) as ok",[first])).rows[0].ok).toBe(true);
+   expect((await db.query<{token:string|null}>("select public.claim_event_sync('test') as token")).rows[0].token).toBeNull();
+   expect((await db.query<{token:string}>("select public.claim_event_sync('test',true) as token")).rows[0].token).toBeTruthy();
+  }finally{await db.exec('reset role');}
+ });
+ it('deduplicates imports without turning listings into student confirmations',async()=>{
+  await db.query("insert into public.club_events(source,source_id,title,starts_at) values('test','1','First',now())");
+  await db.query("insert into public.club_events(source,source_id,title,starts_at) values('test','1','Updated',now()) on conflict(source,source_id) do update set title=excluded.title");
+  expect((await db.query('select title from public.club_events')).rows).toEqual([{title:'Updated'}]);
+  expect((await db.query('select * from public.crumbs')).rows).toHaveLength(0);
+  expect((await db.query('select * from public.votes')).rows).toHaveLength(0);
+ });
+});
 describe('avatars, friends, and related breadcrumbs',()=>{
  it('defaults usernames from UF email, allows verified changes, and protects login email resolution',async()=>{
   const id=randomUUID();await db.query("insert into auth.users(id,email,email_confirmed_at) values($1,'albert@ufl.edu',now())",[id]);

@@ -1,35 +1,107 @@
-import {useRef,useState} from 'react';
-import {Pressable,ScrollView,StyleSheet,Text,TextInput,View} from 'react-native';
-import {categories,postHeadline,submissionTime,type NearbyPostBuilding,type CrumbCategory,type WorldCrumb} from '@breadcrumb/shared';
-import {PixelBread,ToastLogo} from './pixel-art';
-import {GameButton,gameStyles as s} from './game-ui';
-
-export function CrumbComposer({description,category,community,joined,originalLocationLabel,nearbyBuildings,buildingId,onBuilding,hasLocation,signedIn,pending,related,onTitle,onDescription,onCategory,onCommunity,onPost,onConfirm,onSignIn}:{
- originalLocationLabel:string;nearbyBuildings:NearbyPostBuilding[];buildingId:string;onBuilding:(id:string)=>void;
- description:string;category:CrumbCategory;community:string;joined:{id:string;name:string;accent:string;background:string}[];
- hasLocation:boolean;signedIn:boolean;pending:boolean;related:WorldCrumb[];onTitle:(v:string)=>void;onDescription:(v:string)=>void;
- onCategory:(v:CrumbCategory)=>void;onCommunity:(v:string)=>void;onPost:(id?:string)=>Promise<unknown>;onConfirm:(id:string)=>void;onSignIn:()=>void;
-}){
- const submitting=useRef(false),ready=hasLocation&&description.trim().length>=3&&!pending;
- const [submittedAt,setSubmittedAt]=useState<string|null>(null);
- const [menu,setMenu]=useState<'serves'|'flavor'|null>(null);
- const [locationOpen,setLocationOpen]=useState(false);
- async function submit(id?:string){if(!ready||submitting.current)return;submitting.current=true;setSubmittedAt(new Date().toISOString());try{await onPost(id);}finally{submitting.current=false;}}
- return <View style={c.form}>
-  <View style={c.masthead}><Text style={c.mastheadText}>BREADCRUMB KITCHEN</Text><Text style={c.mastheadText}>RECIPE / 01</Text></View>
-  <View style={c.intro}><View style={c.toast}><ToastLogo size={64}/></View><View style={c.introCopy}><Text style={[s.label,{fontSize:6,color:'#956133'}]}>FRESH FROM CAMPUS</Text><Text style={[s.title,{fontSize:14,lineHeight:27}]}>A fresh crumb.</Text><Text style={c.copy}>One good find, ready to share.</Text></View></View>
-  <View style={c.meta}>
-   <View style={c.prepTime}><Text style={c.metaLabel}>PREP TIME</Text><Text style={c.metaValue}>{pending&&submittedAt?submissionTime(submittedAt):'On submission'}</Text></View>
-   <View style={c.metaField}><Text style={c.metaLabel}>SERVES</Text><Pressable accessibilityRole="button" accessibilityLabel="Serves, community" accessibilityState={{expanded:menu==='serves',disabled:pending}} disabled={pending} onPress={()=>{setLocationOpen(false);setMenu(menu==='serves'?null:'serves');}} style={c.dropdown}><Text style={c.dropdownValue}>{joined.find(g=>g.id===community)?.name??'Your community'}</Text><Text style={c.metaValue}>{menu==='serves'?'\u25b4':'\u25be'}</Text></Pressable></View>
-   <View style={c.metaField}><Text style={c.metaLabel}>FLAVOR</Text><Pressable accessibilityRole="button" accessibilityLabel="Flavor, category" accessibilityState={{expanded:menu==='flavor',disabled:pending}} disabled={pending} onPress={()=>{setLocationOpen(false);setMenu(menu==='flavor'?null:'flavor');}} style={c.dropdown}><Text style={c.dropdownValue}>{categories.find(cat=>cat.id===category)?.label}</Text><Text style={c.metaValue}>{menu==='flavor'?'\u25b4':'\u25be'}</Text></Pressable></View>
-   {menu&&<View style={c.dropdownMenu}><Text style={[c.metaLabel,{padding:12}]}>{menu==='serves'?'CHOOSE COMMUNITY':'CHOOSE CATEGORY'}</Text><ScrollView nestedScrollEnabled style={{maxHeight:220}} keyboardShouldPersistTaps="handled">{(menu==='serves'?joined:categories).map(option=><Pressable key={option.id} accessibilityRole="button" accessibilityState={{selected:option.id===(menu==='serves'?community:category)}} disabled={pending} onPress={()=>{if(menu==='serves')onCommunity(option.id);else onCategory(option.id as CrumbCategory);setMenu(null);}} style={c.dropdownOption}><Text style={c.metaValue}>{'name' in option?option.name:option.label}</Text>{option.id===(menu==='serves'?community:category)&&<Text style={c.metaValue}>{'\u2713'}</Text>}</Pressable>)}</ScrollView></View>}
-  </View>
-  <View style={c.ingredients}><Text nativeID="ingredients-label" style={c.recipeHeading}>Ingredients</Text><TextInput accessibilityLabel="Ingredients, write your post" accessibilityLabelledBy="ingredients-label" editable={!pending} style={[s.input,{minHeight:160,lineHeight:24,textAlignVertical:'top',backgroundColor:'#FFFDF4'}]} multiline value={description} onChangeText={value=>{onDescription(value);onTitle(postHeadline(value));}} maxLength={2000} placeholder="What's happening? Write your post here..." placeholderTextColor="#A08A71"/><View style={c.between}><Text style={c.small}>Your find, in your own words.</Text><Text style={c.small}>{description.length}/2000</Text></View></View>
-  <View style={c.field}><View style={c.between}><Text style={s.label}>LOCATION</Text><Text style={c.small}>OPTIONAL</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Location description, optional building" accessibilityState={{expanded:locationOpen,disabled:pending||!hasLocation}} disabled={pending||!hasLocation} onPress={()=>{setMenu(null);setLocationOpen(!locationOpen);}} style={c.dropdown}><Text style={c.dropdownValue}>{buildingId?'At '+(nearbyBuildings.find(b=>b.id===buildingId)?.name??'selected building'):originalLocationLabel}</Text><Text style={c.metaValue}>{locationOpen?'\u25b4':'\u25be'}</Text></Pressable>
-   {locationOpen&&<View style={c.dropdownMenu}><ScrollView nestedScrollEnabled style={{maxHeight:220}} keyboardShouldPersistTaps="handled">{[{id:'',name:originalLocationLabel,distance:null},...nearbyBuildings].map(b=><Pressable accessibilityRole="button" accessibilityState={{selected:b.id===buildingId}} key={b.id} disabled={pending} style={c.dropdownOption} onPress={()=>{onBuilding(b.id);setLocationOpen(false);}}><Text style={[c.metaValue,{flex:1}]}>{b.id?'At '+b.name:b.name}{b.distance!==null?(' ('+Math.round(b.distance)+' m)'):''}</Text>{b.id===buildingId&&<Text style={c.metaValue}>{'\u2713'}</Text>}</Pressable>)}</ScrollView></View>}
-   <Text style={c.small}>{buildingId?'Your crumb will appear at this building.':'Auto-described from your map pin. Your exact tapped spot stays pinned.'}</Text></View>
-  {related.length>0&&<View style={c.related}><Text style={s.label}>SAME RECIPE, NEW DETAILS?</Text><Text style={c.copy}>Fold your update into a nearby breadcrumb.</Text>{related.map(crumb=><View key={crumb.id} style={c.relatedCard}><View style={s.row}><PixelBread state={crumb.state} size={28}/><Text style={[c.copy,{flex:1,fontWeight:'bold'}]}>{crumb.title}</Text></View><GameButton disabled={pending} onPress={()=>onConfirm(crumb.id)}>I SEE IT TOO</GameButton><GameButton disabled={!ready} onPress={()=>void submit(crumb.id)}>ADD MY UPDATE {'\u2197'}</GameButton></View>)}</View>}
-  <View style={c.footer}><Text style={[c.recipeHeading,{textAlign:"center"}]}>Ready to serve?</Text><Text style={[c.small,{textAlign:'center'}]}>{pending?'Dropping your breadcrumb...':!hasLocation?'Pick a map location to post.':description.trim().length<3?'Add your ingredients to drop a crumb.':`Ready for ${joined.find(g=>g.id===community)?.name??'your community'}.`}</Text><GameButton disabled={signedIn&&!ready} onPress={()=>signedIn?void submit():onSignIn()}>{pending?'DROPPING...':signedIn?'DROP BREADCRUMB \u2192':'SIGN IN TO POST \u2192'}</GameButton></View>
- </View>;
+import { Text, TextInput, View } from "react-native";
+import {
+  categories,
+  type Coordinate,
+  type CrumbCategory,
+  type WorldCrumb,
+  relatedCrumbs,
+  postHeadline,
+  describePostLocation,
+} from "@breadcrumb/shared";
+import { useExplore } from "@/providers/explore-provider";
+import { useCampus } from "@/providers/world-provider";
+import { Chip, GameButton, gameStyles as s } from "./game-ui";
+export function CrumbComposer({
+  onChangeLocation,
+  onConfirm,
+}: {
+  onChangeLocation: () => void;
+  onConfirm: (id: string) => void;
+}) {
+  const { draft, setDraft } = useExplore(),
+    { world } = useCampus();
+  const joined = world.communities?.filter(
+    (c) => c.id === "campus" || c.joined,
+  ) ?? [{ id: "campus", name: "Campus" }];
+  const related = draft.point
+    ? relatedCrumbs(
+        world.crumbs.filter(
+          (c) => (c.community_id ?? "campus") === draft.community,
+        ),
+        postHeadline(draft.text),
+        draft.category,
+        draft.point,
+      ).filter((c) => !c.is_author)
+    : [];
+  return (
+    <View style={{ gap: 16 }}>
+      <Text nativeID="post-text-label" style={s.label}>
+        What&apos;s happening?
+      </Text>
+      <TextInput
+        accessibilityLabel="What's happening?"
+        accessibilityLabelledBy="post-text-label"
+        style={[
+          s.input,
+          { minHeight: 120, lineHeight: 24, textAlignVertical: "top" },
+        ]}
+        multiline
+        value={draft.text}
+        onChangeText={(text) => setDraft((d) => ({ ...d, text }))}
+        maxLength={2000}
+        placeholder="Free pizza outside Reitz until 2?"
+        placeholderTextColor="#786451"
+      />
+      <Text style={s.muted}>{draft.text.length}/2000</Text>
+      <Text style={s.label}>Location</Text>
+      <Text style={s.body}>
+        {draft.point ? describePostLocation(draft.point) : "Choose a location"}
+      </Text>
+      <GameButton variant="secondary" onPress={onChangeLocation}>
+        Change location or choose a building
+      </GameButton>
+      <Text style={s.label}>Category</Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        {categories.map((c) => (
+          <Chip
+            key={c.id}
+            label={c.label}
+            selected={draft.category === c.id}
+            onPress={() =>
+              setDraft((d) => ({ ...d, category: c.id as CrumbCategory }))
+            }
+          />
+        ))}
+      </View>
+      <Text style={s.label}>Share with</Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        {joined.map((c) => (
+          <Chip
+            key={c.id}
+            label={c.name}
+            selected={draft.community === c.id}
+            onPress={() => setDraft((d) => ({ ...d, community: c.id }))}
+          />
+        ))}
+      </View>
+      {related.length > 0 && (
+        <View style={s.card}>
+          <Text style={s.label}>Already happening nearby?</Text>
+          <Text style={s.muted}>
+            Confirm an existing report instead of posting a duplicate.
+          </Text>
+          {related.map((c: WorldCrumb) => (
+            <GameButton
+              key={c.id}
+              variant="secondary"
+              onPress={() => onConfirm(c.id)}
+            >
+              {c.title}
+            </GameButton>
+          ))}
+        </View>
+      )}
+    </View>
+  );
 }
-const c=StyleSheet.create({form:{gap:24,borderLeftWidth:2,borderLeftColor:'#DEAA8C',paddingLeft:16,paddingTop:4,paddingBottom:8},intro:{flexDirection:'row',alignItems:'center',gap:16,paddingVertical:4},introCopy:{flex:1,minWidth:0,gap:10},masthead:{flexDirection:'row',justifyContent:'space-between',gap:12,flexWrap:'wrap',borderBottomWidth:2,borderBottomColor:'#A66B48',paddingBottom:16},mastheadText:{fontFamily:'PressStart2P_400Regular',fontSize:6,lineHeight:13,color:'#996348'},prepTime:{width:'100%',gap:10},metaField:{flexBasis:'46%',flexGrow:1,minWidth:0,gap:10},dropdown:{flexDirection:'row',alignItems:'center',gap:8,borderWidth:1,borderColor:'#BCA175',backgroundColor:'#FFF8E8',padding:12,minHeight:48},dropdownValue:{flex:1,fontSize:12,lineHeight:18,color:'#49382C'},dropdownMenu:{width:'100%',borderWidth:1,borderColor:'#BCA175',backgroundColor:'#FFF8E8'},dropdownOption:{flexDirection:'row',justifyContent:'space-between',gap:12,padding:14,minHeight:48,borderTopWidth:1,borderTopColor:'#E4D3B4'},meta:{flexDirection:'row',flexWrap:'wrap',gap:14,paddingVertical:18,borderTopWidth:1,borderBottomWidth:1,borderColor:'#D7B98A'},metaLabel:{fontFamily:'PressStart2P_400Regular',fontSize:6,lineHeight:12,color:'#996348'},metaValue:{fontSize:11,lineHeight:16,color:'#49382C',fontWeight:'bold'},ingredients:{gap:16,backgroundColor:'#F7EBD0',borderWidth:1,borderColor:'#D7B98A',padding:16},recipeHeading:{fontFamily:'PressStart2P_400Regular',fontSize:11,lineHeight:22,color:'#805137'},ingredientCheck:{width:20,height:20,borderWidth:1,borderColor:'#B8A274',textAlign:'center',color:'#9A8159',fontSize:15},ingredientText:{fontSize:12,lineHeight:18,color:'#6D553A',flex:1},toast:{backgroundColor:'#FFE5A1',borderWidth:2,borderColor:'#D8A34F',padding:3},copy:{fontSize:13,lineHeight:21,color:'#806449'},small:{fontSize:10,lineHeight:16,color:'#8A7258'},field:{gap:12},between:{flexDirection:'row',justifyContent:'space-between',gap:10,flexWrap:'wrap'},location:{flexDirection:'row',gap:12,alignItems:'center',borderWidth:2,borderColor:'#C6AF80',backgroundColor:'#F4E8CC',padding:14},pin:{backgroundColor:'#6E8C52',color:'#FFF7D9',fontSize:24,width:28,textAlign:'center'},locationTitle:{fontSize:12,fontWeight:'bold',lineHeight:20,color:'#49382C'},headline:{minHeight:50,lineHeight:24,fontSize:16,fontWeight:'bold',backgroundColor:'#FFFDF4'},categories:{flexDirection:'row',flexWrap:'wrap',gap:10},category:{flexBasis:'46%',flexGrow:1,flexDirection:'row',gap:8,alignItems:'center',padding:12,minHeight:50,borderWidth:2,borderColor:'#DECCB0',backgroundColor:'#FBF0DA'},selected:{backgroundColor:'#FFE4A1',borderColor:'#906032'},categoryText:{fontSize:11,lineHeight:18,color:'#49382C',flexShrink:1},check:{marginLeft:'auto',color:'#7D552E'},community:{borderWidth:2,padding:12,minHeight:44,justifyContent:'center'},related:{gap:12,borderTopWidth:2,borderColor:'#D5BD91',paddingTop:18},relatedCard:{gap:12,padding:12,borderWidth:1,borderColor:'#D6C9A6',backgroundColor:'#F2EDDC'},footer:{gap:16,borderTopWidth:2,borderColor:'#D5BD91',paddingTop:24}});
+export type ComposerPoint = Coordinate;

@@ -1,28 +1,106 @@
-import {useCallback,useEffect,useRef,useState} from 'react';
-import type {SupabaseClient} from '@supabase/supabase-js';
-import {emptyWorld,type World} from '@breadcrumb/shared';
-export function useWorld(client:SupabaseClient|null) {
- const [world,setWorld]=useState<World>(emptyWorld),[error,setError]=useState(''),[now,setNow]=useState(0);
- const epoch=useRef(0),request=useRef(0),applied=useRef(0);
- const refresh=useCallback(async()=>{
-  if(!client)return;
-  const scope=epoch.current,sequence=++request.current;
-  try {
-   const {data,error:readError}=await client.rpc('pixel_world');
-   if(scope!==epoch.current||sequence<applied.current)return;
-   if(readError) {setError(readError.code==='PGRST202'?'Apply the pixel-world migration to connect avatars, friends, and breadcrumbs.':'Campus updates are unavailable. Retrying…');return;}
-   const next=data as World;
-   applied.current=sequence;
-   setWorld(previous=>({...next,presence:next.presence.map(p=>{const old=previous.presence.find(o=>o.id===p.id);return {...p,moving:Boolean(old&&(old.latitude!==p.latitude||old.longitude!==p.longitude))};})}));setError('');
-  }catch{setError('Campus updates are unavailable. Retrying…');}
-  finally{setNow(Date.now());}
- },[client]);
- useEffect(()=>{
-  let active=true;
-  const load=async()=>{if(active)await refresh();};
-  void load(); const interval=setInterval(()=>{void load();},5000);
-  const {data:listener}=client?.auth.onAuthStateChange(event=>{epoch.current++;if(event==='SIGNED_OUT')setWorld(emptyWorld);void Promise.resolve().then(load);})??{data:null};
-  return()=>{active=false;clearInterval(interval);listener?.subscription.unsubscribe();};
- },[client,refresh]);
- return {world:{...world,presence:world.presence.filter(p=>Date.parse(p.expires_at)>now)},error,refresh};
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { emptyWorld, type World } from "@breadcrumb/shared";
+import { activeWorld, reconcileWorld } from './world-state';
+
+export function useWorld(
+  client: SupabaseClient | null,
+  { enabled = true }: { enabled?: boolean } = {},
+) {
+  const [world, setWorld] = useState<World>(emptyWorld),
+    [error, setError] = useState(
+      client ? "" : "Campus updates are unavailable. Try again later.",
+    ),
+    [loading, setLoading] = useState(!!client),
+    [refreshing, setRefreshing] = useState(false),
+    [updatedAt, setUpdatedAt] = useState<number | null>(null),
+    [now, setNow] = useState(() => Date.now());
+  const epoch = useRef(0),
+    mounted = useRef(true),
+    flight = useRef<{
+      scope: number;
+      promise: Promise<World | undefined>;
+      controller: AbortController;
+    } | null>(null);
+  const refresh = useCallback(() => {
+    if (!client) return Promise.resolve<World | undefined>(undefined);
+    const scope = epoch.current;
+    if (flight.current?.scope === scope) return flight.current.promise;
+    const controller = new AbortController();
+    setRefreshing(true);
+    const promise = (async () => {
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      try {
+        const { data, error: readError } = await client
+          .rpc("pixel_world")
+          .abortSignal(controller.signal);
+        if (!mounted.current || scope !== epoch.current) return;
+        if (
+          readError ||
+          !data ||
+          !Array.isArray(data.crumbs) ||
+          !Array.isArray(data.presence)
+        )
+          throw new Error("unavailable");
+        const next = data as World;
+        setWorld((previous) => reconcileWorld(previous, next));
+        setUpdatedAt(Date.now());
+        setNow(Date.now());
+        setError("");
+        return next;
+      } catch {
+        if (mounted.current && scope === epoch.current)
+          setError(
+            "Campus updates could not refresh. Check your connection and retry.",
+          );
+      } finally {
+        clearTimeout(timeout);
+        if (mounted.current && scope === epoch.current) {
+          setLoading(false);
+          setRefreshing(false);
+        }
+        if (flight.current?.controller === controller) flight.current = null;
+      }
+    })();
+    flight.current = { scope, promise, controller };
+    return promise;
+  }, [client]);
+  const cancel = useCallback(() => {
+    mounted.current = false;
+    epoch.current++;
+    flight.current?.controller.abort();
+    flight.current = null;
+  }, []);
+  useEffect(() => {
+    mounted.current = true;
+    const { data: listener } = client?.auth.onAuthStateChange((event) => {
+      if (event === "TOKEN_REFRESHED") return;
+      epoch.current++;
+      flight.current?.controller.abort();
+      flight.current = null;
+      setWorld(emptyWorld);
+      setUpdatedAt(null);
+      setLoading(!!client);
+      void Promise.resolve().then(refresh);
+    }) ?? { data: null };
+    return () => {
+      cancel();
+      listener?.subscription.unsubscribe();
+    };
+  }, [client, refresh, cancel]);
+  useEffect(() => {
+    if (!enabled) return;
+    void refresh();
+    const timer = setInterval(() => void refresh(), 5000);
+    return () => clearInterval(timer);
+  }, [enabled, refresh]);
+  const visibleWorld = useMemo(() => activeWorld(world, now), [world, now]);
+  return {
+    world: visibleWorld,
+    error,
+    loading,
+    refreshing,
+    updatedAt,
+    refresh,
+  };
 }

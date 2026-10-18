@@ -45,11 +45,15 @@ export function snapToWalkway(point:Coordinate,maxDistanceMeters=12):Coordinate{
  }
  return fromWorld(result.x,result.y);
 }
-export function campusScene(world:World,preview:boolean,seconds:number,ownPosition:Coordinate|null|undefined,center:{x:number;y:number},span:number){
+export function campusPeople(world:World,preview=false,seconds=0,ownPosition?:Coordinate|null){
  type Person={kind:'person';id:string;x:number;y:number;avatar:AvatarConfig;walking:boolean;facing:number;label:string};
  const people:Person[]=preview?previewAvatars.map((avatar,i)=>({kind:'person',id:'preview-'+i,...previewWalk(i,seconds),avatar:i===0?(world.profile?.avatar??avatar):avatar,walking:true,label:'PREVIEW'})):[];
  for(const p of world.presence)if(p.id!==world.profile?.id)people.push({kind:'person',id:p.id,...toWorld(p),avatar:p.avatar,walking:!!p.moving,facing:1,label:'FRIEND · APPROX.'});
  if(ownPosition&&inCampus(ownPosition))people.push({kind:'person',id:'self',...toWorld(snapToWalkway(ownPosition)),avatar:world.profile?.avatar??defaultAvatar,walking:false,facing:1,label:'YOU'});
+ return people;
+}
+export function campusScene(world:World,preview:boolean,seconds:number,ownPosition:Coordinate|null|undefined,center:{x:number;y:number},span:number){
+ const people=campusPeople(world,preview,seconds,ownPosition);
  const buildings=illustratedBuildings.filter(b=>Math.abs(b.x-center.x)<span/2+b.width/2&&b.y>center.y-span/2&&b.y-b.artHeight<center.y+span/2);
  buildings.push(...landscape.filter(t=>Math.abs(t.x-center.x)<span/2+t.width&&t.y>center.y-span/2&&t.y-t.artHeight<center.y+span/2));
  return [...buildings,...people.filter(p=>Math.abs(p.x-center.x)<span/2&&Math.abs(p.y-center.y)<span/2)].sort((a,b)=>a.y-b.y);

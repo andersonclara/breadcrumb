@@ -1,13 +1,119 @@
-import {useRef,useState} from 'react';
-import {Pressable,StyleSheet,Text,View} from 'react-native';
-import {avatarOptions,type AvatarConfig} from '@breadcrumb/shared';
-import {useCampus} from '@/providers/world-provider';
-import {PixelAvatar} from './pixel-art';
-import {GameButton,gameStyles as s} from './game-ui';
-export function AvatarWorkshop({initial,signedIn=true,onSaved,onChange,hideSave=false}:{initial:AvatarConfig;signedIn?:boolean;onSaved?:()=>void;onChange?:(avatar:AvatarConfig)=>void;hideSave?:boolean}){
- const [avatar,setAvatar]=useState(initial);const {act,pending}=useCampus();const gesture=useRef<{key:keyof AvatarConfig;x:number;y:number}|null>(null);
- const labels:Record<keyof AvatarConfig,string>={skin:'SKIN TONE',hair:'HAIR COLOR',hairstyle:'HAIR STYLE',shirt:'TOP COLOR',top:'TOP STYLE',pants:'BOTTOMS',accessory:'ACCESSORY'};
- function cycle(key:keyof AvatarConfig,delta:number){const next={...avatar,[key]:(avatar[key]+delta+avatarOptions[key].length)%avatarOptions[key].length};setAvatar(next);onChange?.(next);}
- return <><View style={styles.stage}><PixelAvatar avatar={avatar} size={112}/><Text style={[s.label,{fontSize:6}]}>USE ARROWS OR SWIPE EACH ROW</Text></View>{(Object.keys(labels) as (keyof AvatarConfig)[]).map(key=>{const value=avatarOptions[key][avatar[key]],color=value.startsWith('#');return <View key={key} style={styles.option} onTouchStart={e=>{gesture.current={key,x:e.nativeEvent.pageX,y:e.nativeEvent.pageY};}} onTouchEnd={e=>{const start=gesture.current;gesture.current=null;if(start?.key===key&&Math.abs(e.nativeEvent.pageX-start.x)>35&&Math.abs(e.nativeEvent.pageY-start.y)<35)cycle(key,e.nativeEvent.pageX<start.x?1:-1);}} onTouchCancel={()=>{gesture.current=null;}}><Text style={s.label}>{labels[key]}</Text><View style={styles.controls}><Pressable style={styles.arrow} accessibilityRole="button" accessibilityLabel={`Previous ${labels[key].toLowerCase()}`} onPress={()=>cycle(key,-1)}><Text style={styles.arrowText}>‹</Text></Pressable><View style={styles.value}>{color&&<View style={{width:24,height:24,backgroundColor:value,borderWidth:2,borderColor:'#8C6949'}}/>}<Text style={[s.label,{fontSize:7}]}>{color?`SHADE ${avatar[key]+1}`:value.toUpperCase()}</Text><Text style={s.body}>{avatar[key]+1}/{avatarOptions[key].length}</Text></View><Pressable style={styles.arrow} accessibilityRole="button" accessibilityLabel={`Next ${labels[key].toLowerCase()}`} onPress={()=>cycle(key,1)}><Text style={styles.arrowText}>›</Text></Pressable></View></View>;})}{!hideSave&&<GameButton disabled={pending||!signedIn} onPress={()=>{void act('avatar',avatar).then(()=>onSaved?.()).catch(()=>{});}}>{signedIn?'SAVE MY AVATAR →':'SIGN IN TO SAVE'}</GameButton>}</>;
+import { useState } from "react";
+import { Text, View } from "react-native";
+import { avatarOptions, type AvatarConfig } from "@breadcrumb/shared";
+import { useCampus } from "@/providers/world-provider";
+import { PixelAvatar } from "./pixel-art";
+import { Chip, GameButton, Feedback, gameStyles as s } from "./game-ui";
+export function AvatarWorkshop({
+  initial,
+  signedIn = true,
+  onSaved,
+  onChange,
+  hideSave = false,
+}: {
+  initial: AvatarConfig;
+  signedIn?: boolean;
+  onSaved?: () => void;
+  onChange?: (avatar: AvatarConfig) => void;
+  hideSave?: boolean;
+}) {
+  const [avatar, setAvatar] = useState(initial),
+    [key, setKey] = useState<keyof AvatarConfig>("hairstyle"),
+    [error, setError] = useState(""),
+    c = useCampus();
+  const labels: Record<keyof AvatarConfig, string> = {
+    skin: "Skin tone",
+    hair: "Hair colour",
+    hairstyle: "Hair style",
+    shirt: "Top colour",
+    top: "Top style",
+    pants: "Bottoms",
+    accessory: "Accessory",
+  };
+  function cycle(delta: number) {
+    const next = {
+      ...avatar,
+      [key]:
+        (avatar[key] + delta + avatarOptions[key].length) %
+        avatarOptions[key].length,
+    };
+    setAvatar(next);
+    onChange?.(next);
+  }
+  const value = avatarOptions[key][avatar[key]],
+    color = value.startsWith("#");
+  return (
+    <View style={{ gap: 16 }}>
+      <View
+        style={[s.card, { alignItems: "center", backgroundColor: "#E8EEDC" }]}
+      >
+        <PixelAvatar avatar={avatar} size={64} />
+      </View>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        {(Object.keys(labels) as (keyof AvatarConfig)[]).map((k) => (
+          <Chip
+            key={k}
+            label={labels[k]}
+            selected={key === k}
+            onPress={() => setKey(k)}
+          />
+        ))}
+      </View>
+      <Text style={s.label}>
+        {labels[key]} · {avatar[key] + 1} of {avatarOptions[key].length}
+      </Text>
+      <View style={[s.row, { justifyContent: "center" }]}>
+        {color && (
+          <View
+            accessible
+            accessibilityLabel={
+              "Selected " + labels[key] + ", shade " + (avatar[key] + 1)
+            }
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 8,
+              backgroundColor: value,
+              borderWidth: 1,
+              borderColor: "#49382C",
+            }}
+          />
+        )}
+        <Text style={s.body}>
+          {color ? "Shade " + (avatar[key] + 1) : value}
+        </Text>
+      </View>
+      <View style={s.row}>
+        <GameButton
+          variant="secondary"
+          style={{ flex: 1 }}
+          onPress={() => cycle(-1)}
+        >
+          Previous
+        </GameButton>
+        <GameButton
+          variant="secondary"
+          style={{ flex: 1 }}
+          onPress={() => cycle(1)}
+        >
+          Next
+        </GameButton>
+      </View>
+      <Feedback error message={error} />
+      {!hideSave && (
+        <GameButton
+          loading={c.isPending("avatar")}
+          disabled={!signedIn}
+          onPress={() => {
+            void c
+              .act("avatar", avatar)
+              .then(() => onSaved?.())
+              .catch((e) => setError(e.message));
+          }}
+        >
+          Save avatar
+        </GameButton>
+      )}
+    </View>
+  );
 }
-const styles=StyleSheet.create({stage:{alignItems:'center',gap:16,borderWidth:2,borderColor:'#B4C28C',padding:24,backgroundColor:'#DCE7C2'},option:{gap:12,borderBottomWidth:1,borderColor:'#D7C4A1',paddingBottom:16},controls:{flexDirection:'row',alignItems:'center',gap:12},arrow:{width:46,height:44,borderWidth:2,borderColor:'#9E7045',backgroundColor:'#F7C86E',alignItems:'center',justifyContent:'center'},arrowText:{fontSize:32,lineHeight:34,color:'#49382C'},value:{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'center',gap:10}});

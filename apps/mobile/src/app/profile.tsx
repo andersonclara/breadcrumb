@@ -1,17 +1,167 @@
-import {normalizeUfEmail} from '@breadcrumb/shared';
-import {useState} from 'react';
-import {Redirect,Link,router,useLocalSearchParams} from 'expo-router';
-import {ScrollView,Switch,Text,View} from 'react-native';
-import {useAuth} from '@/providers/auth-provider';
-import {useCampus} from '@/providers/world-provider';
-import {CommunityManager} from '@/components/community-manager';
-import {ProfileEditor} from '@/components/profile-editor';
-import {PixelAvatar,ToastLogo} from '@/components/pixel-art';
-import {GameButton,gameStyles as s} from '@/components/game-ui';
-export default function ProfileScreen(){
- const {session,loading}=useAuth(),{world,error,notice,sharing,share,stop}=useCampus(),params=useLocalSearchParams<{edit?:string}>();const [editing,setEditing]=useState(false);
- if(loading)return <Text>Loading your account...</Text>;
- if(!session||!normalizeUfEmail(session.user.email)||!session.user.email_confirmed_at)return <Redirect href="/login"/>;
- if(world.profile&&(editing||params.edit==='1'||!world.profile.avatar_completed))return <ScrollView style={s.page} contentContainerStyle={s.content} keyboardShouldPersistTaps="handled"><View style={{alignItems:'center'}}><ToastLogo size={75}/><Text style={s.label}>YOUR CAMPUS PROFILE</Text></View><ProfileEditor initialUsername={world.profile.handle} initialAvatar={world.profile.avatar} userId={session.user.id} onSaved={onboarding=>{setEditing(false);router.replace(onboarding||!world.profile?.avatar_completed?'/':'/profile');}}/>{error&&<Text style={s.error}>{error}</Text>}</ScrollView>;
- return <ScrollView style={s.page} contentContainerStyle={s.content}><Text style={s.title}>YOUR PROFILE</Text><Text style={s.body}>{world.profile?.handle??'Your campus account'}</Text>{world.profile&&<><PixelAvatar avatar={world.profile.avatar} size={80}/><GameButton onPress={()=>setEditing(true)}>EDIT PROFILE & AVATAR</GameButton></>}<View style={{gap:12,borderWidth:2,borderColor:"#BA8A4D",padding:18}}><Text style={s.label}>YOUR LOCATION</Text><Text style={s.body}>Only accepted friends can see your avatar location, rounded to about 100 meters. Sharing starts off and stops when the app goes into the background.</Text><View style={s.row}><Switch accessibilityLabel="Share location with friends" value={sharing} onValueChange={enabled=>{if(enabled)void share().catch(()=>{});else void stop();}} trackColor={{false:"#C5AE8C",true:"#67A45C"}} thumbColor="#FFD36B"/><Text style={s.label}>{sharing?"VISIBLE TO FRIENDS":"LOCATION PRIVATE"}</Text></View>{notice&&<Text style={s.body}>{notice}</Text>}</View><CommunityManager/><Link href="/" style={s.body}>Back to campus / drop a crumb</Link><Link href="/login" style={s.body}>Account settings and sign out</Link>{error&&<Text style={s.error}>{error}</Text>}</ScrollView>;
+import { normalizeUfEmail } from "@breadcrumb/shared";
+import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Switch,
+  Text,
+  View,
+} from "react-native";
+import { useAuth } from "@/providers/auth-provider";
+import { useCampus } from "@/providers/world-provider";
+import { useExplore } from "@/providers/explore-provider";
+import { ProfileEditor } from "@/components/profile-editor";
+import { PixelAvatar } from "@/components/pixel-art";
+import {
+  GameButton,
+  Feedback,
+  EmptyState,
+  gameStyles as s,
+} from "@/components/game-ui";
+export default function ProfileScreen() {
+  const { session, loading } = useAuth(),
+    c = useCampus(),
+    e = useExplore(),
+    params = useLocalSearchParams<{ edit?: string }>(),
+    [editing, setEditing] = useState(false),
+    [changing, setChanging] = useState(false);
+  if (loading)
+    return (
+      <View style={s.page}>
+        <ActivityIndicator />
+      </View>
+    );
+  const signedIn =
+    !!session &&
+    !!normalizeUfEmail(session.user.email) &&
+    !!session.user.email_confirmed_at;
+  return (
+    <KeyboardAvoidingView
+      style={s.page}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={s.content}
+        keyboardShouldPersistTaps="handled"
+      >
+        {!signedIn ? (
+          <>
+            <EmptyState
+              title="Your campus starts here."
+              description="Sign in with your UF account to post, add friends, and join communities."
+              action="Sign in or create account"
+              onAction={() => router.push("/login")}
+            />
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/saved")}
+            >
+              Saved discoveries
+            </GameButton>
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/communities")}
+            >
+              Browse communities
+            </GameButton>
+          </>
+        ) : !c.world.profile ? (
+          <>
+            <Text style={s.body}>
+              {c.loading
+                ? "Loading your profile?"
+                : "Your profile could not load."}
+            </Text>
+            <Feedback error message={c.error} />
+            <GameButton variant="secondary" onPress={() => void c.refresh()}>
+              Retry profile
+            </GameButton>
+          </>
+        ) : editing ||
+          params.edit === "1" ||
+          !c.world.profile.avatar_completed ? (
+          <ProfileEditor
+            initialUsername={c.world.profile.handle}
+            initialAvatar={c.world.profile.avatar}
+            userId={session!.user.id}
+            passwordManagedByAuth0={!!session!.user.app_metadata?.auth0_sub}
+            email={session!.user.email}
+            onSaved={() => {
+              setEditing(false);
+              router.replace(e.resumePost ? "/" : "/profile");
+            }}
+          />
+        ) : (
+          <>
+            <View style={[s.row, { paddingVertical: 8 }]}>
+              <PixelAvatar avatar={c.world.profile.avatar} size={48} />
+              <View style={{ flex: 1, gap: 8 }}>
+                <Text style={s.title}>{c.world.profile.handle}</Text>
+                <Text style={s.muted}>Your campus self</Text>
+              </View>
+            </View>
+            <GameButton variant="secondary" onPress={() => setEditing(true)}>
+              Edit profile, avatar and password
+            </GameButton>
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/saved")}
+            >
+              Saved discoveries
+            </GameButton>
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/friends")}
+            >
+              Friends and requests
+            </GameButton>
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/communities")}
+            >
+              Your communities
+            </GameButton>
+            <View style={s.card}>
+              <Text style={s.label}>Location sharing</Text>
+              <Text style={s.body}>
+                Only accepted friends see your approximate location, rounded to
+                about 100 metres. Sharing stops when the app leaves the
+                foreground.
+              </Text>
+              <View style={s.row}>
+                <Switch
+                  disabled={changing}
+                  accessibilityLabel="Share approximate location with accepted friends"
+                  value={c.sharing}
+                  onValueChange={(enabled) => {
+                    setChanging(true);
+                    void (enabled ? c.share() : c.stop())
+                      .catch(() => {})
+                      .finally(() => setChanging(false));
+                  }}
+                />
+                <Text style={[s.label, { flex: 1 }]}>
+                  {c.sharing ? "Visible to friends" : "Location private"}
+                </Text>
+              </View>
+            </View>
+            <GameButton
+              variant="secondary"
+              onPress={() => router.push("/login")}
+            >
+              Account and sign out
+            </GameButton>
+            <Feedback message={c.notice} />
+            <Feedback error message={c.actionError || c.error} />
+          </>
+        )}
+        <GameButton variant="secondary" onPress={() => router.navigate("/")}>
+          Back to Explore
+        </GameButton>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
 }

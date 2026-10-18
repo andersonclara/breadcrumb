@@ -24,8 +24,9 @@ exports.onExecutePreUserRegistration = async (event, api) => {
   if (!/@ufl\.edu$/.test(email)) return api.access.deny('not_uf', 'Use your @ufl.edu email.');
 
   const secret = event.secrets.LOAF_SECRET;
-  const [exp, sig] = String((event.user.user_metadata || {}).loaf_slice || '').split('.');
-  const fresh = Number(exp) >= Math.floor(Date.now() / 1000);
+  const parts = String((event.user.user_metadata || {}).loaf_slice || '').split('.');
+  const [exp, sig] = parts, now = Math.floor(Date.now() / 1000);
+  const fresh = parts.length === 2 && Number.isInteger(Number(exp)) && Number(exp) >= now && Number(exp) <= now + 300;
   const matches = Boolean(secret && sig) && sameText(sig, await hmac(secret, `signup:${email}:${exp}`));
   if (!fresh || !matches) return api.access.deny('no_loaf', "Slice the loaf to prove you're human.");
 

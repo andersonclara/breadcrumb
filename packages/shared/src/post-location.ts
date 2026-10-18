@@ -10,7 +10,7 @@ export function nearbyPostBuildings(origin:Coordinate,maxDistance=150):NearbyPos
 export function postLocation(origin:Coordinate|null,buildings:NearbyPostBuilding[],buildingId:string):Coordinate|null{
  return buildings.find(b=>b.id===buildingId)?.point??origin;
 }
-export function describePostLocation(origin:Coordinate,buildings:NearbyPostBuilding[]):string{
+export function describePostLocation(origin:Coordinate,buildings:NearbyPostBuilding[]=nearbyPostBuildings(origin)):string{
  const nearest=buildings[0],p=toWorld(origin),tolerance=6/campus.metersPerUnit;
  const onPath=campus.walkways.some(route=>route.points.some((b,i)=>{
   if(!i)return false;const a=route.points[i-1],dx=b[0]-a[0],dy=b[1]-a[1];

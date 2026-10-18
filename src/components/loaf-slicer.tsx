@@ -1,6 +1,6 @@
 "use client";
 import {useEffect,useRef,useState,type PointerEvent} from 'react';
-import {checkSliceGesture,sliceHint} from '@breadcrumb/shared';
+import {checkSliceGesture,sliceHint} from '@breadcrumb/shared/loaf';
 
 type Point={x:number;y:number;t:number};
 // Loaf box inside the 40×24 viewBox; trace points are normalized to it (0–1) for the server check.
@@ -22,9 +22,11 @@ export function LoafSlicer({onChange,resetKey}:{onChange:(sliced:boolean)=>void;
  const drawing=useRef<Point[]|null>(null),start=useRef(0),svg=useRef<SVGSVGElement>(null),[nonce,setNonce]=useState(0);
  useEffect(()=>{
   let live=true;
-  fetch('/api/auth/loaf',{cache:'no-store'}).then(response=>response.json()).then(data=>{
+  onChange(false);
+  fetch('/api/auth/loaf',{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error();return response.json();}).then(data=>{
    if(!live)return;setTrace([]);setHint('');
    if(data.enabled===false){setStatus('off');onChange(true);return;}
+   if(typeof data.challenge!=='string'||!Number.isFinite(data.cut))throw new Error();
    setLoaf(data);setStatus('ready');onChange(false);
   }).catch(()=>{if(live)setStatus('error');});
   return ()=>{live=false;};

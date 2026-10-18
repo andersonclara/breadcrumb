@@ -11,7 +11,7 @@ export function ProfileEditor({initialUsername,initialAvatar,accountCompleted,on
   event.preventDefault();const chosen=username.trim().toLowerCase();if(!/^[a-z0-9][a-z0-9_.-]{2,29}$/.test(chosen)){setMessage('Use 3–30 letters, numbers, dots, underscores, or hyphens.');return;}
   // Auth0 owns passwords when configured; nothing to set here.
   if(!passwordManagedByAuth0&&(!accountCompleted||password||confirm)){const error=signupPasswordError(password,confirm);if(error){setMessage(error);return;}}
-  setPending(true);setMessage('');try{const client=createClient();if(password){const {error}=await client.auth.updateUser({password});if(error&&error.code!=='same_password'){setMessage('Could not set your password. Try a stronger password or sign in again.');return;}}
+  setPending(true);setMessage('');try{const client=createClient();if(!passwordManagedByAuth0&&password){const {error}=await client.auth.updateUser({password});if(error&&error.code!=='same_password'){setMessage('Could not set your password. Try a stronger password or sign in again.');return;}}
    if(!accountCompleted||chosen!==initialUsername){const {error}=await client.rpc('complete_account',{p_username:chosen});if(error){setMessage(error.code==='P0001'?error.message:'Could not save your username. Check the username-account migration.');return;}}
    await worldAction('avatar',avatar);setPassword('');setConfirm('');router.replace(onboarding?'/':'/profile');router.refresh();
   }catch(e){setMessage(e instanceof Error?e.message:'Could not save your profile.');}finally{setPending(false);}

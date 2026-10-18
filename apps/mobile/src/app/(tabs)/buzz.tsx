@@ -1,5 +1,68 @@
-import {ScrollView,Text,View} from 'react-native';
-import {useCampus} from '@/providers/world-provider';
-import {PixelBread} from '@/components/pixel-art';
-import {gameStyles as s} from '@/components/game-ui';
-export default function BuzzScreen(){const {world,error}=useCampus();return <ScrollView style={s.page} contentContainerStyle={s.content}><Text style={s.title}>FRESH FROM{ '\n' }THE OVEN.</Text>{world.crumbs.filter(c=>(c.community_id??'campus')==='campus').length?world.crumbs.filter(c=>(c.community_id??'campus')==='campus').map(c=><View key={c.id} style={{gap:12,borderBottomWidth:2,borderColor:'#C5AE8C',paddingBottom:18}}><View style={s.row}><PixelBread state={c.state}/><Text style={[s.body,{flex:1,fontWeight:'700'}]}>{c.title}</Text></View><Text style={s.body}>{c.description}</Text><Text style={s.label}>{c.state.replaceAll('_',' ').toUpperCase()} · {c.related_posts} RELATED POSTS</Text></View>):<Text style={s.body}>Nothing in the oven yet. Be the first to drop a crumb on the map.</Text>}{error&&<Text style={s.error}>{error}</Text>}</ScrollView>;}
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { router } from "expo-router";
+import { discoveryKey } from "@breadcrumb/shared";
+import { useExplore } from "@/providers/explore-provider";
+import { useCampus } from "@/providers/world-provider";
+import { DiscoveryRow } from "@/components/discovery-row";
+import {
+  EmptyState,
+  Feedback,
+  GameButton,
+  gameStyles as s,
+} from "@/components/game-ui";
+export default function NearbyScreen() {
+  const e = useExplore(),
+    c = useCampus();
+  return (
+    <FlatList
+      style={s.page}
+      contentContainerStyle={s.content}
+      data={e.records}
+      keyExtractor={discoveryKey}
+      ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+      refreshing={e.refreshing}
+      onRefresh={() => {
+        void e.refresh();
+        void c.refresh();
+      }}
+      ListHeaderComponent={
+        <View style={{ gap: 16, marginBottom: 16 }}>
+          <Text style={s.title}>Campus picks</Text>
+          <Feedback error message={e.error || c.error} />
+          {(e.error || c.error) && (
+            <GameButton
+              variant="secondary"
+              onPress={() => {
+                void e.refresh();
+                void c.refresh();
+              }}
+            >
+              Retry
+            </GameButton>
+          )}
+        </View>
+      }
+      ListEmptyComponent={
+        e.loading ? (
+          <ActivityIndicator />
+        ) : (
+          <EmptyState
+            title="No matches right now"
+            description="Change your filters or share something happening on campus."
+            action="Back to Explore"
+            onAction={() => router.navigate("/")}
+          />
+        )
+      }
+      renderItem={({ item }) => (
+        <DiscoveryRow
+          record={item}
+          onPress={() => {
+            e.selectRecord(item);
+            router.navigate("/");
+          }}
+        />
+      )}
+    />
+  );
+}

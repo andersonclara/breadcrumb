@@ -3,5 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" }
+  "exports": {
+    ".": "./src/index.ts",
+    "./loaf": "./src/loaf.ts",
+    "./email": "./src/email.ts",
+    "./login": "./src/login.ts"
+  }
 }

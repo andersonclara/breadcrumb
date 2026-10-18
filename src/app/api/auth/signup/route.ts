@@ -1,11 +1,12 @@
 import {createClient} from '@/lib/supabase/server';
 import {createAuth0Account} from '@/lib/auth/password';
 import {auth0Config,trustedClientIp} from '@/lib/auth/auth0';
-// Mobile sign-up. Returns {mode:'email'} when Auth0 is off so the app keeps its email-code flow.
-export async function POST(request:Request){
+import {allowedApiOrigin,mobileApi,mobileOptions} from '@/lib/mobile-api';
+// Mobile signup always uses Auth0. A configuration problem must not change the signup method.
+async function post(request:Request){
  try{
-  const origin=request.headers.get('origin');if(origin&&origin!==new URL(request.url).origin)return Response.json({error:'Invalid request origin'},{status:403});
-  if(!auth0Config())return Response.json({mode:'email'},{headers:{'Cache-Control':'no-store'}});
+  if(!allowedApiOrigin(request))return Response.json({error:'Invalid request origin'},{status:403});
+  if(!auth0Config())return Response.json({error:'Account creation is temporarily unavailable. Please try again later.'},{status:503,headers:{'Cache-Control':'no-store'}});
   const raw=await request.text();if(raw.length>20000)return Response.json({error:'Invalid sign-up request'},{status:400});
   let body;try{body=JSON.parse(raw);}catch{return Response.json({error:'Invalid sign-up request'},{status:400});}
   if(!body||typeof body!=='object')return Response.json({error:'Invalid sign-up request'},{status:400});
@@ -14,3 +15,6 @@ export async function POST(request:Request){
   return Response.json(result,{status:result.error?400:200,headers:{'Cache-Control':'private, no-store'}});
  }catch{return Response.json({error:'Could not create your account. Please try again.'},{status:503,headers:{'Cache-Control':'no-store'}});}
 }
+export const POST=mobileApi(post);
+export const OPTIONS=mobileOptions;
+export const GET=mobileApi(async()=>Response.json({passwordSignup:!!auth0Config()},{headers:{'Cache-Control':'no-store'}}));

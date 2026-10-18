@@ -9,13 +9,18 @@
     "ios": "expo start --ios",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "export": "expo export --platform ios --platform android"
+    "export": "expo export --platform ios --platform android",
+    "prestart": "node ../../scripts/ensure-mobile-map.mjs",
+    "preexport": "node ../../scripts/ensure-mobile-map.mjs",
+    "preios": "node ../../scripts/ensure-mobile-map.mjs",
+    "preandroid": "node ../../scripts/ensure-mobile-map.mjs"
   },
   "dependencies": {
     "@breadcrumb/client": "*",
     "@breadcrumb/shared": "*",
     "@expo-google-fonts/press-start-2p": "^0.4.1",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@shopify/react-native-skia": "2.6.2",
     "@supabase/supabase-js": "^2.118.0",
     "expo": "~57.0.30",
     "expo-constants": "~57.0.22",

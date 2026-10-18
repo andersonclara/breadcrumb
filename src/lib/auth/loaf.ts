@@ -1,11 +1,11 @@
 import {createHmac,randomBytes,timingSafeEqual} from 'node:crypto';
-import {checkSliceGesture} from '@breadcrumb/shared';
+import {checkSliceGesture} from '@breadcrumb/shared/loaf';
 
 // BreadPass "slice the loaf": a light human check before Auth0 sign-up. The student drags a knife
 // through a pixel loaf at a server-chosen spot; the server checks the gesture and mints a short-lived
 // slice token that the Auth0 Pre User Registration Action re-verifies with the same LOAF_SECRET.
 // It stops casual scripts and direct calls to Auth0's public signup endpoint, not a determined bot.
-export type {SlicePoint} from '@breadcrumb/shared';
+export type {SlicePoint} from '@breadcrumb/shared/loaf';
 export const CHALLENGE_SECONDS=120,TOKEN_SECONDS=300;
 
 export function loafSecret(env:Record<string,string|undefined>=process.env){return env.LOAF_SECRET?.trim()||null;}
@@ -31,10 +31,11 @@ function claim(id:string,exp:number,nowSeconds:number){
 
 export function checkSlice(secret:string,challenge:unknown,trace:unknown,now=Date.now()):{ok:true}|{ok:false;reason:string}{
  if(typeof challenge!=='string')return {ok:false,reason:'missing'};
- const [id,cutText,expText,sig]=challenge.split('.');
- if(!id||!cutText||!expText||!sig||!sameSignature(sig,sign(secret,`loaf:${id}.${cutText}.${expText}`)))return {ok:false,reason:'signature'};
+ const parts=challenge.split('.'),[id,cutText,expText,sig]=parts;
+ if(parts.length!==4||!id||!cutText||!expText||!sig||!sameSignature(sig,sign(secret,`loaf:${id}.${cutText}.${expText}`)))return {ok:false,reason:'signature'};
  const cut=Number(cutText)/100,exp=Number(expText),nowSeconds=Math.floor(now/1000);
- if(!(exp>=nowSeconds))return {ok:false,reason:'expired'};
+ if(!Number.isInteger(exp)||exp<nowSeconds||exp>nowSeconds+CHALLENGE_SECONDS)return {ok:false,reason:'expired'};
+ if(cut<0.3||cut>0.7)return {ok:false,reason:'signature'};
  // Same gesture rules the slicers show to the student (packages/shared/src/loaf.ts).
  const gesture=checkSliceGesture(cut,trace);
  if(!gesture.ok)return {ok:false,reason:gesture.reason};

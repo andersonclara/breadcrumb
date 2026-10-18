@@ -1,4 +1,4 @@
-import {normalizeUfEmail} from './index';
+import {normalizeUfEmail} from './email';
 export function normalizeUfLogin(value:unknown):string|null{
  if(typeof value!=='string')return null;
  const login=value.trim().toLowerCase();
