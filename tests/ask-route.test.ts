@@ -21,7 +21,7 @@ describe('public Ask endpoint',()=>{
     expect((await POST(request({message:'Free food now',demo}))).status).toBe(200);
     expect(mocks.ask.mock.calls[0][0].demo).toEqual(demo);
     mocks.quota.mockClear();
-    expect((await POST(request({message:'Food',demo:{...demo,startedAt:Date.now()-180001}}))).status).toBe(410);
+    expect((await POST(request({message:'Food',demo:{...demo,startedAt:Date.now()-300001}}))).status).toBe(410);
     expect((await POST(request({message:'Food',demo:{...demo,startedAt:Date.now()+60000}}))).status).toBe(410);
     expect((await POST(request({message:'Food',demo:{...demo,reports:[{title:'injected'}]}}))).status).toBe(400);
     expect(mocks.quota).not.toHaveBeenCalled();

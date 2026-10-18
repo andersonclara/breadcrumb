@@ -70,11 +70,9 @@ function useExploreValue() {
     [chatInput, setChatInput] = useState(""),
     [chatScroll, setChatScroll] = useState(0);
   const [demo, setDemo] = useState<DemoSession | null>(null),
-    [demoSeconds, setDemoSeconds] = useState(0),
     [heatmap, setHeatmap] = useState(false);
   const endDemo = useCallback(() => {
     setDemo(null);
-    setDemoSeconds(0);
     setSelected(r => r && isDemoRecord(r) ? null : r);
     setTurns(items => items.filter(turn => !turn.demoKey));
     setContext(undefined);
@@ -82,7 +80,6 @@ function useExploreValue() {
   const startDemo = () => {
     endDemo();
     setDemo({ startedAt: Date.now(), seed: 1 + Math.floor(Math.random() * 0x7ffffffe) });
-    setDemoSeconds(180);
     setHeatmap(true);
     setScope('campus');
     setPeriod('next7days');
@@ -92,14 +89,16 @@ function useExploreValue() {
   };
   useEffect(() => {
     if (!demo) return;
-    const tick = () => {
+    let timer: ReturnType<typeof setTimeout>;
+    const scheduleExpiry = () => {
+      clearTimeout(timer);
       const remaining = demoRemaining(demo);
       if (!remaining) endDemo();
-      else setDemoSeconds(Math.ceil(remaining / 1000));
+      else timer = setTimeout(endDemo, remaining);
     };
-    const timer = setInterval(tick, 1000);
-    const listener = AppState.addEventListener('change', state => { if (state === 'active') tick(); });
-    return () => { clearInterval(timer); listener.remove(); };
+    scheduleExpiry();
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') scheduleExpiry(); });
+    return () => { clearTimeout(timer); listener.remove(); };
   }, [demo, endDemo]);
   const demoRecords = useMemo(() => demo ? createDemoReports(demo) : [], [demo]);
   const [saved, setSaved] = useState<DiscoveryRecord[]>([]),
@@ -333,7 +332,6 @@ function useExploreValue() {
     demo: demo && demoRemaining(demo) ? demo : null,
     demoKey: demoKey(demo),
     demoRecords,
-    demoSeconds,
     startDemo,
     endDemo,
     heatmap,

@@ -31,9 +31,9 @@ describe('temporary campus demo evidence', () => {
     expect(createDemoReports({ ...session, seed: 42 })[0].id).not.toBe(reports[0].id);
   });
   it('expires by wall clock even if timers were suspended, and rejects far-future or invalid sessions', () => {
-    expect(demoRemaining(session, session.startedAt)).toBe(180000);
-    expect(demoRemaining(session, session.startedAt + 179999)).toBe(1);
-    expect(demoRemaining(session, session.startedAt + 180000)).toBe(0);
+    expect(demoRemaining(session, session.startedAt)).toBe(300000);
+    expect(demoRemaining(session, session.startedAt + 299999)).toBe(1);
+    expect(demoRemaining(session, session.startedAt + 300000)).toBe(0);
     expect(demoRemaining(session, session.startedAt + 600000)).toBe(0);
     expect(demoRemaining(session, session.startedAt - 5001)).toBe(0);
     expect(demoRemaining({ ...session, seed: 0 }, session.startedAt)).toBe(0);

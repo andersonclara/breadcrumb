@@ -97,8 +97,8 @@ for (const b of sprites) {
   b.overview = b.tree || b.index === undefined ? '' : simple(0);
   b.blocks = b.index === undefined && !b.tree ? '' : simple(3);
 }
-// Oversized, crisp-edged ground pixels make the recolored outer campus read as
-// game terrain. Close-up tiers retain the fine material swatches.
+// Pixel blocks give terrain and ground a consistent 8-bit texture; close-up
+// tiers retain fine material swatches so landmarks stay readable.
 const pixelGroundMaterials = {
   grass: { size: 1.6, path: 'M.12 .12h.22v.22H.12zM.62 .38h.18v.18H.62zM.38 .82h.14v.14H.38z' },
   woodland: { size: 1.6, path: 'M.08 .1h.32v.32H.08zM.56 .52h.26v.26H.56zM.18 .7h.14v.14H.18z' },
@@ -124,13 +124,13 @@ const pixelTerrain = [
   { color: '#98C276', path: 'M.18 .22h.44v.34h-.44zM1.18 1.12h.4v.3h-.4z' },
 ];
 const terrainDefs = level => pixelTerrain.map((pixel, index) => {
-  const scale = 10 / 2 ** level / 2.4, size = 2.4 * scale;
+  const scale = 10 / 2 ** Math.min(level, 3) / 2.4, size = 2.4 * scale;
   return `<pattern id="pt-${index}" width="${size}" height="${size}" patternUnits="userSpaceOnUse" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="${campus.colors[index]}"/><path d="${pixel.path}" transform="scale(${scale})" fill="${pixel.color}"/></pattern>`;
 }).join('');
 const defs = Object.entries(groundMaterials).map(([id, m]) => `<pattern id="g-${id}" width="${m.size}" height="${m.size}" patternUnits="userSpaceOnUse"><rect width="${m.size}" height="${m.size}" fill="${m.color}"/><path d="${m.path}" fill="${m.detail}"/></pattern>`).join('');
 const pixelGroundDefs = level => Object.entries(pixelGroundMaterials).map(([id, pixel]) => {
     const m = groundMaterials[id] ?? groundMaterials.unknown;
-    const scale = 10 / 2 ** level / pixel.size, size = pixel.size * scale;
+    const scale = 10 / 2 ** Math.min(level, 3) / pixel.size, size = pixel.size * scale;
     return `<pattern id="pg-${id}" width="${size}" height="${size}" patternUnits="userSpaceOnUse" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="${m.color}"/><path d="${pixel.path}" transform="scale(${scale})" fill="${m.detail}"/></pattern>`;
 }).join('');
 const catalog = { size: campus.size, bounds: campus.bounds, colors: campus.colors, metersPerUnit: campus.metersPerUnit,

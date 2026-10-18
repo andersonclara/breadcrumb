@@ -34,7 +34,7 @@ export async function ask(request:AskRequest,deps:AskDependencies,signal:AbortSi
     if(cards.some(r=>r.source==='demo'))answer=`Demo simulation: ${answer}`;
     return {status,answer,cards,appliedConstraints:{...constraints,window,origin},
       context:{constraints,results:status==='clarification'?(request.context?.results??[]):cards.map(({id,kind})=>({id,kind})),referencePlace:constraints.nearPlace},
-      suggestedFollowUps:followUps,dataFreshnessNote:request.demo?'Demo reports are simulated, local to this session, and expire after three minutes. Published event listings remain real. '+freshness:freshness};
+      suggestedFollowUps:followUps,dataFreshnessNote:request.demo?'Demo reports are simulated, local to this session, and expire after five minutes. Published event listings remain real. '+freshness:freshness};
   }
   if(intent.action==='unsupported')return response('unsupported',intent.clarification??'I can help discover published campus events and fresh public Crumbs.');
   if(intent.action==='clarify')return response('clarification',intent.clarification??'What would you like to discover, and where or when?');

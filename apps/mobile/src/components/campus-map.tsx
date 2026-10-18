@@ -16,6 +16,7 @@ import { useMapCamera } from "@/lib/use-map-camera";
 import { CampusTiles } from "./campus-tiles";
 import { BreadGlyph, PixelAvatar } from "./pixel-art";
 import { Icon } from "./icon";
+import { PixelFrame } from "./pixel-frame";
 import { theme, type Theme } from "@/lib/theme";
 import { useTheme } from "@/lib/theme-context";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
@@ -165,7 +166,7 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
       {(["plus", "minus"] as const).map((name) => <Pressable key={name} accessibilityRole="button"
         accessibilityLabel={name === "plus" ? "Zoom in" : "Zoom out"}
         style={({ pressed }) => [styles.control, pressed && { opacity: .7 }]}
-        onPress={() => zoomBy(name === "plus" ? 1.5 : 1 / 1.5)}><Icon name={name} /></Pressable>)}
+        onPress={() => zoomBy(name === "plus" ? 1.5 : 1 / 1.5)}><PixelFrame /><Icon name={name} /></Pressable>)}
     </View>
     <Text pointerEvents="none" style={[styles.credit, { bottom: bottomInset + 2 }]}>© UF GIS + OpenStreetMap · ODbL</Text>
   </View>;
@@ -179,7 +180,7 @@ const createStyles = (t: Theme) => StyleSheet.create({
   locationHalo: { position: "absolute", bottom: 0, width: 28, height: 12, borderRadius: 14, borderWidth: 2, borderColor: t.ink, backgroundColor: t.sage },
   target: { width: 32, height: 32, borderRadius: 16, borderWidth: 2, borderColor: t.ink, backgroundColor: "#F4BC5588" },
   controls: { position: "absolute", right: 16, gap: 8 },
-  control: { width: 48, height: 48, borderRadius: 14, backgroundColor: t.surface, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: t.border },
+  control: { width: 48, height: 48, alignItems: "center", justifyContent: "center" },
   credit: { position: "absolute", left: 12, fontSize: 10, color: t.ink, backgroundColor: t.surface + "E6", padding: 3, borderRadius: 4 },
 });
 const styles = createStyles(theme);

@@ -1,7 +1,7 @@
 import { campus, fromWorld } from './world';
 import { isCurrentRecord, type DiscoveryRecord } from './discovery';
 
-export const DEMO_DURATION_MS = 180_000;
+export const DEMO_DURATION_MS = 300_000;
 export const DEMO_REPORT_COUNT = 144;
 export type DemoSession = { startedAt: number; seed: number };
 export const isDemoRecord = (r: Pick<DiscoveryRecord, 'source'>) => r.source === 'demo';
@@ -48,7 +48,7 @@ export function createDemoReports(session: DemoSession): DiscoveryRecord[] {
     return {
       kind: 'crumb', id: `d3e00000-${hex.slice(0, 4)}-4${hex.slice(4, 7)}-8${hex.slice(7)}00-${stamp}${i.toString(16).padStart(4, '0')}`,
       title: `${options[i % options.length]} near ${site[0]}`,
-      description: 'Simulated campus report for this three-minute demo. Food availability, activity, and confirmations are fictional.',
+      description: 'Simulated campus report for this five-minute demo. Food availability, activity, and confirmations are fictional.',
       category, venue: site[0], ...fromWorld(x, y), startsAt: null, endsAt: null,
       eventDate: null, allDay: false,
       createdAt: new Date(session.startedAt - Math.floor(random() * 600_000)).toISOString(),
