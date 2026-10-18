@@ -85,7 +85,7 @@ function useExploreValue() {
     setDemoSeconds(180);
     setHeatmap(true);
     setScope('campus');
-    setPeriod('now');
+    setPeriod('next7days');
     setCategory('all');
     setQuery('');
     setCamera({ x: 228, y: 76, zoom: 2.3 });

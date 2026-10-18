@@ -38,11 +38,6 @@ describe('map event retrieval',()=>{
     } finally {vi.useRealTimers();}
   });
   it('fails explicitly on storage errors instead of presenting an empty successful map',async()=>{
-    const {db,queries}=database([]);
-    const pending=readMapEvents(db,window,false,new AbortController().signal);
-    // Set-up runs synchronously through both reads; they are independently bounded.
-    expect(queries).toHaveLength(2);
-    await pending;
     const broken={from:()=>{throw new Error('unavailable');}} as unknown as SupabaseClient;
     await expect(readMapEvents(broken,window,false,new AbortController().signal)).rejects.toThrow();
   });

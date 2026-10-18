@@ -16,6 +16,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -90,6 +91,8 @@ export default function MapScreen() {
 }
 
 function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMapAppearance> }) {
+  const viewport = useWindowDimensions();
+  const compact = viewport.width > viewport.height && viewport.height < 500;
   const t = useTheme(), s = useGameStyles();
   const styles = useMemo(() => createStyles(t), [t]);
   const dark = isDarkTheme(t);
@@ -323,7 +326,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
         bottomInset={bottom}
       />
       <View
-        style={[styles.top, { top: insets.top + 8 }]}
+        style={[styles.top, { top: insets.top + 8 }, compact && { right: undefined, width: viewport.width * .43 }]}
         pointerEvents="box-none"
       >
         <View style={styles.topRow}>
@@ -398,7 +401,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
       {placing ? (
         <View
           onLayout={(event) => setDockHeight(event.nativeEvent.layout.height)}
-          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 16) }]}
+          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 16) }, compact && { right: 16, alignSelf: 'auto', width: viewport.width * .43 }]}
         >
           <Text style={s.label}>Choose a spot for your Crumb</Text>
           <Text style={s.muted}>
@@ -428,7 +431,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
       ) : (
         <View
           onLayout={(event) => setDockHeight(event.nativeEvent.layout.height)}
-          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12) }]}
+          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12) }, compact && { right: 16, alignSelf: 'auto', width: viewport.width * .43 }]}
         >
           <View style={[s.row, { justifyContent: "space-between" }]}>
             <View style={s.row}>
@@ -582,7 +585,7 @@ function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMap
               <Chip label="Pins" selected={!explore.heatmap} onPress={() => explore.setHeatmap(false)} />
               <Chip label="Heatmap + pins" selected={explore.heatmap} onPress={() => explore.setHeatmap(true)} />
             </View>
-            {explore.heatmap && <Text style={s.muted}>Gold to orange shows fewer to more active reports, not attendance. Your category filter also filters the heatmap.</Text>}
+            {explore.heatmap && <Text style={s.muted}>Orange to red shows fewer to more active reports, not attendance. Your category filter also filters the heatmap.</Text>}
             {!explore.demo && <GameButton variant="secondary" onPress={() => {
               setFollowing(false); explore.startDemo(); setPanel(null);
             }}>Start three-minute demo</GameButton>}

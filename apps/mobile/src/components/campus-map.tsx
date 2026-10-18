@@ -134,9 +134,9 @@ export function CampusMap({ camera, onCamera, onInteract, followPosition, follow
         {heat.map(cell => <MapAnchor key={cell.key} point={cell} live={live} size={size} width={140} height={140}>
           <Svg width={140} height={140} viewBox="-70 -70 140 140">
             <Defs><RadialGradient id={`density-${cell.key.replace(':', '-')}`} cx="50%" cy="50%" r="50%">
-              <Stop offset="0" stopColor={cell.count >= 8 ? '#D66B2B' : '#EFC654'} stopOpacity={Math.min(.8, .2 + cell.count / 30)} />
-              <Stop offset=".5" stopColor="#EFC654" stopOpacity={Math.min(.4, cell.count / 50)} />
-              <Stop offset="1" stopColor="#EFC654" stopOpacity="0" />
+              <Stop offset="0" stopColor={cell.count >= 8 ? '#E32929' : '#F97316'} stopOpacity={Math.min(.8, .2 + cell.count / 30)} />
+              <Stop offset=".5" stopColor={cell.count >= 8 ? '#EF4444' : '#FB923C'} stopOpacity={Math.min(.4, cell.count / 50)} />
+              <Stop offset="1" stopColor="#EF4444" stopOpacity="0" />
             </RadialGradient></Defs>
             <Circle r={70} fill={`url(#density-${cell.key.replace(':', '-')})`} />
           </Svg>
