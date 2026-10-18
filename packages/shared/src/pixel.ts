@@ -55,9 +55,10 @@ export function avatarPixels(config: AvatarConfig = defaultAvatar, frame = 0): P
  if(a.accessory===3){h(8,16,7,1,ink);h(8,17,1,5,ink);h(14,17,1,5,ink);h(9,22,5,1,ink);h(18,16,7,1,ink);h(18,17,1,5,ink);h(24,17,1,5,ink);h(19,22,5,1,ink);h(15,18,3,1,ink);h(9,17,2,1,'#BEE7DF');h(19,17,2,1,'#BEE7DF');}
  return pixels;
 }
-export function breadPixels(state: 'crumb' | 'rising' | 'full_loaf' | 'stale'): PixelRect[] {
-  if(state === 'crumb') return [{x:5,y:8,w:5,h:4,color:'#774D35'},{x:6,y:7,w:3,h:3,color:'#D59A55'},{x:11,y:11,w:2,h:2,color:'#D59A55'}];
-  const rows = state === 'full_loaf' ? ['    oooooooo    ','  ooCCCCCCCCoo  ',' oCCLLLLLLLLCCo ','oCCLllllllLlLCCo','oCLlllllLllllLCo','oCLllLllllLllLCo','oCLllllLlllllLCo','oCLlLlllllLllLCo','oCLllllLlllllLCo','oCLllLllllLllLCo',' oCLllllllllLCo ',' oCCCCCCCCCCCCo ','  oooooooooooo  '] : ['   oooooooo   ',' ooCCCCCCCCoo ','oCCLLLLLLLLCCo','oCLllllllllLCo','oCLllLllLllLCo','oCLllllllllLCo','oCLllLlllllLCo','oCLllllLlllLCo','oCLllllllllLCo','oCCCCCCCCCCCCo',' oooooooooooo '];
-  const colors:Record<string,string> = {o:'#774D35', C:state === 'stale'?'#A7977C':'#C88A47',L:'#E5BA71',l:state === 'stale'?'#C5B89B':'#F8DB9B'};
-  return rows.flatMap((row,y)=>[...row].flatMap((c,x)=>colors[c]?[{x,y:y+1,w:1,h:1,color:colors[c]}]:[]));
+export function breadPixels(state: 'crumb' | 'rising' | 'full_loaf' | 'stale' | 'burnt'): PixelRect[] {
+ if(state==='crumb')return [{x:5,y:7,w:6,h:5,color:'#D98A36'},{x:6,y:7,w:4,h:4,color:'#FFF5C4'},{x:7,y:8,w:3,h:2,color:'#FFC65A'},{x:12,y:12,w:2,h:2,color:'#FFC65A'}];
+ // Golden fragments grow into a smaller rising toast, then a full golden loaf.
+ const golden:PixelRect[]=[{x:5,y:7,w:18,h:19,color:'#D98A36'},{x:3,y:5,w:8,h:7,color:'#D98A36'},{x:17,y:5,w:8,h:7,color:'#D98A36'},{x:6,y:7,w:16,h:18,color:'#FFF5C4'},{x:4,y:6,w:7,h:5,color:'#FFF5C4'},{x:18,y:6,w:6,h:5,color:'#FFF5C4'},{x:8,y:10,w:12,h:13,color:'#FFC65A'},{x:6,y:8,w:4,h:4,color:'#FFC65A'},{x:19,y:8,w:3,h:4,color:'#FFC65A'}];
+ const scale=state==='rising'?.72:1;
+ return golden.map(p=>({...p,color:state==='burnt'?({'#D98A36':'#302925','#FFF5C4':'#76503A','#FFC65A':'#45332C'}[p.color]??p.color):p.color,x:(p.x*.6-.4-8)*scale+8,y:(p.y*.6-1.3-8)*scale+8,w:p.w*.6*scale,h:p.h*.6*scale}));
 }

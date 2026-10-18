@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "ios": { "supportsTablet": true },
     "android": { "predictiveBackGestureEnabled": true },
-    "plugins": ["expo-router", ["expo-splash-screen", { "backgroundColor": "#F5E9D5" }], ["expo-location", {"locationWhenInUsePermission":"Share your campus avatar with accepted friends while Breadcrumb is open."}]],
+    "plugins": ["expo-router", ["expo-splash-screen", { "backgroundColor": "#F5E9D5" }], ["expo-location", {"locationWhenInUsePermission":"Center the campus map on your location. Sharing with accepted friends is a separate, optional action."}]],
     "experiments": { "typedRoutes": true }
   }
 }

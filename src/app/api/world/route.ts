@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {assertCanAct} from '@/lib/guard';
 import {inCampus,validAvatar} from '@breadcrumb/shared';
+import {allowedApiOrigin,mobileApi,mobileOptions} from '@/lib/mobile-api';
 const coordinate={latitude:z.number().finite(),longitude:z.number().finite()};
 const input=z.discriminatedUnion('action',[
  z.object({action:z.literal('community_create'),data:z.object({name:z.string().trim().min(3).max(48),description:z.string().trim().max(280),accent:z.string().regex(/^#[0-9a-fA-F]{6}$/)})}),
@@ -14,10 +15,9 @@ const input=z.discriminatedUnion('action',[
  z.object({action:z.literal('friend_request'),data:z.object({code:z.string().trim().regex(/^[a-fA-F0-9]{8}$/)})}),
  z.object({action:z.enum(['friend_accept','friend_remove']),data:z.object({id:z.uuid()})}),
 ]);
-export async function POST(request:Request) {
+async function post(request:Request) {
  try {
-  const origin=request.headers.get('origin');
-  if(origin&&origin!==new URL(request.url).origin) return Response.json({error:'Invalid request origin'},{status:403});
+  if(!allowedApiOrigin(request)) return Response.json({error:'Invalid request origin'},{status:403});
   const text=await request.text();
   if(text.length>5000)return Response.json({error:'Request is too large'},{status:413});
   let body:unknown;try{body=JSON.parse(text);}catch{return Response.json({error:'Invalid request'},{status:400});}
@@ -32,3 +32,5 @@ export async function POST(request:Request) {
   return Response.json({error:'Could not connect. Please try again.'},{status:503});
  }
 }
+export const POST=mobileApi(post);
+export const OPTIONS=mobileOptions;

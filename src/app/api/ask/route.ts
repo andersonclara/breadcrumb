@@ -7,14 +7,14 @@ import {interpret,explain} from '@/lib/ai/ask/model';
 import {getAskModelConfig} from '@/lib/ai/ask/provider';
 import {createSearch} from '@/lib/ai/ask/search';
 import {readAskBody,takeQuota} from '@/lib/ai/ask/http';
+import {allowedApiOrigin,mobileApi,mobileOptions} from '@/lib/mobile-api';
 
 export const runtime='nodejs';
 export const maxDuration=30;
-export async function POST(request:Request) {
+async function post(request:Request) {
   const headers={'Cache-Control':'private, no-store'};
   try {
-    const origin=request.headers.get('origin');
-    if(origin&&origin!==new URL(request.url).origin)return Response.json({error:'Invalid request origin'},{status:403,headers});
+    if(!allowedApiOrigin(request))return Response.json({error:'Invalid request origin'},{status:403,headers});
     const parsed=askRequestSchema.safeParse(await readAskBody(request));
     if(!parsed.success)return Response.json({error:'Check your message and search context.'},{status:400,headers});
     const config=getSupabaseConfig();
@@ -32,3 +32,5 @@ export async function POST(request:Request) {
     return Response.json({error:'Ask Breadcrumb is temporarily unavailable. Please try again.'},{status:503,headers});
   }
 }
+export const POST=mobileApi(post);
+export const OPTIONS=mobileOptions;

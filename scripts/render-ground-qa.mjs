@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import sharp from 'sharp';
+import {groundMaterials} from '../packages/shared/src/ground-materials.ts';
+const campus=JSON.parse(fs.readFileSync('packages/shared/src/campus-map.json','utf8'));
+const tower=campus.buildings.find(b=>b.name==='Century Tower'),span=22;
+const surfaces=campus.surfaces.filter(s=>s.left<tower.x+span/2&&s.right>tower.x-span/2&&s.top<tower.y+span/2&&s.bottom>tower.y-span/2);
+const defs=Object.entries(groundMaterials).map(([id,m])=>`<pattern id="ground-${id}" width="${m.size}" height="${m.size}" patternUnits="userSpaceOnUse"><rect width="${m.size}" height="${m.size}" fill="${m.color}"/><path d="${m.path}" fill="${m.detail}"/></pattern>`).join('');
+const ground=surfaces.map(s=>`<path d="${s.path}" fill="url(#ground-${s.material})" fill-rule="evenodd"/>`).join('');
+const names=campus.buildings.filter(b=>Math.abs(b.x-tower.x)<span/2&&Math.abs(b.y-tower.y)<span/2).map(b=>`<path d="${b.path}" fill="#BA9978" fill-rule="evenodd" stroke="#7C654F" stroke-width=".02"/>`).join('');
+await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="850"><defs>${defs}</defs><rect width="1000" height="850" fill="${campus.colors[0]}"/><svg width="1000" height="850" viewBox="${tower.x-span/2} ${tower.y-span/2} ${span} ${span}">${ground}${names}</svg></svg>`)).png().toFile('public/ground-preview.png');
+console.log('public/ground-preview.png');

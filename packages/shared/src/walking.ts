@@ -1,7 +1,21 @@
 import {campus,toWorld,fromWorld,inCampus,type Coordinate,type World} from './world';
 import {defaultAvatar,type AvatarConfig} from './pixel';
 import {identifyLandmark,campusLandmarkSprites} from './campus-landmarks';
+import {buildingArt} from './building-art';
+import {canopyArt,frenchFriesArt} from './landscape-art';
 import {previewAvatars} from './landmarks';
+const illustratedBuildings=campus.buildings.map(b=>{
+  const id=identifyLandmark(b.name),tower=id==='century',emphasis=id==='malachowsky'?1.35:id==='west'||id==='marston'?1.25:1;
+  const art=id?campusLandmarkSprites[id]:buildingArt(b);
+  // Landmark emphasis preserves the geographic anchors.
+  const artHeight=tower?(47.85/campus.metersPerUnit+b.height)*2:Math.max(b.height+b.rise,b.width*.3)*emphasis;
+  const width=tower?Math.max(b.width,artHeight*art.width/art.height):b.width*emphasis;
+  return {...b,width,kind:'building' as const,art,artHeight,landmark:b.landmark||!!id};
+ });
+const treeSprites=[0,1,2].map(canopyArt);
+const landscape=campus.trees.map(t=>({...campus.buildings[0],kind:'building' as const,id:t.id,name:'Woodland canopy',x:t.x,y:t.y,width:1.05,height:.3,rise:0,landmark:false,art:treeSprites[t.variant],artHeight:1.05}));
+const marston=campus.buildings.find(b=>b.name==='Marston Science Library');
+if(marston)landscape.push({...campus.buildings[0],kind:'building',id:'alachua-sculpture',name:'French Fries / Alachua',x:marston.x-marston.width/2-.6,y:marston.y-.3,width:15.24/campus.metersPerUnit,height:.5,rise:0,landmark:true,art:frenchFriesArt(),artHeight:1.2});
 const anchor=toWorld({latitude:29.6485,longitude:-82.3437});
 const routes=campus.walkways.map(path=>{
  let length=0;const distances=[0];
@@ -31,14 +45,17 @@ export function snapToWalkway(point:Coordinate,maxDistanceMeters=12):Coordinate{
  }
  return fromWorld(result.x,result.y);
 }
-export function campusScene(world:World,preview:boolean,seconds:number,ownPosition:Coordinate|null|undefined,center:{x:number;y:number},span:number){
+export function campusPeople(world:World,preview=false,seconds=0,ownPosition?:Coordinate|null){
  type Person={kind:'person';id:string;x:number;y:number;avatar:AvatarConfig;walking:boolean;facing:number;label:string};
  const people:Person[]=preview?previewAvatars.map((avatar,i)=>({kind:'person',id:'preview-'+i,...previewWalk(i,seconds),avatar:i===0?(world.profile?.avatar??avatar):avatar,walking:true,label:'PREVIEW'})):[];
  for(const p of world.presence)if(p.id!==world.profile?.id)people.push({kind:'person',id:p.id,...toWorld(p),avatar:p.avatar,walking:!!p.moving,facing:1,label:'FRIEND · APPROX.'});
  if(ownPosition&&inCampus(ownPosition))people.push({kind:'person',id:'self',...toWorld(snapToWalkway(ownPosition)),avatar:world.profile?.avatar??defaultAvatar,walking:false,facing:1,label:'YOU'});
- const buildings=campus.buildings.filter(b=>Math.abs(b.x-center.x)<span/2+b.width/2&&b.y>center.y-span/2&&b.y-b.height-b.rise<center.y+span/2).map(b=>{const id=identifyLandmark(b.name);return {...b,kind:'building' as const,art:id?campusLandmarkSprites[id]:null,artHeight:id==='century'?b.rise+b.height:Math.max(b.height*.6+b.rise,b.width*.48),landmark:b.landmark||!!id};});
- const plaza=campus.labels.find(l=>l.name==='Plaza of the Americas');
- if(plaza&&Math.abs(plaza.x-center.x)<span/2+5&&Math.abs(plaza.y-center.y)<span/2+5)buildings.push({...campus.buildings[0],kind:'building',id:'plaza-art',name:plaza.name,x:plaza.x,y:plaza.y+3,width:8,height:5,rise:0,landmark:true,art:campusLandmarkSprites.plaza,artHeight:6});
+ return people;
+}
+export function campusScene(world:World,preview:boolean,seconds:number,ownPosition:Coordinate|null|undefined,center:{x:number;y:number},span:number){
+ const people=campusPeople(world,preview,seconds,ownPosition);
+ const buildings=illustratedBuildings.filter(b=>Math.abs(b.x-center.x)<span/2+b.width/2&&b.y>center.y-span/2&&b.y-b.artHeight<center.y+span/2);
+ buildings.push(...landscape.filter(t=>Math.abs(t.x-center.x)<span/2+t.width&&t.y>center.y-span/2&&t.y-t.artHeight<center.y+span/2));
  return [...buildings,...people.filter(p=>Math.abs(p.x-center.x)<span/2&&Math.abs(p.y-center.y)<span/2)].sort((a,b)=>a.y-b.y);
 }
 export function visibleWalkways(center:{x:number;y:number},span:number){

@@ -1,18 +1,23 @@
-import { Tabs } from "expo-router";
-import { Text } from "react-native";
-import { palette } from "@breadcrumb/shared";
-
-export default function TabLayout() {
-  return <Tabs screenOptions={{
-    headerStyle: { backgroundColor: palette.cream }, headerTintColor: palette.crust,
-    headerTitleStyle:{fontFamily:'PressStart2P_400Regular',fontSize:9},tabBarLabelStyle:{fontFamily:'PressStart2P_400Regular',fontSize:6},
-    tabBarActiveTintColor: palette.crust, tabBarInactiveTintColor: "#8B7B6E",
-    tabBarStyle: { backgroundColor: palette.cream,borderTopWidth:3,borderTopColor:palette.crust },
-  }}>
-    <Tabs.Screen name="index" options={{ title: "Map", headerShown: false, tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 22 }}>◎</Text> }} />
-    <Tabs.Screen name="buzz" options={{ title: "Live Buzz", tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 22 }}>≋</Text> }} />
-    <Tabs.Screen name="communities" options={{title:"Communities",tabBarIcon:({color})=><Text style={{color,fontSize:22}}>?</Text>}}/>
-    <Tabs.Screen name="ask" options={{ title: "Ask", tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 22 }}>?</Text> }} />
-    <Tabs.Screen name="radar" options={{ title: "Radar", tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 22 }}>◉</Text> }} />
-  </Tabs>;
+import { Stack } from "expo-router";
+import { theme } from "@/lib/theme";
+export default function ExploreLayout() {
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: theme.surface },
+        headerTintColor: theme.ink,
+        headerTitleStyle: { fontSize: 18, fontWeight: "600" },
+        contentStyle: { backgroundColor: theme.background },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{ headerShown: false, title: "Explore" }}
+      />
+      <Stack.Screen name="ask" options={{ title: "Ask Breadcrumb" }} />
+      <Stack.Screen name="buzz" options={{ title: "Nearby" }} />
+      <Stack.Screen name="communities" options={{ title: "Communities" }} />
+      <Stack.Screen name="radar" options={{ headerShown: false }} />
+    </Stack>
+  );
 }

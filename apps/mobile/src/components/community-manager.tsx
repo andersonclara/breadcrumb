@@ -1,11 +1,158 @@
-import {useState} from 'react';
-import {Pressable,Text,TextInput,View} from 'react-native';
-import {communities} from '@breadcrumb/shared';
-import {useCampus} from '@/providers/world-provider';
-import {GameButton,gameStyles as s} from './game-ui';
-const colors=['#BD4B83','#307D69','#3B7FAD','#7454B3','#D78636'];
-export function CommunityManager(){
- const {world,act,pending}=useCampus();const [name,setName]=useState(''),[description,setDescription]=useState(''),[accent,setAccent]=useState(colors[0]);
- const directory=world.communities??communities.map(c=>({...c,joined:c.id==='campus',featured:true,created_by:null}));
- return <View style={{gap:20}}><Text style={s.title}>YOUR COMMUNITIES</Text><Text style={s.body}>Add communities to show them as tabs on your map. Membership never shares your location.</Text>{directory.filter(c=>c.featured||c.created_by||c.joined||communities.some(p=>p.id===c.id)).map(c=><View key={c.id} style={{gap:12,borderWidth:2,borderColor:c.accent,backgroundColor:c.background,padding:18}}><Text style={[s.label,{color:c.accent}]}>{c.name.toUpperCase()}</Text><Text style={s.body}>{c.description}</Text>{c.id==='campus'?<Text style={s.body}>Always on your map</Text>:<GameButton disabled={pending} onPress={()=>{void act(c.joined?'community_leave':'community_join',{community_id:c.id}).catch(()=>{});}}>{c.joined?'REMOVE FROM MY TABS':'ADD TO MY TABS'}</GameButton>}</View>)}<Text style={s.title}>START A COMMUNITY</Text><TextInput style={s.input} accessibilityLabel="Community name" placeholder="e.g. Computer Science" value={name} onChangeText={setName} maxLength={48}/><TextInput style={s.input} accessibilityLabel="Community description" placeholder="Who is this space for?" value={description} onChangeText={setDescription} maxLength={280} multiline/><Text style={s.label}>ACCENT COLOR</Text><View style={s.row}>{colors.map(c=><Pressable key={c} accessibilityRole="button" accessibilityLabel={`Choose ${c}`} accessibilityState={{selected:accent===c}} onPress={()=>setAccent(c)} style={{width:40,height:40,backgroundColor:c,borderWidth:accent===c?4:2,borderColor:accent===c?'#49382C':'#FFFFFF'}}/>)}</View><GameButton disabled={pending||name.trim().length<3} onPress={()=>{void act('community_create',{name,description,accent}).then(()=>{setName('');setDescription('');}).catch(()=>{});}}>CREATE & ADD COMMUNITY</GameButton></View>;
+import { useState } from "react";
+import { router } from "expo-router";
+import { Pressable, Text, TextInput, View } from "react-native";
+import { communities } from "@breadcrumb/shared";
+import { useCampus } from "@/providers/world-provider";
+import { GameButton, Feedback, gameStyles as s } from "./game-ui";
+const colors = [
+  { name: "Berry", hex: "#BD4B83" },
+  { name: "Forest", hex: "#307D69" },
+  { name: "Lake", hex: "#3B7FAD" },
+  { name: "Violet", hex: "#7454B3" },
+  { name: "Toast", hex: "#D78636" },
+];
+export function CommunityManager() {
+  const c = useCampus(),
+    [name, setName] = useState(""),
+    [description, setDescription] = useState(""),
+    [accent, setAccent] = useState(colors[0].hex),
+    [creating, setCreating] = useState(false),
+    [error, setError] = useState("");
+  const directory =
+    c.world.communities ??
+    communities.map((v) => ({
+      ...v,
+      joined: v.id === "campus",
+      featured: true,
+      created_by: null,
+    }));
+  return (
+    <View style={{ gap: 16 }}>
+      <Text style={s.body}>
+        Choose who you discover and share with. Joining a community never shares
+        your location.
+      </Text>
+      <Feedback error message={error || c.actionError || c.error} />
+      <Feedback message={c.notice} />
+      {directory.map((group) => (
+        <View
+          key={group.id}
+          style={[
+            s.card,
+            { borderLeftWidth: 4, borderLeftColor: group.accent },
+          ]}
+        >
+          <Text style={s.title}>{group.name}</Text>
+          <Text style={s.body}>{group.description}</Text>
+          {group.id === "girls" && (
+            <Text style={s.muted}>Membership is self-selected.</Text>
+          )}
+          {group.id === "campus" ? (
+            <Text style={s.muted}>
+              Public campus discoveries ? always available
+            </Text>
+          ) : (
+            <GameButton
+              loading={c.isPending(
+                group.joined ? "community_leave" : "community_join",
+                group.id,
+              )}
+              variant={group.joined ? "secondary" : "primary"}
+              onPress={() => {
+                if (!c.world.profile) {
+                  router.push("/login");
+                  return;
+                }
+                void c
+                  .act(group.joined ? "community_leave" : "community_join", {
+                    community_id: group.id,
+                  })
+                  .catch(() => {});
+              }}
+            >
+              {group.joined
+                ? "Leave community"
+                : c.world.profile
+                  ? "Join community"
+                  : "Sign in to join"}
+            </GameButton>
+          )}
+        </View>
+      ))}
+      {c.world.profile && (
+        <>
+          <GameButton
+            variant="secondary"
+            onPress={() => setCreating(!creating)}
+          >
+            {creating ? "Cancel creation" : "Start a community"}
+          </GameButton>
+          {creating && (
+            <View style={s.card}>
+              <Text style={s.label}>Community name</Text>
+              <TextInput
+                style={s.input}
+                accessibilityLabel="Community name"
+                value={name}
+                onChangeText={setName}
+                maxLength={48}
+              />
+              <Text style={s.label}>Description</Text>
+              <TextInput
+                style={s.input}
+                accessibilityLabel="Community description"
+                value={description}
+                onChangeText={setDescription}
+                maxLength={280}
+                multiline
+              />
+              <Text style={s.label}>Accent colour</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {colors.map((v) => (
+                  <Pressable
+                    key={v.hex}
+                    accessibilityRole="button"
+                    accessibilityLabel={v.name + " accent"}
+                    accessibilityState={{ selected: accent === v.hex }}
+                    onPress={() => setAccent(v.hex)}
+                    style={{
+                      minWidth: 48,
+                      minHeight: 48,
+                      borderRadius: 12,
+                      backgroundColor: v.hex,
+                      borderWidth: accent === v.hex ? 4 : 1,
+                      borderColor: "#49382C",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "#FFF", fontSize: 20 }}>
+                      {accent === v.hex ? "?" : ""}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+              <GameButton
+                disabled={name.trim().length < 3}
+                loading={c.isPending("community_create")}
+                onPress={() => {
+                  setError("");
+                  void c
+                    .act("community_create", { name, description, accent })
+                    .then(() => {
+                      setName("");
+                      setDescription("");
+                      setCreating(false);
+                    })
+                    .catch((e) => setError(e.message));
+                }}
+              >
+                Create community
+              </GameButton>
+            </View>
+          )}
+        </>
+      )}
+    </View>
+  );
 }
