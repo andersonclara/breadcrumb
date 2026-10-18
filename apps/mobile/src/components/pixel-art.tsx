@@ -33,9 +33,11 @@ export function AvatarGlyph({
 export function PixelAvatar({
   avatar = defaultAvatar,
   size = 64,
+  walking = false,
 }: {
   avatar?: AvatarConfig;
   size?: number;
+  walking?: boolean;
 }) {
   return (
     <Svg
@@ -44,7 +46,7 @@ export function PixelAvatar({
       viewBox="0 0 16 24"
       accessibilityLabel="Pixel avatar"
     >
-      <AvatarGlyph avatar={avatar} />
+      <AvatarGlyph avatar={avatar} walking={walking} />
     </Svg>
   );
 }

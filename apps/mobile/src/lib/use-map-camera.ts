@@ -4,7 +4,8 @@ import { useFocusEffect } from "expo-router";
 import { Gesture } from "react-native-gesture-handler";
 import { cancelAnimation, useAnimatedReaction, useDerivedValue, useSharedValue, withDecay, withTiming } from "react-native-reanimated";
 import { scheduleOnRN, scheduleOnUI } from "react-native-worklets";
-import { panCamera, screenToWorld, zoomCamera, type MapCamera, type MapSize } from "./map-gesture";
+import type { MapCamera, MapSize, Point } from "./map-gesture";
+import { movePan, movePinch, panTouchAnchor, type PinchAnchor } from "./map-touch";
 import { SCENE_INTERVAL_MS, shouldRefreshScene } from "./map-viewport";
 import { useReducedMotion } from "./use-reduced-motion";
 
@@ -12,27 +13,35 @@ import { useReducedMotion } from "./use-reduced-motion";
 // Finger movement, pinch anchoring, momentum and layer transforms stay on UI.
 export function useMapCamera(camera: MapCamera, size: MapSize,
   onCamera: (camera: MapCamera) => void,
-  onTap: (point: { x: number; y: number }, camera: MapCamera) => void) {
+  onTap: (point: { x: number; y: number }, camera: MapCamera) => void,
+  onInteract?: () => void,
+  followTarget?: Point | null, followRequest = 0) {
   const [scene, setScene] = useState(camera);
   const x = useSharedValue(camera.x), y = useSharedValue(camera.y), zoom = useSharedValue(camera.zoom);
   const lastScene = useSharedValue(camera), lastRefresh = useSharedValue(0);
   const panning = useSharedValue(false), pinching = useSharedValue(false);
-  const pinchStart = useSharedValue(camera.zoom), anchor = useSharedValue({ x: camera.x, y: camera.y });
+  const panAnchor = useSharedValue({ x: 0, y: 0, pointers: 0 });
+  const pinchAnchor = useSharedValue<PinchAnchor | null>(null);
+  const allowFollowing = useSharedValue(true), lastFollowRequest = useSharedValue(followRequest);
   const wasPinched = useSharedValue(false), flight = useSharedValue(0), axes = useSharedValue(0);
   const enabled = useSharedValue(true), reduced = useReducedMotion();
   const live = useDerivedValue(() => ({ x: x.get(), y: y.get(), zoom: zoom.get() }));
-  const callbacks = useRef({ onCamera, onTap });
+  const callbacks = useRef({ onCamera, onTap, onInteract });
   const published = useRef(camera), mounted = useRef(true);
-  useLayoutEffect(() => { callbacks.current = { onCamera, onTap }; });
-  const refreshScene = useCallback((next: MapCamera) => {
-    if (mounted.current) startTransition(() => setScene(next));
-  }, []);
-  const publish = useCallback((next: MapCamera) => {
-    if (!mounted.current) return;
+  const nativeSnapshots = useRef(new WeakSet<MapCamera>());
+  useLayoutEffect(() => { callbacks.current = { onCamera, onTap, onInteract }; });
+  const interact = useCallback(() => { callbacks.current.onInteract?.(); }, []);
+  const refreshScene = useCallback((next: MapCamera, ticket: number) => {
+    if (mounted.current && flight.get() === ticket) startTransition(() => setScene(next));
+  }, [flight]);
+  const publish = useCallback((next: MapCamera, ticket: number) => {
+    // A finished gesture can reach JS after the next gesture has already begun on UI.
+    if (!mounted.current || flight.get() !== ticket) return;
+    nativeSnapshots.current.add(next);
     published.current = next;
     setScene(next);
     callbacks.current.onCamera(next);
-  }, []);
+  }, [flight]);
   const tapAt = useCallback((point: { x: number; y: number }, at: MapCamera) => {
     if (mounted.current) callbacks.current.onTap(point, at);
   }, []);
@@ -47,20 +56,48 @@ export function useMapCamera(camera: MapCamera, size: MapSize,
     if (panning.get() || pinching.get() || axes.get()) return;
     const next = { x: x.get(), y: y.get(), zoom: zoom.get() };
     lastScene.set(next);
-    scheduleOnRN(publish, next);
-  }, [panning, pinching, axes, x, y, zoom, lastScene, publish]);
+    scheduleOnRN(publish, next, flight.get());
+  }, [panning, pinching, axes, x, y, zoom, lastScene, publish, flight]);
+  const beginInteraction = useCallback(() => {
+    "worklet";
+    // This must happen on UI at first contact, before any queued GPS update can run.
+    allowFollowing.set(false);
+    cancelMotion();
+    scheduleOnRN(interact);
+  }, [allowFollowing, cancelMotion, interact]);
   useLayoutEffect(() => {
+    // Persisting a native position is an acknowledgement, never a camera command.
+    // Even a delayed React commit of an older snapshot must not rewind live gestures.
+    if (nativeSnapshots.current.has(camera)) return;
     const old = published.current;
     if (old.x === camera.x && old.y === camera.y && old.zoom === camera.zoom) return;
     published.current = camera;
     setScene(camera);
     scheduleOnUI((next: MapCamera) => {
       "worklet";
+      allowFollowing.set(false);
       cancelMotion();
       x.set(next.x); y.set(next.y); zoom.set(next.zoom);
       lastScene.set(next);
     }, camera);
-  }, [camera, x, y, zoom, lastScene, cancelMotion]);
+  }, [camera, x, y, zoom, lastScene, cancelMotion, allowFollowing]);
+  useLayoutEffect(() => {
+    scheduleOnUI((target: Point | null | undefined, request: number) => {
+      "worklet";
+      // Only an explicit location-button press can resume follow after touching the map.
+      if (request !== lastFollowRequest.get()) {
+        lastFollowRequest.set(request);
+        allowFollowing.set(true);
+      }
+      if (!target || !allowFollowing.get() || !enabled.get() || panning.get() || pinching.get()) return;
+      cancelMotion();
+      const next = { ...target, zoom: Math.max(18, zoom.get()) };
+      x.set(next.x); y.set(next.y); zoom.set(next.zoom);
+      lastScene.set(next);
+      scheduleOnRN(publish, next, flight.get());
+    }, followTarget, followRequest);
+  }, [followTarget, followRequest, lastFollowRequest, allowFollowing, enabled, panning, pinching,
+    cancelMotion, zoom, x, y, lastScene, publish, flight]);
   useLayoutEffect(() => {
     mounted.current = true;
     return () => { mounted.current = false; scheduleOnUI(cancelMotion); };
@@ -85,18 +122,19 @@ export function useMapCamera(camera: MapCamera, size: MapSize,
     if (now - lastRefresh.get() < SCENE_INTERVAL_MS) return;
     lastRefresh.set(now);
     lastScene.set(next);
-    scheduleOnRN(refreshScene, next);
+    scheduleOnRN(refreshScene, next, flight.get());
   });
   // These callbacks are registered here and executed later by Gesture Handler
   // on UI; scheduleOnRN invokes the ref-backed handlers outside React render.
   /* eslint-disable react-hooks/refs */
   const gesture = useMemo(() => {
     const pan = Gesture.Pan().minDistance(4).averageTouches(true)
-      .onBegin(() => { cancelMotion(); wasPinched.set(false); })
-      .onStart(() => { panning.set(true); })
-      .onChange((e) => {
-        if (!enabled.get() || pinching.get() || e.numberOfPointers !== 1) return;
-        const next = panCamera(live.get(), { x: e.changeX, y: e.changeY }, size);
+      .onBegin(() => { beginInteraction(); if (!pinching.get()) wasPinched.set(false); })
+      .onStart((e) => { panning.set(true); panAnchor.set(panTouchAnchor(e)); })
+      .onUpdate((e) => {
+        if (!enabled.get()) return;
+        const next = movePan(live.get(), panAnchor.get(), e, size, pinching.get());
+        panAnchor.set(panTouchAnchor(e));
         x.set(next.x); y.set(next.y);
       })
       .onEnd((e, success) => {
@@ -112,35 +150,37 @@ export function useMapCamera(camera: MapCamera, size: MapSize,
           axes.set(axes.get() - 1);
           finish();
         };
-        x.set(withDecay({ velocity: -e.velocityX / scale, deceleration: .993, clamp: [0, 320] }, done));
-        y.set(withDecay({ velocity: -e.velocityY / scale, deceleration: .993, clamp: [0, 320] }, done));
+        x.set(withDecay({ velocity: -e.velocityX / scale, deceleration: .993, clamp: [Math.min(0, x.get()), Math.max(320, x.get())] }, done));
+        y.set(withDecay({ velocity: -e.velocityY / scale, deceleration: .993, clamp: [Math.min(0, y.get()), Math.max(320, y.get())] }, done));
       })
       .onFinalize(() => { panning.set(false); finish(); });
     const pinch = Gesture.Pinch()
       .onStart((e) => {
-        cancelMotion(); pinching.set(true); wasPinched.set(true);
-        pinchStart.set(zoom.get());
-        anchor.set(screenToWorld(live.get(), { x: e.focalX, y: e.focalY }, size));
+        beginInteraction(); pinching.set(true); wasPinched.set(true);
+        pinchAnchor.set(movePinch(live.get(), null, e, size).anchor);
       })
       .onUpdate((e) => {
         if (!enabled.get()) return;
-        const next = zoomCamera(pinchStart.get(), e.scale, anchor.get(), { x: e.focalX, y: e.focalY }, size);
-        x.set(next.x); y.set(next.y); zoom.set(next.zoom);
+        const next = movePinch(live.get(), pinchAnchor.get(), e, size);
+        pinchAnchor.set(next.anchor);
+        x.set(next.camera.x); y.set(next.camera.y); zoom.set(next.camera.zoom);
       })
-      .onFinalize(() => { pinching.set(false); finish(); });
+      .onFinalize(() => { pinching.set(false); pinchAnchor.set(null); panAnchor.set({ x: 0, y: 0, pointers: 0 }); finish(); });
     const tap = Gesture.Tap().maxDistance(8).onEnd((e, success) => {
       if (success && enabled.get() && !wasPinched.get())
         scheduleOnRN(tapAt, { x: e.x, y: e.y }, live.get());
     });
     return Gesture.Race(Gesture.Simultaneous(pan, pinch), tap);
-  }, [cancelMotion, wasPinched, panning, enabled, pinching, live, size, x, y,
-    reduced, flight, axes, zoom, finish, pinchStart, anchor, tapAt]);
+  }, [beginInteraction, wasPinched, panning, enabled, pinching, live, size, x, y,
+    reduced, flight, axes, zoom, finish, pinchAnchor, panAnchor, tapAt]);
   /* eslint-enable react-hooks/refs */
-  const zoomBy = useCallback((factor: number) => scheduleOnUI(() => {
-    "worklet";
-    cancelMotion();
-    const next = Math.max(1, Math.min(128, zoom.get() * factor));
-    zoom.set(withTiming(next, { duration: reduced ? 0 : 160 }, (done) => { if (done) finish(); }));
-  }), [cancelMotion, zoom, reduced, finish]);
+  const zoomBy = useCallback((factor: number) => {
+    scheduleOnUI(() => {
+      "worklet";
+      beginInteraction();
+      const next = Math.max(1, Math.min(128, zoom.get() * factor));
+      zoom.set(withTiming(next, { duration: reduced ? 0 : 160 }, (done) => { if (done) finish(); }));
+    });
+  }, [beginInteraction, zoom, reduced, finish]);
   return { live, scene, gesture, zoomBy };
 }

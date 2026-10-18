@@ -17,13 +17,11 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Location from "expo-location";
 import {
   campus,
   categories,
   fromWorld,
   toWorld,
-  inCampus,
   crumbRecord,
   discoveryKey,
   postHeadline,
@@ -51,6 +49,9 @@ import { useCampus } from "@/providers/world-provider";
 import { useExplore } from "@/providers/explore-provider";
 import { useAuth } from "@/providers/auth-provider";
 import { theme as t } from "@/lib/theme";
+import { useLiveMapLocation } from "@/lib/use-live-map-location";
+import { useMapAppearance } from "@/lib/use-map-appearance";
+import { mapAppearances } from "@/lib/map-appearance";
 type Panel =
   | "nearby"
   | "detail"
@@ -79,17 +80,21 @@ export default function MapScreen() {
     [building, setBuilding] = useState<MapBuilding | null>(null),
     [group, setGroup] = useState<DiscoveryRecord[] | null>(null),
     [message, setMessage] = useState(""),
-    [locating, setLocating] = useState(false),
-    [ownPosition, setOwnPosition] = useState<Coordinate | null>(null),
+    [following, setFollowing] = useState(true),
     [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false),
     [dockHeight, setDockHeight] = useState(220);
+  const [followRequest, setFollowRequest] = useState(0);
+  const location = useLiveMapLocation(session?.user.id);
+  const appearance = useMapAppearance();
+  const browseMap = useCallback(() => setFollowing(false), []);
   const scopeName =
     world.communities?.find((c) => c.id === explore.scope)?.name ?? "Campus";
   const nearby = group ?? records;
   const mapWorld = useMemo(() => ({ ...world, crumbs: [] }), [world]);
   const choose = useCallback(
     (r: DiscoveryRecord) => {
+      setFollowing(false);
       Keyboard.dismiss();
       explore.selectRecord(r);
       setPanel("detail");
@@ -112,9 +117,13 @@ export default function MapScreen() {
     useCallback(() => {
       const state = returnState.current;
       if (state.resumePost) {
+        setFollowing(false);
         setPanel("post");
         state.setResumePost(false);
-      } else if (state.selected) setPanel("detail");
+      } else if (state.selected) {
+        setFollowing(false);
+        setPanel("detail");
+      }
     }, []),
   );
   useEffect(() => {
@@ -123,6 +132,7 @@ export default function MapScreen() {
     return () => clearTimeout(timer);
   }, [success]);
   function startPost(p?: Coordinate) {
+    setFollowing(false);
     setMessage("");
     setPanel(null);
     explore.setSelected(null);
@@ -151,36 +161,11 @@ export default function MapScreen() {
     setPanel(null);
     setGroup(null);
   }
-  async function locate() {
-    if (locating) return;
-    setLocating(true);
+  function locate() {
     setMessage("");
-    try {
-      const permission = await Location.requestForegroundPermissionsAsync();
-      if (permission.status !== "granted") {
-        setMessage("Location is off. Search for a campus building instead.");
-        return;
-      }
-      const p = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
-      const location = {
-        latitude: p.coords.latitude,
-        longitude: p.coords.longitude,
-      };
-      if (!inCampus(location)) {
-        setMessage("You are outside the UF map. You can still browse campus.");
-        return;
-      }
-      setOwnPosition(location);
-      setCamera({ ...toWorld(location), zoom: 18 });
-    } catch {
-      setMessage(
-        "Could not find your location. Choose a building using search.",
-      );
-    } finally {
-      setLocating(false);
-    }
+    setFollowing(true);
+    setFollowRequest(request => request + 1);
+    if (!location.position) location.locate();
   }
   function signIn() {
     explore.setResumePost(true);
@@ -253,6 +238,7 @@ export default function MapScreen() {
           .slice(0, 12);
   }, [explore.query]);
   function chooseBuilding(b: MapBuilding) {
+    setFollowing(false);
     setBuilding(b);
     setCamera({ ...camera, ...{ x: b.x, y: b.y + 2 }, zoom: 20 });
     setPanel("building");
@@ -276,8 +262,12 @@ export default function MapScreen() {
   return (
     <View style={s.page}>
       <CampusMap
+        light={appearance.light}
         camera={camera}
         onCamera={setCamera}
+        onInteract={browseMap}
+        followPosition={following && !placing ? location.position : null}
+        followRequest={followRequest}
         world={mapWorld}
         records={records}
         placing={placing}
@@ -290,7 +280,8 @@ export default function MapScreen() {
         onBuilding={chooseBuilding}
         onBlank={() => explore.setSelected(null)}
         selected={placing ? point : undefined}
-        ownPosition={ownPosition ?? camp.position}
+        ownPosition={location.position}
+        walking={location.walking}
         bottomInset={bottom}
       />
       <View
@@ -442,12 +433,13 @@ export default function MapScreen() {
             </GameButton>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Center map on my location without sharing"
-              disabled={locating}
-              onPress={() => void locate()}
-              style={styles.avatar}
+              accessibilityLabel="Follow my location without sharing"
+              accessibilityState={{ selected: following && !!location.position, busy: location.locating }}
+              disabled={location.locating}
+              onPress={locate}
+              style={[styles.avatar, following && !!location.position && { borderColor: t.ink, backgroundColor: t.sage }]}
             >
-              {locating ? (
+              {location.locating ? (
                 <ActivityIndicator color={t.ink} />
               ) : (
                 <Icon name="location" />
@@ -456,9 +448,9 @@ export default function MapScreen() {
           </View>
         </View>
       )}
-      {(message && !panel) || success ? (
+      {((message || location.error) && !panel) || success ? (
         <View style={[styles.toast, { bottom: bottom + 70 }]}>
-          <Feedback error={!!message} message={message || success} />
+          <Feedback error={!!(message || location.error)} message={message || success || location.error} />
         </View>
       ) : null}
       <Sheet
@@ -538,6 +530,13 @@ export default function MapScreen() {
         )}
         {panel === "filters" && (
           <>
+            <Text style={s.label}>Map appearance</Text>
+            <View style={styles.wrap}>
+              {mapAppearances.map(option => <Chip key={option.id} label={option.label}
+                selected={appearance.mode === option.id} onPress={() => appearance.choose(option.id)}/>)}
+            </View>
+            <Text style={s.muted}>Automatic follows sunrise and sunset at UF.</Text>
+            {!!appearance.error && <Text style={s.muted}>{appearance.error}</Text>}
             <Text style={s.label}>When</Text>
             <View style={styles.wrap}>
               {periods.map((p) => (

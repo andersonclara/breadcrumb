@@ -1,7 +1,7 @@
 # Ask Breadcrumb backend
 
 Implemented as a public, read-only `POST /api/ask` endpoint for web and native
-clients. No frontend changes are part of this implementation. The route uses
+clients. The web map includes an Ask panel, and the native Ask tab uses the same endpoint. The route uses
 a server-only Groq/Gemini provider, the existing Supabase project, published `club_events`, and
 fresh public Campus Crumbs. It does not fetch external sources during chat.
 
@@ -259,3 +259,24 @@ The live Crumb search returned no fresh public reports, so a new report becoming
 discoverable still needs a real posting test. This verification did not deploy
 the Next.js server, connect the frontend, or exercise device/email authentication.
 SQL Editor execution is still distinct from recorded CLI migration history.
+
+
+## Discovery quality update (October 18)
+
+Apply only the new `supabase/migrations/20261018010000_ask_discovery_quality.sql` after the existing Ask migration. It preserves publication/privacy filters, adds Communicore and Emerson Alumni Hall using existing campus-map anchors, resolves explicit room suffixes on known venues, and ranks keyword matches before the SQL retrieval limit. It does not guess a location for ?Plaza.? This migration was tested locally but has not been applied to the hosted project by this update.
+
+Ask supports `details` interpretation with a nullable 1-based `resultIndex`. Answers receive deterministic Gainesville local-time labels rather than relying on model timezone arithmetic. The server re-fetches only the selected prior ID under the original constraints and checks it again before answering. Missing/ambiguous references require clarification; deleted, expired, or unpublished records cannot be restored from conversation history. Clients display numbered results. Approximate location is opt-in in both clients and is rounded before transmission; mobile refreshes its foreground point for each request. Location is not added to conversation context or shared with friends by this feature.
+
+The web map's **Ask Breadcrumb** button opens the conversation panel. Closing it preserves the active conversation; New chat clears it. Answers include source cards, follow-up buttons, retryable errors, and a loading state. Exact common follow-ups (free-only, ordinal details, campus-wide search, and closest) preserve constraints without an interpretation model call. Upstream provider throttling returns a retryable error with a 60-second retry interval. Responses are not streamed. The current client conversation is held in memory, not persisted across app restarts.
+
+Descriptions now contain only explicitly supplied factual summaries, not raw publisher descriptions. Instagram extraction proposes short summaries and topic tags alongside dates, venues, price and evidence. Every new extracted event remains behind source review. Existing approved Instagram listings can be enriched without collecting posts again:
+
+```powershell
+npm run events:enrich
+npm run events:enrich -- --stage 3 --model gemini-3.5-flash-lite
+npm run events:enrich -- --approve EVENT_UUID
+```
+
+The default command only lists eligible upcoming published Instagram events missing a summary. `--stage` generates at most ten private metadata proposals, records their model/source/event fingerprints, and reuses unchanged proposals. Review the output against the source before `--approve`; approval writes only summary/tags and never changes publication status or price. Source or event changes invalidate the proposal. Caption-only enrichment does not claim to read a flyer. This update reviewed and approved summaries/tags for C-Lunch, Fall Open House, and the Elizabeth Bello speaker event. The speaker summary includes the caption's advertised free cookies; event admission remains unknown.
+
+Remaining limitations: unreviewed Instagram candidates remain private, keyword matching is not embedding search, many venues remain unresolved, and admission price and an advertised free food offer are not yet separate search filters. No scheduler, new scrape, or broad automatic publication was enabled.

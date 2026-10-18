@@ -42,6 +42,12 @@ describe('public Ask endpoint',()=>{
     mocks.ask.mockRejectedValue(new Error('server-secret upstream details'));
     const response=await POST(request({message:'Tonight?'}));expect(response.status).toBe(503);expect(await response.text()).not.toContain('server-secret');
   });
+  it('gives a retry interval when the upstream model is rate limited',async()=>{
+    mocks.ask.mockRejectedValue(new Error('ask_groq_unavailable_429'));
+    const response=await POST(request({message:'Events?'}));
+    expect(response.status).toBe(503);expect(response.headers.get('retry-after')).toBe('60');
+    expect((await response.json()).error).toContain('retry in a minute');
+  });
   it('rejects non-JSON and malformed JSON',async()=>{
     expect((await POST(new Request('https://example.test/api/ask',{method:'POST',body:'hello'}))).status).toBe(415);
     expect((await POST(new Request('https://example.test/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:'{'}))).status).toBe(400);

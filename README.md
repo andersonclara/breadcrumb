@@ -12,7 +12,7 @@ hosted job; Instagram remains manual.
 Ask Breadcrumb now has a public discovery backend with source-linked event/Crumb
 results, conversational filters, and database-backed rate limits. It prefers
 Groq GPT-OSS 120B when configured and also supports Gemini. Hosted retrieval and
-Groq responses have been checked; the Ask frontend is still separate work. See
+Groq responses have been checked; the web Ask panel and native Ask tab connect to this backend. See
 [the Ask backend guide](docs/ASK_BACKEND.md) for configuration and the API contract.
 
 A community map of what's happening around the University of Florida, presented as an 8-bit campus world. Next.js powers the web app; React Native and Expo power iPhone and Android. Both render the same pixel map, avatar outfits, breadcrumbs, and loaves using one Supabase backend.
@@ -35,7 +35,7 @@ Open http://localhost:3000 (or the alternate port printed by Next.js). The pixel
 npm run dev:mobile
 ```
 
-Install Expo Go on your phone and scan the QR code from the terminal while connected to the same Wi-Fi. The native app lives in `apps/mobile`, using Expo SDK 57. It has the pixel campus world, four navigation tabs, saved avatars, friends, foreground location sharing, breadcrumbs, and UF email-code sign-in. Ask and Radar remain placeholders. Next.js must also be running for native writes.
+Install Expo Go on your phone and scan the QR code from the terminal while connected to the same Wi-Fi. The native app lives in `apps/mobile`, using Expo SDK 57. It has the pixel campus world, four navigation tabs, saved avatars, friends, foreground location sharing, breadcrumbs, and UF email-code sign-in. Ask connects to the discovery backend; Radar remains a placeholder. Next.js must also be running for native writes.
 
 See [the mobile setup guide](apps/mobile/README.md) for environment configuration, phone networking, and email-code setup. Mobile has its own ignored `.env.local` containing only public settings. The web `.env.local` stays at the repository root. Never copy server secrets into the mobile app.
 

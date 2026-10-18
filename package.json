@@ -22,6 +22,7 @@
     "events:preview": "node scripts/events.mjs preview",
     "events:sync": "node scripts/events.mjs sync",
     "events:instagram": "node scripts/instagram-bootstrap.mjs",
+    "events:enrich": "node scripts/enrich-events.mjs",
     "events:extract": "node scripts/events.mjs extract",
     "events:review": "node scripts/events.mjs review",
     "check": "npm run lint && npm run typecheck && npm test",

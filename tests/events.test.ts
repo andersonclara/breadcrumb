@@ -7,6 +7,12 @@ import {feedClient} from '../src/lib/events/http';
 import {validCron} from '../src/lib/events/cron';
 import {validateExtractionBatch} from '../src/lib/events/extract';
 
+it('publishes only an explicitly supplied factual summary, never the raw caption',()=>{
+ const input={id:'summary',title:'Campus workshop',url:'https://example.test/event',start:'2026-10-19T18:00:00Z',venue:'Reitz',description:'Long private publisher caption'};
+ expect(normalizeEvent(input,'instagram').event?.description).toBeNull();
+ expect(normalizeEvent({...input,summary:'<b>A hands-on workshop.</b>'},'instagram').event?.description).toBe('A hands-on workshop.');
+});
+
 const source=(id:string)=>sources.find(s=>s.id===id)!;
 afterEach(()=>vi.unstubAllEnvs());
 describe('event clocks and evidence',()=>{

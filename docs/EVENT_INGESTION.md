@@ -206,3 +206,6 @@ References: [Apify run limits](https://docs.apify.com/api/v2/actors-runs-post),
 [Instagram input schema](https://apify.com/apify/instagram-scraper/input-schema),
 [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security),
 [GitHub scheduled workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+
+Reviewed short factual summaries and topic tags are now supported for Instagram events. Raw captions remain private. `npm run events:enrich` plans a bounded enrichment of existing published Instagram listings; `--stage` generates private proposals and `--approve EVENT_UUID` applies reviewed metadata without changing event publication. See [Ask backend](ASK_BACKEND.md#discovery-quality-update-october-18) for the workflow and deployment migration. `/api/events` includes the reviewed `description` field.

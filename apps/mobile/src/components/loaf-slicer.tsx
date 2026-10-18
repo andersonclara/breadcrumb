@@ -5,6 +5,7 @@ import {checkSliceGesture,sliceHint} from '@breadcrumb/shared';
 import {apiFetch} from '@/lib/api';
 import {gameStyles as s} from '@/components/game-ui';
 import {theme} from '@/lib/theme';
+import {loafTouchPoint} from '@/lib/loaf-touch';
 
 export type LoafSlice={challenge:string;trace:{x:number;y:number;t:number}[]};
 type Point={x:number;y:number;t:number};
@@ -19,6 +20,7 @@ function Half({from,to}:{from:number;to:number}){
 export function LoafSlicer({onChange,onReady,onInteractionChange,resetKey}:{onChange:(slice:LoafSlice|null)=>void;onReady:(ready:boolean)=>void;onInteractionChange:(active:boolean)=>void;resetKey?:unknown}){
  const [loaf,setLoaf]=useState<{challenge:string;cut:number}|null>(null),[status,setStatus]=useState<'loading'|'ready'|'sliced'|'missed'|'off'|'error'>('loading'),[trace,setTrace]=useState<Point[]>([]),[hint,setHint]=useState('');
  const size=useRef({w:1,h:1}),drawing=useRef<Point[]|null>(null),start=useRef(0),current=useRef(loaf);
+ const frame=useRef({x:0,y:0,w:1,h:1});
  useEffect(()=>{current.current=loaf;},[loaf]);
  // Release the page even if navigation or a challenge reset interrupts the cut.
  useEffect(()=>()=>{onInteractionChange(false);},[onInteractionChange]);
@@ -45,18 +47,14 @@ export function LoafSlicer({onChange,onReady,onInteractionChange,resetKey}:{onCh
   if(!result.ok){setHint(sliceHint(result.reason));setTrace([]);return;}
   setCutAt(result.cutAt);setTrace(points);setStatus('sliced');setHint('');onChange({challenge:l.challenge,trace:points});onReady(true);
  },[onChange,onReady]);
- const assistedSlice=()=>{
-  const l=current.current;if(!l)return;
-  let elapsed=0;
-  finish(Array.from({length:25},(_,i)=>{elapsed+=40+Math.round(Math.random()*30);return {x:l.cut+(Math.random()-0.5)*0.03,y:-0.05+i*0.05,t:elapsed};}));
- };
  // Touch handlers (React Native's responder system); they run on touch events, not during render.
- const toPoint=(e:GestureResponderEvent):Point=>({x:(e.nativeEvent.locationX/size.current.w*40-BOX.x)/BOX.w,y:(e.nativeEvent.locationY/size.current.h*24-BOX.y)/BOX.h,t:Date.now()-start.current});
+ const toPoint=(e:GestureResponderEvent):Point=>loafTouchPoint(e.nativeEvent,frame.current,start.current);
+ const appendPoint=(e:GestureResponderEvent,limit:number)=>{const d=drawing.current;if(!d||d.length>=limit)return;const p=toPoint(e);if(p.t>d[d.length-1].t)d.push(p);};
  const touch=status!=='ready'?{}:{
   onStartShouldSetResponderCapture:()=>true,onStartShouldSetResponder:()=>true,onMoveShouldSetResponder:()=>true,onResponderTerminationRequest:()=>false,
-  onResponderGrant:(e:GestureResponderEvent)=>{onInteractionChange(true);start.current=Date.now();drawing.current=[toPoint(e)];},
-  onResponderMove:(e:GestureResponderEvent)=>{const d=drawing.current;if(!d||d.length>=400)return;const p=toPoint(e);if(p.t>d[d.length-1].t){d.push(p);setTrace([...d]);}},
-  onResponderRelease:()=>{const d=drawing.current;drawing.current=null;onInteractionChange(false);if(d)finish(d);},
+  onResponderGrant:(e:GestureResponderEvent)=>{onInteractionChange(true);const n=e.nativeEvent;frame.current={x:n.pageX-n.locationX,y:n.pageY-n.locationY,...size.current};start.current=n.timestamp;drawing.current=[toPoint(e)];setHint('');setTrace([]);},
+  onResponderMove:(e:GestureResponderEvent)=>{appendPoint(e,399);if(drawing.current)setTrace([...drawing.current]);},
+  onResponderRelease:(e:GestureResponderEvent)=>{appendPoint(e,400);const d=drawing.current;drawing.current=null;onInteractionChange(false);if(d)finish(d);},
   onResponderTerminate:()=>{drawing.current=null;setTrace([]);onInteractionChange(false);},
  };
  if(status==='off')return null;
@@ -71,10 +69,9 @@ export function LoafSlicer({onChange,onReady,onInteractionChange,resetKey}:{onCh
     {!cutDone&&trace.length>1&&<Polyline fill="none" stroke="#49382C" strokeWidth={0.5} points={trace.map(p=>`${BOX.x+p.x*BOX.w},${BOX.y+p.y*BOX.h}`).join(' ')}/>}
    </Svg>
   </View>
-  <Text style={{fontSize:14,lineHeight:21,color:status==='error'?theme.danger:status==='sliced'?theme.success:theme.muted}} accessibilityLiveRegion="polite">{status==='loading'?'Warming up your loaf...':status==='error'?hint:status==='sliced'?'Sliced! You’re human.':hint||'Slice down the dotted line to prove you’re human.'}</Text>
-  <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',gap:8}}>
-   {status==='ready'&&<Pressable accessibilityRole="button" accessibilityLabel="Slice loaf without dragging" onPress={assistedSlice} style={{minHeight:48,justifyContent:'center'}}><Text style={[s.label,{fontSize:13,textDecorationLine:'underline'}]}>Slice without dragging</Text></Pressable>}
-   {status!=='loading'&&<Pressable accessibilityRole="button" onPress={fresh} style={{minHeight:48,justifyContent:'center'}}><Text style={[s.label,{fontSize:13,textDecorationLine:'underline'}]}>{status==='error'?'Retry bread challenge':'New loaf'}</Text></Pressable>}
+  <View>
+   <Text style={{fontSize:14,lineHeight:21,color:status==='error'?theme.danger:status==='sliced'?theme.success:theme.muted}} accessibilityLiveRegion="polite">{status==='loading'?'Warming up your loaf...':status==='error'?hint:status==='sliced'?'Sliced! You’re human.':hint||'Slice down the dotted line to prove you’re human.'}</Text>
+   {status!=='loading'&&<Pressable accessibilityRole="button" onPress={fresh} style={{minHeight:48,alignSelf:'flex-start',justifyContent:'center'}}><Text style={[s.label,{fontSize:13,textDecorationLine:'underline'}]}>{status==='error'?'Retry bread challenge':'New loaf'}</Text></Pressable>}
   </View>
  </View>;
 }

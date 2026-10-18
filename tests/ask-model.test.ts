@@ -3,12 +3,21 @@ const mocks=vi.hoisted(()=>({generate:vi.fn()}));
 vi.mock('server-only',()=>({}));
 vi.mock('../src/lib/ai/client',()=>({getGemini:()=>({models:{generateContent:mocks.generate}}),getGeminiModel:()=> 'configured-model'}));
 import {interpret,explain} from '../src/lib/ai/ask/model';
-import {defaultConstraints} from '../src/lib/ai/ask/schema';
+import {defaultConstraints,type DiscoveryRecord} from '../src/lib/ai/ask/schema';
 beforeEach(()=>{
   vi.resetAllMocks();vi.stubEnv('ASK_AI_PROVIDER','gemini');vi.stubEnv('GROQ_API_KEY','');
   vi.stubEnv('GEMINI_API_KEY','test-key');vi.stubEnv('GEMINI_MODEL','configured-model');
 });
 describe('bounded Gemini contracts',()=>{
+  it('supplies deterministic Gainesville clock labels instead of asking the model to convert UTC',async()=>{
+    const id='00000000-0000-4000-8000-000000000001';
+    mocks.generate.mockResolvedValue({text:JSON.stringify({answer:'A speaker event.',citations:[{kind:'event',id}]})});
+    const record={id,kind:'event',startsAt:'2026-10-19T22:00:00Z',endsAt:'2026-10-19T23:00:00Z',allDay:false} as DiscoveryRecord;
+    await explain('When is it?',defaultConstraints,[record],new AbortController().signal);
+    const data=JSON.parse(mocks.generate.mock.calls[0][0].contents);
+    expect(data.records[0].localTimeLabel).toContain('6:00 PM EDT');
+    expect(data.records[0].localTimeLabel).toContain('7:00 PM EDT');
+  });
   it('uses the configured model, bounded structured output and separate system instructions',async()=>{
     const patch={kind:null,time:null,nearPlace:null,useUserLocation:null,radiusMeters:null,freeOnly:true,categories:null,terms:null};
     const intent={action:'refine',clearLocation:false,clarification:null,patch};mocks.generate.mockResolvedValue({text:JSON.stringify(intent)});

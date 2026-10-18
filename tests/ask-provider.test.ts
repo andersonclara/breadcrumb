@@ -14,6 +14,12 @@ beforeEach(()=>{
 });
 afterEach(()=>{vi.unstubAllGlobals();vi.unstubAllEnvs();});
 describe('Ask provider selection',()=>{
+  it('includes nullable optional reference fields in the strict provider contract',async()=>{
+    mockFetch.mockResolvedValue(envelope('{"resultIndex":null}'));
+    await generateAskJSON(z.object({resultIndex:z.number().nullable().optional()}),'rules',{},signal,900);
+    const body=JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect(body.response_format.json_schema.schema.required).toContain('resultIndex');
+  });
   it('prefers Groq GPT-OSS 120B when its key is present',()=>{
     expect(getAskModelConfig()).toEqual({provider:'groq',model:DEFAULT_GROQ_MODEL});
   });

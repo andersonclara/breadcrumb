@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
+import * as Location from "expo-location";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -16,6 +17,7 @@ import {
   mappable,
   discoveryKey,
   resolveDiscoveryLocation,
+  roundedLocation,
   type AskResult,
   type DiscoveryRecord,
 } from "@breadcrumb/shared";
@@ -39,6 +41,8 @@ export default function AskScreen() {
     abort = useRef<AbortController | null>(null),
     busy = useRef(false);
   const [pending, setPending] = useState(false),
+    [locationEnabled, setLocationEnabled] = useState(false),
+    [locating, setLocating] = useState(false),
     [error, setError] = useState(""),
     [lastQuestion, setLastQuestion] = useState(""),
     [detail, setDetail] = useState<DiscoveryRecord | null>(null);
@@ -59,6 +63,17 @@ export default function AskScreen() {
     const request = new AbortController();
     abort.current = request;
     try {
+      let coarseUserLocation;
+      if (locationEnabled) {
+        const permission = await Location.getForegroundPermissionsAsync();
+        if (permission.status !== "granted") {
+          setLocationEnabled(false);
+          throw new Error("Location access has ended. Choose a campus place or enable location again.");
+        }
+        const position = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
+        coarseUserLocation = roundedLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
+        if (!inCampus(coarseUserLocation)) throw new Error("Choose a UF campus place to search from your current location.");
+      }
       const response = await apiFetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,6 +81,7 @@ export default function AskScreen() {
         body: JSON.stringify({
           message: question,
           ...(e.context ? { context: e.context } : {}),
+          ...(coarseUserLocation ? { coarseUserLocation } : {}),
         }),
       });
       const data = await response.json();
@@ -130,12 +146,13 @@ export default function AskScreen() {
         <Text style={s.muted}>Public campus discoveries</Text>
         <Pressable
           accessibilityRole="button"
-          disabled={pending}
+          disabled={pending || locating}
           onPress={() => {
             e.setTurns([]);
             e.setContext(undefined);
             e.setChatInput("");
             e.setChatScroll(0);
+            setLocationEnabled(false);
             setError("");
           }}
           style={{ minHeight: 48, justifyContent: "center", padding: 8 }}
@@ -189,8 +206,9 @@ export default function AskScreen() {
               <Text style={s.body}>{turn.question}</Text>
             </View>
             <Text style={s.body}>{turn.result.answer}</Text>
-            {turn.result.cards.map((r) => (
+            {turn.result.cards.map((r, index) => (
               <View key={discoveryKey(r)} style={{ gap: 8 }}>
+                <Text style={s.label}>Option {index + 1}</Text>
                 <DiscoveryRow record={r} onPress={() => setDetail(r)} />
                 {mappable(r) &&
                   inCampus({
@@ -223,7 +241,7 @@ export default function AskScreen() {
         {pending && (
           <View accessibilityLiveRegion="polite" style={s.row}>
             <ActivityIndicator color={t.ink} />
-            <Text style={s.body}>Looking through campus discoveries?</Text>
+            <Text style={s.body}>Looking through campus discoveries…</Text>
           </View>
         )}
         <Feedback error message={error} />
@@ -259,6 +277,16 @@ export default function AskScreen() {
           </Text>
         )}
         <Text style={s.label}>Ask Breadcrumb</Text>
+        <GameButton variant="secondary" disabled={pending || locating} onPress={() => {
+          if (locationEnabled) { setLocationEnabled(false); return; }
+          setLocating(true);
+          void Location.requestForegroundPermissionsAsync().then(permission => {
+            if (permission.status === "granted") setLocationEnabled(true);
+            else setError("Location was not enabled. Try a campus place like Reitz.");
+          }).catch(() => setError("Could not enable location. Try a campus place like Reitz.")).finally(() => setLocating(false));
+        }}>
+          {locating ? "Enabling location…" : locationEnabled ? "Approximate location on · Remove" : "Use approximate location"}
+        </GameButton>
         <TextInput
           accessibilityLabel="Ask Breadcrumb"
           style={[s.input, { maxHeight: 120 }]}

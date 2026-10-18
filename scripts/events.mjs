@@ -59,7 +59,7 @@ try {
       const {error:saveError}=await db.from('club_events').update({ingestion_status:'published',review_reasons:[]}).eq('id',id).eq('ingestion_status','needs_review');dbError(saveError);
       console.log(JSON.stringify({approved:id}));
     } else {
-      let query=db.from('club_events').select('id,source,title,starts_at,ends_at,venue_text,url,review_reasons').eq('ingestion_status','needs_review');
+      let query=db.from('club_events').select('id,source,title,description,tags,starts_at,ends_at,venue_text,url,review_reasons').eq('ingestion_status','needs_review');
       const sourceIndex=args.indexOf('--source');
       if(sourceIndex>=0){const source=args[sourceIndex+1];if(!source || !['instagram',...sources.map(s=>s.id)].includes(source))throw new Error('unknown_event_source');query=query.eq('source',source);}
       if(!args.includes('--all'))query=query.gte('starts_at',new Date(Date.now()-86400000).toISOString()).lte('starts_at',new Date(Date.now()+8*86400000).toISOString());

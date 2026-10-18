@@ -6,7 +6,9 @@ import { spawnSync } from 'node:child_process';
 const root = path.resolve(import.meta.dirname, '..');
 const manifest = path.join(root, 'apps/mobile/src/generated/map-assets.ts');
 const source = fs.readFileSync(path.join(root, 'packages/shared/src/campus-map.json'));
-const hash = createHash('sha256').update(source).digest('hex');
+const hash = createHash('sha256').update(source)
+  .update(fs.readFileSync(new URL('./build-mobile-map.mjs', import.meta.url)))
+  .update(fs.readFileSync(new URL('./mobile-map-style.mjs', import.meta.url))).digest('hex');
 const compiled = fs.existsSync(manifest) ? fs.readFileSync(manifest, 'utf8') : '';
 const references = [...compiled.matchAll(/require\("(\.\.\/\.\.\/assets\/campus\/[^"]+)"\)/g)];
 const ready = compiled.includes(hash) && references.length === 1365 &&
