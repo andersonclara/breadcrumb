@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { router, useFocusEffect } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import {
   ActivityIndicator,
   Keyboard,
@@ -15,6 +16,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -37,6 +39,7 @@ import { CrumbComposer } from "@/components/crumb-composer";
 import { DiscoveryDetail } from "@/components/discovery-detail";
 import { DiscoveryRow } from "@/components/discovery-row";
 import { Sheet } from "@/components/sheet";
+import { PixelFrame } from "@/components/pixel-frame";
 import { Icon } from "@/components/icon";
 import { ToastLogo, PixelAvatar } from "@/components/pixel-art";
 import {
@@ -44,12 +47,14 @@ import {
   Chip,
   Feedback,
   EmptyState,
-  gameStyles as s,
+  useGameStyles,
 } from "@/components/game-ui";
 import { useCampus } from "@/providers/world-provider";
 import { useExplore } from "@/providers/explore-provider";
 import { useAuth } from "@/providers/auth-provider";
-import { theme as t } from "@/lib/theme";
+import type { Theme } from "@/lib/theme";
+import { PixelThemeContext, ThemeContext, useTheme } from "@/lib/theme-context";
+import { isDarkTheme, mapUITheme } from "@/lib/map-ui-theme";
 import { useLiveMapLocation } from "@/lib/use-live-map-location";
 import { mapAppearances } from "@/lib/map-appearance";
 import { mapAppearanceMatrix } from "@/lib/map-appearance-rendering";
@@ -71,6 +76,32 @@ const periods: { id: DiscoveryPeriod; label: string }[] = [
   { id: "next7days", label: "This week" },
 ];
 export default function MapScreen() {
+  const nativeAppearance = Platform.OS !== 'web';
+  const appearance = useMapAppearance(nativeAppearance);
+  const { day, dusk, night } = appearance.light;
+  const uiTheme = useMemo(() => mapUITheme({
+    mode: appearance.mode, light: { day, dusk, night },
+    ready: appearance.ready, enabled: nativeAppearance,
+  }), [appearance.mode, appearance.ready, nativeAppearance, day, dusk, night]);
+  return (
+    <ThemeContext value={uiTheme}>
+      <PixelThemeContext value>
+        <MapScreenContent appearance={appearance} />
+      </PixelThemeContext>
+    </ThemeContext>
+  );
+}
+
+function MapScreenContent({ appearance }: { appearance: ReturnType<typeof useMapAppearance> }) {
+  const viewport = useWindowDimensions();
+  const compact = viewport.width > viewport.height && viewport.height < 500;
+  const t = useTheme(), s = useGameStyles();
+  const styles = useMemo(() => createStyles(t), [t]);
+  const dark = isDarkTheme(t);
+  useFocusEffect(useCallback(() => {
+    StatusBar.setStyle(dark ? 'light' : 'dark');
+    return () => StatusBar.setStyle('dark');
+  }, [dark]));
   const insets = useSafeAreaInsets(),
     camp = useCampus(),
     explore = useExplore(),
@@ -81,7 +112,7 @@ export default function MapScreen() {
     [placing, setPlacing] = useState(false),
     [point, setPoint] = useState<Coordinate | null>(null),
     [building, setBuilding] = useState<MapBuilding | null>(null),
-    [group, setGroup] = useState<DiscoveryRecord[] | null>(null),
+    [group, setGroup] = useState<string[] | null>(null),
     [message, setMessage] = useState(""),
     [following, setFollowing] = useState(true),
     [success, setSuccess] = useState("");
@@ -90,7 +121,6 @@ export default function MapScreen() {
   const [followRequest, setFollowRequest] = useState(0);
   const [lightProbe, setLightProbe] = useState<MapLightProbe | null>();
   const nativeAppearance = Platform.OS !== 'web';
-  const appearance = useMapAppearance(nativeAppearance);
   const { day, dusk, night } = appearance.light;
   const lightingLevel = appearance.ready && appearance.mode !== 'original' ? night + dusk * .4 : 0;
   const tileMatrix = useMemo(() => mapAppearanceMatrix({
@@ -100,7 +130,7 @@ export default function MapScreen() {
   const browseMap = useCallback(() => setFollowing(false), []);
   const scopeName =
     world.communities?.find((c) => c.id === explore.scope)?.name ?? "Campus";
-  const nearby = group ?? records;
+  const nearby = group ? records.filter(r => group.includes(discoveryKey(r))) : records;
   const mapWorld = useMemo(() => ({ ...world, crumbs: [] }), [world]);
   const choose = useCallback(
     (r: DiscoveryRecord) => {
@@ -282,11 +312,12 @@ export default function MapScreen() {
         followRequest={followRequest}
         world={mapWorld}
         records={records}
+        heatmap={explore.heatmap}
         placing={placing}
         onDrop={setPoint}
         onRecord={choose}
         onGroup={(items) => {
-          setGroup(items);
+          setGroup(items.map(discoveryKey));
           setPanel("nearby");
         }}
         onBuilding={chooseBuilding}
@@ -297,7 +328,7 @@ export default function MapScreen() {
         bottomInset={bottom}
       />
       <View
-        style={[styles.top, { top: insets.top + 8 }]}
+        style={[styles.top, { top: insets.top + 8 }, compact && { right: undefined, width: viewport.width * .43 }]}
         pointerEvents="box-none"
       >
         <View style={styles.topRow}>
@@ -313,9 +344,10 @@ export default function MapScreen() {
               pressed && { opacity: 0.8 },
             ]}
           >
+            <PixelFrame />
             <Icon name="search" />
-            <Text style={{ fontSize: 16, color: t.muted, flex: 1 }}>
-              Find your next campus moment
+            <Text numberOfLines={1} style={[styles.pixelLabel, { fontSize: 12, color: t.muted, flex: 1 }]}>
+              Search campus
             </Text>
           </Pressable>
           <Pressable
@@ -324,6 +356,7 @@ export default function MapScreen() {
             onPress={() => router.push("/profile")}
             style={styles.avatar}
           >
+            <PixelFrame />
             {world.profile ? (
               <PixelAvatar avatar={world.profile.avatar} size={26} />
             ) : (
@@ -331,15 +364,16 @@ export default function MapScreen() {
             )}
           </Pressable>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Open filters and community scope"
             onPress={() => setPanel("filters")}
             style={styles.scope}
           >
+            <PixelFrame fill={t.sage} />
             <Icon name="filter" size={18} />
-            <Text style={[s.label, { flexShrink: 1 }]}>
+            <Text numberOfLines={2} style={[styles.pixelLabel, { flexShrink: 1 }]}>
               {scopeName} ·{" "}
               {periods.find((p) => p.id === explore.period)?.label}
               {explore.category !== "all"
@@ -355,18 +389,29 @@ export default function MapScreen() {
             onPress={() => router.push("/ask")}
             style={styles.ask}
           >
-            <Icon name="ask" size={18} />
-            <Text style={s.label}>Ask</Text>
+            <PixelFrame fill={t.toast} accent />
+            <Icon name="ask" size={18} color={t.buttonInk} />
+            <Text style={[styles.pixelLabel, { color: t.buttonInk }]}>Ask</Text>
+          </Pressable>
+          <Pressable accessibilityRole="button" accessibilityLabel={explore.demo ? 'End demo' : 'Start five-minute campus demo'}
+            onPress={() => {
+              if (explore.demo) { explore.endDemo(); return; }
+              setFollowing(false);
+              explore.startDemo();
+            }} style={styles.ask}>
+            <PixelFrame fill={t.toast} accent />
+            <Text style={[styles.pixelLabel, { color: t.buttonInk }]}>{explore.demo ? "End demo" : "Demo"}</Text>
           </Pressable>
         </View>
       </View>
       {placing ? (
         <View
           onLayout={(event) => setDockHeight(event.nativeEvent.layout.height)}
-          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 16) }]}
+          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 16) }, compact && { right: 16, alignSelf: 'auto', width: viewport.width * .43 }]}
         >
-          <Text style={s.label}>Choose a spot for your Crumb</Text>
-          <Text style={s.muted}>
+          <PixelFrame panel />
+          <Text style={styles.pixelLabel}>Choose a spot for your Crumb</Text>
+          <Text style={styles.pixelBody}>
             {point
               ? describePostLocation(point)
               : "Tap the map or choose a building"}
@@ -393,12 +438,13 @@ export default function MapScreen() {
       ) : (
         <View
           onLayout={(event) => setDockHeight(event.nativeEvent.layout.height)}
-          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12) }]}
+          style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12) }, compact && { right: 16, alignSelf: 'auto', width: viewport.width * .43 }]}
         >
-          <View style={[s.row, { justifyContent: "space-between" }]}>
-            <View style={s.row}>
+          <PixelFrame panel />
+          <View style={styles.picksHeader}>
+            <View style={[s.row, { flexShrink: 1 }]}>
               <ToastLogo size={28} />
-              <Text style={{ fontSize: 21, fontWeight: "700", color: t.ink }}>
+              <Text style={styles.picksTitle}>
                 Campus picks
               </Text>
             </View>
@@ -410,30 +456,30 @@ export default function MapScreen() {
               }}
               style={styles.textAction}
             >
-              <Text style={s.label}>See list</Text>
+              <Text style={styles.pixelLabel}>See list</Text>
               <Icon name="list" size={20} />
             </Pressable>
           </View>
           {explore.loading ? (
             <View style={s.row}>
               <ActivityIndicator color={t.ink} />
-              <Text style={s.muted}>Finding campus discoveries?</Text>
+              <Text style={styles.pixelBody}>Finding campus discoveries?</Text>
             </View>
           ) : records[0] ? (
             <Pressable
               accessibilityRole="button"
               onPress={() => choose(records[0])}
-              style={{ minHeight: 48, justifyContent: "center", gap: 4 }}
+              style={styles.pickPreview}
             >
-              <Text numberOfLines={1} style={s.label}>
+              <Text numberOfLines={1} style={styles.pixelLabel}>
                 {records[0].title}
               </Text>
-              <Text numberOfLines={1} style={s.muted}>
+              <Text numberOfLines={1} style={styles.pixelBody}>
                 {records[0].venue ?? "Campus discovery"}
               </Text>
             </Pressable>
           ) : (
-            <Text style={s.muted}>
+            <Text style={styles.pixelBody}>
               {explore.error
                 ? "Discoveries could not load. Open the list to retry."
                 : "No matches right now. Try another time or filter."}
@@ -449,8 +495,9 @@ export default function MapScreen() {
               accessibilityState={{ selected: following && !!location.position, busy: location.locating }}
               disabled={location.locating}
               onPress={locate}
-              style={[styles.avatar, following && !!location.position && { borderColor: t.ink, backgroundColor: t.sage }]}
+              style={styles.avatar}
             >
+              <PixelFrame fill={following && location.position ? t.sage : t.surface} />
               {location.locating ? (
                 <ActivityIndicator color={t.ink} />
               ) : (
@@ -466,7 +513,7 @@ export default function MapScreen() {
         </View>
       ) : null}
       <Sheet
-        visible={panel !== null}
+        visible={panel !== null && (panel !== 'detail' || !!selected)}
         title={
           panel === "post"
             ? "Post a Crumb"
@@ -542,6 +589,16 @@ export default function MapScreen() {
         )}
         {panel === "filters" && (
           <>
+            <Text style={s.label}>Map activity</Text>
+            <View style={styles.wrap}>
+              <Chip label="Pins" selected={!explore.heatmap} onPress={() => explore.setHeatmap(false)} />
+              <Chip label="Heatmap + pins" selected={explore.heatmap} onPress={() => explore.setHeatmap(true)} />
+            </View>
+            {explore.heatmap && <Text style={s.muted}>Orange to red shows fewer to more active reports, not attendance. Your category filter also filters the heatmap.</Text>}
+            {!explore.demo && <GameButton variant="secondary" onPress={() => {
+              setFollowing(false); explore.startDemo(); setPanel(null);
+            }}>Start five-minute demo</GameButton>}
+            {explore.demo && <GameButton variant="secondary" onPress={explore.endDemo}>End demo</GameButton>}
             {nativeAppearance && <>
               <Text style={s.label}>Map appearance</Text>
               <View style={styles.wrap}>
@@ -665,6 +722,8 @@ export default function MapScreen() {
               accessibilityLabel="Search campus"
               placeholder="Try Reitz, pizza, or a club?"
               placeholderTextColor={t.muted}
+              selectionColor={t.ink}
+              keyboardAppearance={dark ? "dark" : "light"}
               style={s.input}
               value={explore.query}
               onChangeText={explore.setQuery}
@@ -797,41 +856,55 @@ export default function MapScreen() {
     </View>
   );
 }
-const styles = StyleSheet.create({
+const createStyles = (t: Theme) => StyleSheet.create({
+  pixelLabel: { fontFamily: "PressStart2P_400Regular", fontSize: 10, lineHeight: 18, color: t.ink },
+  pixelBody: { fontFamily: "PressStart2P_400Regular", fontSize: 10, lineHeight: 19, color: t.muted },
+  picksTitle: { fontFamily: "PressStart2P_400Regular", fontSize: 13, lineHeight: 21, color: t.ink, flexShrink: 1 },
+  picksHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, borderBottomWidth: 2, borderBottomColor: t.border, paddingBottom: 8 },
+  pickPreview: { minHeight: 60, justifyContent: "center", gap: 6, padding: 10, backgroundColor: t.sage, borderWidth: 2, borderColor: t.border },
   top: { position: "absolute", left: 16, right: 16, gap: 10 },
   topRow: { flexDirection: "row", gap: 8 },
   search: {
     flex: 1,
     minHeight: 52,
-    backgroundColor: t.surface,
-    borderRadius: 16,
+    backgroundColor: "transparent",
+    borderRadius: 0,
     paddingHorizontal: 14,
     paddingVertical: 10,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: t.border,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   avatar: {
     width: 52,
     minHeight: 52,
-    borderRadius: 16,
-    backgroundColor: t.surface,
+    borderRadius: 0,
+    backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: t.border,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   scope: {
     flexShrink: 1,
+    minWidth: 120,
     minHeight: 48,
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
     padding: 12,
-    backgroundColor: t.surface,
-    borderRadius: 24,
+    backgroundColor: "transparent",
+    borderRadius: 0,
+    borderWidth: 0,
+    borderColor: t.border,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   ask: {
     minHeight: 48,
@@ -839,8 +912,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     paddingHorizontal: 16,
-    backgroundColor: t.toast,
-    borderRadius: 24,
+    backgroundColor: "transparent",
+    borderRadius: 0,
+    borderWidth: 0,
+    borderColor: t.buttonInk,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   dock: {
     position: "absolute",
@@ -848,11 +925,14 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 16,
     gap: 10,
-    backgroundColor: t.surface,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderWidth: 1,
+    backgroundColor: "transparent",
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderWidth: 0,
     borderColor: t.border,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    borderRightWidth: 0,
     maxWidth: 640,
     alignSelf: "center",
   },

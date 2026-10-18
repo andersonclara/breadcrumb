@@ -8,4 +8,10 @@ export const theme = {
   success: "#2F684A",
   danger: "#A43F35",
   sage: "#E8EEDC",
+  buttonInk: "#49382C",
+  dangerSurface: "#FCEAE1",
+  crumbSurface: "#FFF0CB",
+  backdrop: "#241C1666",
 } as const;
+
+export type Theme = { -readonly [Key in keyof typeof theme]: string };

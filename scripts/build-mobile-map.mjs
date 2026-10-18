@@ -97,7 +97,42 @@ for (const b of sprites) {
   b.overview = b.tree || b.index === undefined ? '' : simple(0);
   b.blocks = b.index === undefined && !b.tree ? '' : simple(3);
 }
+// Pixel blocks give terrain and ground a consistent 8-bit texture; close-up
+// tiers retain fine material swatches so landmarks stay readable.
+const pixelGroundMaterials = {
+  grass: { size: 1.6, path: 'M.12 .12h.22v.22H.12zM.62 .38h.18v.18H.62zM.38 .82h.14v.14H.38z' },
+  woodland: { size: 1.6, path: 'M.08 .1h.32v.32H.08zM.56 .52h.26v.26H.56zM.18 .7h.14v.14H.18z' },
+  water: { size: 1.4, path: 'M.08 .18h.4v.12H.08zM.58 .62h.28v.1H.58z' },
+  planter: { size: 1.2, path: 'M.12 .12h.28v.28H.12zM.58 .58h.24v.24H.58z' },
+  turf: { size: 1.6, path: 'M0 .2h.5v.12H0zM.5 .68h.5v.12H.5z' },
+  sand: { size: 1.4, path: 'M.12 .12h.24v.24H.12zM.62 .58h.2v.2h-.2z' },
+  concrete: { size: 1.6, path: 'M.46 0h.08v1.6h-.08zM0 .46h1.6v.08H0z' },
+  brick: { size: 1.2, path: 'M0 .27h1.2v.12H0zM.54 0h.12v.27H.54zM.27 .39h.12v.27H.27z' },
+  asphalt: { size: 1.4, path: 'M.12 .14h.2v.16h-.2zM.68 .7h.18v.16H.68z' },
+  gravel: { size: 1.2, path: 'M.08 .12h.32v.26H.08zM.62 .58h.24v.24H.62z' },
+  wood: { size: 1.2, path: 'M0 .28h1.2v.1H0zM0 .7h1.2v.1H0z' },
+  unknown: { size: 1.6, path: 'M.12 .12h.22v.22H.12zM.62 .38h.18v.18H.62zM.38 .82h.14v.14H.38z' },
+};
+const pixelTerrain = [
+  { color: '#93BA6D', path: 'M.2 .2h.42v.32H.2zM1.12 .76h.34v.32h-.34zM1.82 1.72h.28v.24h-.28z' },
+  { color: '#719563', path: 'M.18 .18h.58v.5H.18zM1.28 .86h.42v.42h-.42zM1.86 1.74h.34v.3h-.34z' },
+  { color: '#98D2DC', path: 'M.2 .38h.62v.14H.2zM1.24 1.22h.72v.14h-.72z' },
+  { color: '#E5CC91', path: 'M.18 .2h.4v.32h-.4zM1.12 1.08h.52v.38h-.52z' },
+  { color: '#D3A07A', path: 'M.16 .18h.5v.44h-.5zM1.24 .92h.4v.34h-.4z' },
+  { color: '#A97B5E', path: 'M.18 .2h.5v.38h-.5zM1.18 1.16h.48v.34h-.48z' },
+  { color: '#93BA6D', path: 'M.12 .14h.46v.32h-.46zM1.2 .78h.4v.3h-.4zM1.82 1.7h.3v.3h-.3z' },
+  { color: '#98C276', path: 'M.18 .22h.44v.34h-.44zM1.18 1.12h.4v.3h-.4z' },
+];
+const terrainDefs = level => pixelTerrain.map((pixel, index) => {
+  const scale = 10 / 2 ** Math.min(level, 3) / 2.4, size = 2.4 * scale;
+  return `<pattern id="pt-${index}" width="${size}" height="${size}" patternUnits="userSpaceOnUse" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="${campus.colors[index]}"/><path d="${pixel.path}" transform="scale(${scale})" fill="${pixel.color}"/></pattern>`;
+}).join('');
 const defs = Object.entries(groundMaterials).map(([id, m]) => `<pattern id="g-${id}" width="${m.size}" height="${m.size}" patternUnits="userSpaceOnUse"><rect width="${m.size}" height="${m.size}" fill="${m.color}"/><path d="${m.path}" fill="${m.detail}"/></pattern>`).join('');
+const pixelGroundDefs = level => Object.entries(pixelGroundMaterials).map(([id, pixel]) => {
+    const m = groundMaterials[id] ?? groundMaterials.unknown;
+    const scale = 10 / 2 ** Math.min(level, 3) / pixel.size, size = pixel.size * scale;
+    return `<pattern id="pg-${id}" width="${size}" height="${size}" patternUnits="userSpaceOnUse" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="${m.color}"/><path d="${pixel.path}" transform="scale(${scale})" fill="${m.detail}"/></pattern>`;
+}).join('');
 const catalog = { size: campus.size, bounds: campus.bounds, colors: campus.colors, metersPerUnit: campus.metersPerUnit,
   buildings: campus.buildings.map(b => ({ id: b.id, name: b.name, x: b.x, y: b.y, width: b.width, height: b.height, rise: b.rise,
     path: '', buildingNumber: b.buildingNumber ?? null })),
@@ -126,13 +161,19 @@ for (let level = 0; level <= maxLevel; level++) {
     while (cursor < tasks.length) {
       const { x, y } = tasks[cursor++], left = x * span - pad, top = y * span - pad;
       const view = { left, top, right: (x + 1) * span + pad, bottom: (y + 1) * span + pad };
-      const features = terrain.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="${campus.colors[p.color]}"/>`).join('') +
+      const baseFill = `url(#pt-0)`;
+      const features = terrain.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="url(#pt-${p.color})"/>`).join('') +
         roads.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#C4B594" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
         walks.filter(p => (level >= 3 || p.width >= .2) && intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#FFE7B1" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
-        campus.surfaces.filter(p => intersects(p, view)).map(p => `<path d="${p.path}" fill="${mapDetail(level) !== 'detail' ? (groundMaterials[p.material] ?? groundMaterials.unknown).color : `url(#g-${p.material in groundMaterials ? p.material : 'unknown'})`}" fill-rule="evenodd"/>`).join('') +
+        campus.surfaces.filter(p => intersects(p, view)).map(p => {
+          const material = p.material in groundMaterials ? p.material : 'unknown';
+          const pattern = level < 4 ? `pg-${material}` : `g-${material}`;
+          return `<path d="${p.path}" fill="url(#${pattern})" fill-rule="evenodd"/>`;
+        }).join('') +
         sprites.filter(b => intersects(b.bounds, view)).map(b => mapDetail(level) === 'detail' ? b.svg : level < 3 ? b.overview : b.blocks).join('');
       const pixels = tilePixels + bleed * 2;
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pixels}" height="${pixels}" viewBox="${left} ${top} ${span + pad * 2} ${span + pad * 2}" shape-rendering="crispEdges"><defs>${defs}</defs><rect x="${left}" y="${top}" width="${span + pad * 2}" height="${span + pad * 2}" fill="${campus.colors[0]}"/>${features}</svg>`;
+      const groundDefs = level < 4 ? pixelGroundDefs(level) : defs;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pixels}" height="${pixels}" viewBox="${left} ${top} ${span + pad * 2} ${span + pad * 2}" shape-rendering="crispEdges"><defs>${terrainDefs(level)}${groundDefs}</defs><rect x="${left}" y="${top}" width="${span + pad * 2}" height="${span + pad * 2}" fill="${baseFill}"/>${features}</svg>`;
       const name = `${level}-${x}-${y}.png`;
       const png = await sharp(Buffer.from(svg), { limitInputPixels: false }).png({ palette: true, colours: 256 }).toBuffer();
       const destination = path.join(output, name);

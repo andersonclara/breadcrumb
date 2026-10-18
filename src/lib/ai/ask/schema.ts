@@ -24,6 +24,7 @@ export const askRequestSchema=z.object({
   message:z.string().trim().min(1).max(1200),
   context:contextSchema.optional(),
   coarseUserLocation:pointSchema.optional(),
+  demo:z.object({startedAt:z.number().int().positive().max(8_640_000_000_000_000),seed:z.number().int().min(1).max(0x7fffffff)}).strict().optional(),
 }).strict();
 export type AskRequest=z.infer<typeof askRequestSchema>;
 

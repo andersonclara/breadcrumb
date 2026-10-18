@@ -59,7 +59,7 @@ export function resolveDiscoveryLocation(r: DiscoveryRecord): DiscoveryRecord {
   const normalize = (s: string) =>
     s.toLowerCase().replace(/[.,]/g, "").replace(/\s+/g, " ").trim();
   const venue = normalize(r.venue).replace(
-    /\s+(?:\d+(?:st|nd|rd|th)? floor|room [a-z0-9-]+)$/,
+    /\s+(?:\d+(?:st|nd|rd|th)? floor|room [a-z0-9-]+|\([a-z]*\d[a-z0-9-]*\))$/,
     "",
   );
   const aliases: Record<string, string> = {

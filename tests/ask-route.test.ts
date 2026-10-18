@@ -16,6 +16,16 @@ beforeEach(()=>{
   mocks.quota.mockResolvedValue(undefined);mocks.search.mockReturnValue({places:vi.fn(),search:vi.fn()});mocks.ask.mockResolvedValue({status:'no_results',cards:[]});
 });
 describe('public Ask endpoint',()=>{
+  it('accepts a bounded demo seed but rejects expired sessions and arbitrary report injection before quota',async()=>{
+    const demo={startedAt:Date.now(),seed:42};
+    expect((await POST(request({message:'Free food now',demo}))).status).toBe(200);
+    expect(mocks.ask.mock.calls[0][0].demo).toEqual(demo);
+    mocks.quota.mockClear();
+    expect((await POST(request({message:'Food',demo:{...demo,startedAt:Date.now()-300001}}))).status).toBe(410);
+    expect((await POST(request({message:'Food',demo:{...demo,startedAt:Date.now()+60000}}))).status).toBe(410);
+    expect((await POST(request({message:'Food',demo:{...demo,reports:[{title:'injected'}]}}))).status).toBe(400);
+    expect(mocks.quota).not.toHaveBeenCalled();
+  });
   it('allows native requests without cookies or a login and uses an anonymous read client',async()=>{
     const response=await POST(request({message:'Tonight?'}));expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('private, no-store');expect(mocks.quota).toHaveBeenCalledOnce();

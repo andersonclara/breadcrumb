@@ -1,5 +1,5 @@
 import { normalizeUfEmail } from "@breadcrumb/shared";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
@@ -13,6 +13,7 @@ import {
 import { useAuth } from "@/providers/auth-provider";
 import { useCampus } from "@/providers/world-provider";
 import { useExplore } from "@/providers/explore-provider";
+import { supabase } from "@/lib/supabase";
 import { ProfileEditor } from "@/components/profile-editor";
 import { PixelAvatar } from "@/components/pixel-art";
 import {
@@ -27,7 +28,28 @@ export default function ProfileScreen() {
     e = useExplore(),
     params = useLocalSearchParams<{ edit?: string }>(),
     [editing, setEditing] = useState(false),
-    [changing, setChanging] = useState(false);
+    [changing, setChanging] = useState(false),
+    [signingOut, setSigningOut] = useState(false),
+    [signOutError, setSignOutError] = useState("");
+  const signOutLock = useRef(false);
+  async function signOut() {
+    if (signOutLock.current) return;
+    signOutLock.current = true;
+    setSigningOut(true);
+    setSignOutError("");
+    try {
+      if (!supabase) throw new Error("Sign-out is unavailable. Please try again.");
+      await c.stop();
+      const { error } = await supabase.auth.signOut({ scope: "local" });
+      if (error) throw new Error("Could not log out. Please try again.");
+      router.replace("/login");
+    } catch (error) {
+      setSignOutError(error instanceof Error ? error.message : "Could not log out. Please try again.");
+    } finally {
+      signOutLock.current = false;
+      setSigningOut(false);
+    }
+  }
   if (loading)
     return (
       <View style={s.page}>
@@ -134,7 +156,7 @@ export default function ProfileScreen() {
               </Text>
               <View style={s.row}>
                 <Switch
-                  disabled={changing}
+                  disabled={changing || signingOut}
                   accessibilityLabel="Share approximate location with accepted friends"
                   value={c.sharing}
                   onValueChange={(enabled) => {
@@ -149,16 +171,17 @@ export default function ProfileScreen() {
                 </Text>
               </View>
             </View>
-            <GameButton
-              variant="secondary"
-              onPress={() => router.push("/login")}
-            >
-              Account and sign out
-            </GameButton>
             <Feedback message={c.notice} />
             <Feedback error message={c.actionError || c.error} />
           </>
         )}
+        {signedIn && <>
+          <GameButton variant="danger" loading={signingOut} disabled={changing}
+            onPress={() => void signOut()}>
+            {signingOut ? "Logging out..." : "Log out"}
+          </GameButton>
+          <Feedback error message={signOutError} />
+        </>}
         <GameButton variant="secondary" onPress={() => router.navigate("/")}>
           Back to Explore
         </GameButton>

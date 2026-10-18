@@ -21,7 +21,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "./icon";
-import { theme as t } from "@/lib/theme";
+import type { Theme } from "@/lib/theme";
+import { usePixelTheme, useTheme } from "@/lib/theme-context";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 export function Sheet({
   visible,
@@ -37,6 +38,9 @@ export function Sheet({
   footer?: React.ReactNode;
   scroll?: boolean;
 } & PropsWithChildren) {
+  const t = useTheme();
+  const pixel = usePixelTheme();
+  const styles = useMemo(() => createStyles(t, pixel), [t, pixel]);
   const insets = useSafeAreaInsets(),
     heading = useRef<Text>(null),
     [translation] = useState(() => new Animated.Value(0)),
@@ -140,19 +144,22 @@ export function Sheet({
     </Modal>
   );
 }
-const styles = StyleSheet.create({
+const createStyles = (t: Theme, pixel: boolean) => StyleSheet.create({
   backdrop: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "#241C1666",
+    backgroundColor: t.backdrop,
   },
   sheet: {
     backgroundColor: t.surface,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: pixel ? 12 : 24,
+    borderTopRightRadius: pixel ? 12 : 24,
     width: "100%",
     maxWidth: 640,
     alignSelf: "center",
+    borderWidth: pixel ? 2 : 0,
+    borderColor: pixel ? t.border : "transparent",
+    borderBottomWidth: 0,
   },
   handle: {
     width: 36,

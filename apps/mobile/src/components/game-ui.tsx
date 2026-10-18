@@ -7,9 +7,11 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import type { PropsWithChildren } from "react";
-import { theme as t } from "@/lib/theme";
-export const gameStyles = StyleSheet.create({
+import { useMemo, type PropsWithChildren } from "react";
+import { theme, type Theme } from "@/lib/theme";
+import { PixelFrame } from "./pixel-frame";
+import { usePixelTheme, useTheme } from "@/lib/theme-context";
+const createGameStyles = (t: Theme, pixel = false) => StyleSheet.create({
   page: { flex: 1, backgroundColor: t.background },
   content: {
     padding: 16,
@@ -24,16 +26,20 @@ export const gameStyles = StyleSheet.create({
   label: { fontSize: 14, lineHeight: 20, fontWeight: "600", color: t.ink },
   input: {
     backgroundColor: t.surface,
-    borderWidth: 1,
+    borderRadius: pixel ? 8 : 12,
+    borderWidth: pixel ? 2 : 1,
     borderColor: t.border,
-    borderRadius: 12,
+    borderRightWidth: pixel ? 3 : 1,
+    borderBottomWidth: pixel ? 3 : 1,
     padding: 14,
     minHeight: 52,
     color: t.ink,
-    fontSize: 16,
+    fontFamily: pixel ? "PressStart2P_400Regular" : undefined,
+    fontSize: pixel ? 11 : 16,
+    lineHeight: 22,
   },
   button: {
-    borderRadius: 12,
+    borderRadius: pixel ? 0 : 12,
     backgroundColor: t.toast,
     paddingHorizontal: 16,
     paddingVertical: 14,
@@ -44,10 +50,11 @@ export const gameStyles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    fontSize: 16,
-    lineHeight: 22,
-    fontWeight: "600",
-    color: t.ink,
+    fontFamily: pixel ? "PressStart2P_400Regular" : undefined,
+    fontSize: pixel ? 11 : 16,
+    lineHeight: pixel ? 20 : 22,
+    fontWeight: pixel ? "400" : "600",
+    color: t.buttonInk,
     textAlign: "center",
   },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
@@ -56,19 +63,26 @@ export const gameStyles = StyleSheet.create({
     lineHeight: 21,
     color: t.danger,
     padding: 12,
-    backgroundColor: "#FCEAE1",
+    backgroundColor: t.dangerSurface,
     borderRadius: 12,
   },
   card: {
     padding: 16,
-    borderWidth: 1,
+    borderRadius: pixel ? 8 : 16,
     borderColor: t.border,
-    borderRadius: 16,
     backgroundColor: t.surface,
+    borderWidth: pixel ? 2 : 1,
+    borderRightWidth: pixel ? 3 : 1,
+    borderBottomWidth: pixel ? 3 : 1,
     gap: 8,
   },
   muted: { fontSize: 14, lineHeight: 20, color: t.muted },
 });
+export const gameStyles = createGameStyles(theme);
+export function useGameStyles() {
+  const t = useTheme(), pixel = usePixelTheme();
+  return useMemo(() => t === theme && !pixel ? gameStyles : createGameStyles(t, pixel), [t, pixel]);
+}
 export function GameButton({
   children,
   onPress,
@@ -83,6 +97,7 @@ export function GameButton({
   variant?: "primary" | "secondary" | "danger";
   style?: StyleProp<ViewStyle>;
 } & PropsWithChildren) {
+  const t = useTheme(), pixel = usePixelTheme(), gameStyles = useGameStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -91,18 +106,19 @@ export function GameButton({
       disabled={disabled || loading}
       style={({ pressed }) => [
         gameStyles.button,
-        variant !== "primary" && {
-          backgroundColor: variant === "danger" ? "#FCEAE1" : t.sage,
-        },
+        variant !== "primary" && { backgroundColor: variant === "danger" ? t.dangerSurface : t.sage },
+        pixel && { backgroundColor: "transparent" },
         (disabled || loading) && { opacity: 0.5 },
         pressed && { opacity: 0.7 },
         style,
       ]}
     >
-      {loading && <ActivityIndicator color={t.ink} />}
+      {pixel && <PixelFrame fill={variant === "primary" ? t.toast : variant === "danger" ? t.dangerSurface : t.sage} accent={variant === "primary"} />}
+      {loading && <ActivityIndicator color={variant === "primary" ? t.buttonInk : t.ink} />}
       <Text
         style={[
           gameStyles.buttonText,
+          variant === "secondary" && { color: t.ink },
           variant === "danger" && { color: t.danger },
         ]}
       >
@@ -118,6 +134,7 @@ export function Feedback({
   message?: string | null;
   error?: boolean;
 }) {
+  const t = useTheme(), gameStyles = useGameStyles();
   return message ? (
     <Text
       accessibilityRole={error ? "alert" : undefined}
@@ -144,6 +161,7 @@ export function Chip({
   selected: boolean;
   onPress: () => void;
 }) {
+  const t = useTheme(), pixel = usePixelTheme();
   return (
     <Pressable
       accessibilityRole="button"
@@ -153,7 +171,7 @@ export function Chip({
         minHeight: 48,
         paddingHorizontal: 16,
         paddingVertical: 12,
-        borderRadius: 24,
+        borderRadius: pixel ? 8 : 24,
         borderWidth: 1,
         borderColor: selected ? t.ink : t.border,
         backgroundColor: selected ? t.ink : t.surface,
@@ -163,8 +181,10 @@ export function Chip({
     >
       <Text
         style={{
-          fontSize: 14,
-          fontWeight: "600",
+          fontFamily: pixel ? "PressStart2P_400Regular" : undefined,
+          fontSize: pixel ? 10 : 14,
+          lineHeight: pixel ? 18 : 20,
+          fontWeight: pixel ? "400" : "600",
           color: selected ? t.surface : t.ink,
         }}
       >
@@ -185,10 +205,11 @@ export function EmptyState({
   action?: string;
   onAction?: () => void;
 }) {
+  const s = useGameStyles();
   return (
     <View style={{ gap: 12, paddingVertical: 16 }}>
-      <Text style={gameStyles.title}>{title}</Text>
-      <Text style={gameStyles.muted}>{description}</Text>
+      <Text style={s.title}>{title}</Text>
+      <Text style={s.muted}>{description}</Text>
       {action && onAction && (
         <GameButton variant="secondary" onPress={onAction}>
           {action}
