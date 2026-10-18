@@ -8,6 +8,7 @@ import { mapAssetInfo, mapAssets } from '@/generated/map-assets';
 import { tileImageRect } from '@/lib/map-tiles';
 import { TileCache } from '@/lib/tile-cache';
 import { useMapTiles } from '@/lib/use-map-tiles';
+import type { MapLightProbe } from '@/lib/map-lighting';
 
 const cache = new TileCache<number>(key => new Promise((resolve, reject) => {
   const asset = mapAssets[key];
@@ -18,7 +19,9 @@ const cache = new TileCache<number>(key => new Promise((resolve, reject) => {
   image.src = typeof source === 'string' ? source : source.uri;
 }));
 export const CampusTiles = memo(function CampusTiles({ scene, size, live }: {
-  scene: MapCamera; size: MapSize; live: SharedValue<MapCamera>;
+  scene: MapCamera; size: MapSize; live: SharedValue<MapCamera>; colorMatrix?: number[];
+  lightProbe?: MapLightProbe | null;
+  lightingLevel?: number;
 }) {
   const { tiles, failed, retry } = useMapTiles(cache, scene, size, mapAssetInfo.maxLevel);
   const transform = useAnimatedStyle(() => {

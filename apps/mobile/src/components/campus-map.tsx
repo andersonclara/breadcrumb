@@ -17,10 +17,9 @@ import { BreadGlyph, PixelAvatar } from "./pixel-art";
 import { Icon } from "./icon";
 import { theme as t } from "@/lib/theme";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
-import type { MapLight } from "@/lib/map-appearance";
+import type { MapLightProbe } from "@/lib/map-lighting";
 
 type Props = {
-  light: MapLight;
   camera: MapCamera;
   onCamera: (c: MapCamera) => void;
   onInteract?: () => void;
@@ -38,6 +37,9 @@ type Props = {
   ownPosition?: Coordinate | null;
   walking?: boolean;
   bottomInset?: number;
+  colorMatrix?: number[];
+  lightProbe?: MapLightProbe | null;
+  lightingLevel?: number;
 };
 type MarkerGroup = { x: number; y: number; records: DiscoveryRecord[] };
 
@@ -59,11 +61,9 @@ const MapAnchor = memo(function MapAnchor({ point, live, size, width = 48, heigh
     style={[styles.anchor, { width, height }, style]}>{children}</Animated.View>;
 });
 
-export function CampusMap({ light, camera, onCamera, onInteract, followPosition, followRequest, world, records, placing, onDrop, onRecord,
-  onGroup, onBuilding, onBlank, selected, ownPosition, walking = false, bottomInset = 190 }: Props) {
+export function CampusMap({ camera, onCamera, onInteract, followPosition, followRequest, world, records, placing, onDrop, onRecord,
+  onGroup, onBuilding, onBlank, selected, ownPosition, walking = false, bottomInset = 190, colorMatrix, lightProbe, lightingLevel }: Props) {
   const reduced = useReducedMotion();
-  const dark = light.night + light.dusk * .32 > .5;
-  const mapText = { color: dark ? '#F0E9DC' : t.ink, backgroundColor: dark ? '#25343DEB' : '#FFFCF5E6' };
   const [size, setSize] = useState<MapSize>({ width: 390, height: 700 });
   const displayedGroups = useRef<MarkerGroup[]>([]);
   const tap = useCallback((screen: { x: number; y: number }, at: MapCamera) => {
@@ -115,7 +115,7 @@ export function CampusMap({ light, camera, onCamera, onInteract, followPosition,
     return mapPeople(world, ownPosition).filter(p => p.x >= bounds.left && p.x <= bounds.right &&
       p.y >= bounds.top && p.y <= bounds.bottom);
   }, [world, ownPosition, scene, size]);
-  return <View style={[styles.map, { backgroundColor: dark ? '#304642' : light.dusk > .5 ? '#9DAD93' : '#B4C8A3' }]} onLayout={(e) => {
+  return <View style={styles.map} onLayout={(e) => {
     const { width, height } = e.nativeEvent.layout;
     // Stack transitions can briefly report a hidden screen as 0×0. Keep the
     // last usable viewport so cached scenery and gesture math stay finite.
@@ -124,13 +124,13 @@ export function CampusMap({ light, camera, onCamera, onInteract, followPosition,
   }}>
     <GestureDetector gesture={gesture} touchAction="none">
       <View collapsable={false} accessible={false} style={StyleSheet.absoluteFill}>
-        <CampusTiles scene={scene} size={size} live={live} light={light} />
+        <CampusTiles scene={scene} size={size} live={live} colorMatrix={colorMatrix} lightProbe={lightProbe} lightingLevel={lightingLevel} />
         {labels.map((l) => <MapAnchor key={l.id} point={l.point} live={live} size={size} width={180} height={24} bottomInset={bottomInset + 20} label>
-          <Text numberOfLines={1} style={[styles.label, mapText]}>{l.name}</Text>
+          <Text numberOfLines={1} style={styles.label}>{l.name}</Text>
         </MapAnchor>)}
         {people.map((p) => <MapAnchor key={p.id} point={p} live={live} size={size} width={70} height={68} grounded={p.id === 'self'}>
           {p.id === 'self' && <View style={styles.locationHalo}/>}
-          <Text style={[styles.personLabel, mapText]}>{p.id === "self" ? "You" : "Friend ≈100m"}</Text><PixelAvatar avatar={p.avatar} size={29} walking={p.id === 'self' && walking && !reduced}/>
+          <Text style={styles.personLabel}>{p.id === "self" ? "You" : "Friend ≈100m"}</Text><PixelAvatar avatar={p.avatar} size={29} walking={p.id === 'self' && walking && !reduced}/>
         </MapAnchor>)}
         {selected && <MapAnchor point={toWorld(selected)} live={live} size={size}>
           <View style={styles.target} />
@@ -148,10 +148,10 @@ export function CampusMap({ light, camera, onCamera, onInteract, followPosition,
     <View style={[styles.controls, { bottom: bottomInset + 16 }]}>
       {(["plus", "minus"] as const).map((name) => <Pressable key={name} accessibilityRole="button"
         accessibilityLabel={name === "plus" ? "Zoom in" : "Zoom out"}
-        style={({ pressed }) => [styles.control, dark && { backgroundColor: '#25343D', borderColor: '#657583' }, pressed && { opacity: .7 }]}
-        onPress={() => zoomBy(name === "plus" ? 1.5 : 1 / 1.5)}><Icon name={name} color={mapText.color} /></Pressable>)}
+        style={({ pressed }) => [styles.control, pressed && { opacity: .7 }]}
+        onPress={() => zoomBy(name === "plus" ? 1.5 : 1 / 1.5)}><Icon name={name} /></Pressable>)}
     </View>
-    <Text pointerEvents="none" style={[styles.credit, mapText, { bottom: bottomInset + 2 }]}>© UF GIS + OpenStreetMap · ODbL</Text>
+    <Text pointerEvents="none" style={[styles.credit, { bottom: bottomInset + 2 }]}>© UF GIS + OpenStreetMap · ODbL</Text>
   </View>;
 }
 const styles = StyleSheet.create({

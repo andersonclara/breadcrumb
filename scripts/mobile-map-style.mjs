@@ -1,5 +1,6 @@
-export const MAP_STYLE_VERSION = 2;
-export const mapDetail = level => level >= 5 ? 'detail' : level >= 3 ? 'blocks' : 'overview';
+export const MAP_STYLE_VERSION = 3;
+// Bake full artwork one tier earlier, without increasing runtime tile/cache budgets.
+export const mapDetail = level => level >= 4 ? 'detail' : level >= 3 ? 'blocks' : 'overview';
 
 // The outer alpha contour keeps the same anchor and silhouette as the close-up
 // artwork, without shipping thousands of windows and roof pixels into overview tiles.

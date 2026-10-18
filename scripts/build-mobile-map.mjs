@@ -13,7 +13,7 @@ import { MAP_STYLE_VERSION, mapDetail, silhouettePath, simpleSprite } from './mo
 const root = path.resolve(import.meta.dirname, '..');
 const source = await fs.readFile(path.join(root, 'packages/shared/src/campus-map.json'));
 const geometryHash = createHash('sha256').update(source).digest('hex');
-// Explicit migration mode for changes confined to overview styling. A changed
+// Explicit migration mode for changes confined to lower-tier styling. A changed
 // campus source must always rebuild the detailed artwork too.
 const reuseDetail = process.argv.includes('--reuse-detail');
 if (reuseDetail) {
@@ -129,7 +129,7 @@ for (let level = 0; level <= maxLevel; level++) {
       const features = terrain.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="${campus.colors[p.color]}"/>`).join('') +
         roads.filter(p => intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#C4B594" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
         walks.filter(p => (level >= 3 || p.width >= .2) && intersects(p.bounds, view)).map(p => `<path d="${p.path}" fill="none" stroke="#FFE7B1" stroke-width="${p.width}" stroke-linecap="round"/>`).join('') +
-        campus.surfaces.filter(p => intersects(p, view)).map(p => `<path d="${p.path}" fill="${level < 5 ? (groundMaterials[p.material] ?? groundMaterials.unknown).color : `url(#g-${p.material in groundMaterials ? p.material : 'unknown'})`}" fill-rule="evenodd"/>`).join('') +
+        campus.surfaces.filter(p => intersects(p, view)).map(p => `<path d="${p.path}" fill="${mapDetail(level) !== 'detail' ? (groundMaterials[p.material] ?? groundMaterials.unknown).color : `url(#g-${p.material in groundMaterials ? p.material : 'unknown'})`}" fill-rule="evenodd"/>`).join('') +
         sprites.filter(b => intersects(b.bounds, view)).map(b => mapDetail(level) === 'detail' ? b.svg : level < 3 ? b.overview : b.blocks).join('');
       const pixels = tilePixels + bleed * 2;
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pixels}" height="${pixels}" viewBox="${left} ${top} ${span + pad * 2} ${span + pad * 2}" shape-rendering="crispEdges"><defs>${defs}</defs><rect x="${left}" y="${top}" width="${span + pad * 2}" height="${span + pad * 2}" fill="${campus.colors[0]}"/>${features}</svg>`;

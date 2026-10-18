@@ -10,6 +10,7 @@ import { router, useFocusEffect } from "expo-router";
 import {
   ActivityIndicator,
   Keyboard,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -50,8 +51,10 @@ import { useExplore } from "@/providers/explore-provider";
 import { useAuth } from "@/providers/auth-provider";
 import { theme as t } from "@/lib/theme";
 import { useLiveMapLocation } from "@/lib/use-live-map-location";
-import { useMapAppearance } from "@/lib/use-map-appearance";
 import { mapAppearances } from "@/lib/map-appearance";
+import { mapAppearanceMatrix } from "@/lib/map-appearance-rendering";
+import { useMapAppearance } from "@/lib/use-map-appearance";
+import { mapLightProbes, type MapLightProbe } from "@/lib/map-lighting";
 type Panel =
   | "nearby"
   | "detail"
@@ -85,8 +88,15 @@ export default function MapScreen() {
   const [submitting, setSubmitting] = useState(false),
     [dockHeight, setDockHeight] = useState(220);
   const [followRequest, setFollowRequest] = useState(0);
+  const [lightProbe, setLightProbe] = useState<MapLightProbe | null>();
+  const nativeAppearance = Platform.OS !== 'web';
+  const appearance = useMapAppearance(nativeAppearance);
+  const { day, dusk, night } = appearance.light;
+  const lightingLevel = appearance.ready && appearance.mode !== 'original' ? night + dusk * .4 : 0;
+  const tileMatrix = useMemo(() => mapAppearanceMatrix({
+    mode: appearance.mode, light: { day, dusk, night }, ready: appearance.ready, enabled: nativeAppearance,
+  }), [appearance.mode, appearance.ready, nativeAppearance, day, dusk, night]);
   const location = useLiveMapLocation(session?.user.id);
-  const appearance = useMapAppearance();
   const browseMap = useCallback(() => setFollowing(false), []);
   const scopeName =
     world.communities?.find((c) => c.id === explore.scope)?.name ?? "Campus";
@@ -262,7 +272,9 @@ export default function MapScreen() {
   return (
     <View style={s.page}>
       <CampusMap
-        light={appearance.light}
+        colorMatrix={tileMatrix}
+        lightProbe={__DEV__ && nativeAppearance ? lightProbe : undefined}
+        lightingLevel={lightingLevel}
         camera={camera}
         onCamera={setCamera}
         onInteract={browseMap}
@@ -530,13 +542,20 @@ export default function MapScreen() {
         )}
         {panel === "filters" && (
           <>
-            <Text style={s.label}>Map appearance</Text>
-            <View style={styles.wrap}>
-              {mapAppearances.map(option => <Chip key={option.id} label={option.label}
-                selected={appearance.mode === option.id} onPress={() => appearance.choose(option.id)}/>)}
-            </View>
-            <Text style={s.muted}>Automatic follows sunrise and sunset at UF.</Text>
-            {!!appearance.error && <Text style={s.muted}>{appearance.error}</Text>}
+            {nativeAppearance && <>
+              <Text style={s.label}>Map appearance</Text>
+              <View style={styles.wrap}>
+                {mapAppearances.map(option => <Chip key={option.id} label={option.label}
+                  selected={appearance.mode === option.id} onPress={() => appearance.choose(option.id)} />)}
+              </View>
+              <Text style={s.muted}>
+                Automatic follows the sun at UF. Original uses the unfiltered map artwork.
+                Exterior lights are illustrative scenery.
+              </Text>
+              {appearance.storageStatus === 'saved' && <Text style={s.muted}>Choice saved on this device.</Text>}
+              {appearance.storageStatus === 'saving' && <Text style={s.muted}>Saving choice…</Text>}
+              <Feedback error message={appearance.error} />
+            </>}
             <Text style={s.label}>When</Text>
             <View style={styles.wrap}>
               {periods.map((p) => (
@@ -601,6 +620,41 @@ export default function MapScreen() {
             <GameButton onPress={() => setPanel(null)}>
               Show discoveries
             </GameButton>
+            {__DEV__ && (
+              <>
+                {nativeAppearance && <>
+                  <Text style={s.label}>Lighting checks (development)</Text>
+                  <View style={styles.wrap}>
+                    {mapLightProbes.map(option => <Chip key={option.id} label={option.label}
+                      selected={(lightProbe === null ? 'off' : lightProbe?.mode ?? 'appearance') === option.id} onPress={() => {
+                        if (option.id === 'off') { setLightProbe(null); return; }
+                        if (option.id === 'appearance') { setLightProbe(undefined); return; }
+                        setFollowing(false);
+                        const fixed = option.id === 'fixtures';
+                        setLightProbe(fixed ? { mode: option.id }
+                          : { mode: option.id, point: { x: camera.x + 2, y: camera.y - 2 } });
+                        setCamera(fixed
+                          ? { x: 196, y: 54, zoom: 8 } : { ...camera, zoom: 12 });
+                      }} />)}
+                  </View>
+                  <Text style={s.muted}>
+                    Use Night for contrast. Dot and Glow zoom in and appear above/right of center.
+                    Fixtures centers the view on the stadium exterior. These lights are illustrative scenery.
+                    Follow map uses the selected appearance and fades out at distant zoom.
+                    A full restart restores normal appearance lighting.
+                  </Text>
+                </>}
+                <GameButton
+                  variant="secondary"
+                  onPress={() => {
+                    setPanel(null);
+                    router.push("/map-appearance-lab");
+                  }}
+                >
+                  Appearance check (development)
+                </GameButton>
+              </>
+            )}
           </>
         )}
         {panel === "search" && (
